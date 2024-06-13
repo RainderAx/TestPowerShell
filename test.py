@@ -1,15 +1,13 @@
 import subprocess
+import os
 
-# Commande PowerShell à exécuter
-command = "Get-Process"
+# Chemin vers le script PowerShell
+ps_script_path = os.path.abspath("HelloWorld.ps1")
 
-# Exécution de la commande PowerShell
-process = subprocess.Popen(["powershell", "-Command", command], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+# Utiliser pwsh pour exécuter le script PowerShell
+process = subprocess.Popen(["pwsh", ps_script_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+stdout, stderr = process.communicate()
 
-# Récupération de la sortie et des erreurs
-output, error = process.communicate()
-
-print("Output:")
-print(output.decode())
-print("Error:")
-print(error.decode())
+# Afficher les résultats
+print("Standard Output:", stdout.decode())
+print("Standard Error:", stderr.decode())
