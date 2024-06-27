@@ -1,0 +1,40 @@
+III. Rechercher des utilisateurs dans une OU avec -SearchBase
+Pour réaliser une action sur un lot d’utilisateurs, il peut s’avérer très utile d’utiliser un filtre basé sur une unité d’organisation (OU).
+
+Le cmdlet Get-ADUser intègre un paramètre nommé -SearchBase qui va permettre de répondre à ce besoin. Ce qui donne :
+
+Get-ADUser -Filter * -SearchBase "CN=Users,DC=IT-CONNECT,DC=LOCAL" -Server SRV-ADDS-01.it-connect.local
+
+Pour l’unité d’organisation, vous devez préciser son « chemin » correspondant à son DN (DistinguishedName). Vous pouvez le retrouver dans les propriétés de l’OU via l’onglet « Editeur d’attributs » ou en PowerShell grâce à la commande :
+
+Get-ADOrganizationalUnit -Filter * | Format-Table DistinguishedName
+
+Ajouter une valeur dans un attribut en masse à partir d’un CSV
+
+$CSVFile = "C:\Scripts\AD_USERS\Utilisateurs.csv"
+$CSVData = Import-CSV -Path $CSVFile -Delimiter ";" -Encoding UTF8
+
+Foreach($Utilisateur in $CSVData){
+    # Construction du login (SamAccountName)
+    $UtilisateurLogin = ($Utilisateur.Prenom).Substring(0,1) + "." + $Utilisateur.Nom
+}
+
+Nous allons intégrer à notre boucle la commande Set-ADUser pour modifier le champ « Description » pour chaque utilisateur. La commande est :
+
+Set-ADUser -Identity $UtilisateurLogin -Description $Utilisateur.Fonction
+
+Dans le script, on va au préalable s’assurer que l’utilisateur existe avant de chercher à le modifier. Au final, voici le code complet de la boucle :
+
+Foreach($Utilisateur in $CSVData){
+
+    # Construction du login (SamAccountName)
+    $UtilisateurLogin = ($Utilisateur.Prenom).Substring(0,1) + "." + $Utilisateur.Nom
+
+    if (Get-ADUser -Identity $UtilisateurLogin)
+    {
+       Write-Output "L'identifiant $UtilisateurLogin existe, l'utilisateur va être modifié."
+       Set-ADUser -Identity $UtilisateurLogin -Description $Utilisateur.Fonction
+    }
+}
+
+https://www.it-connect.fr/active-directory-automatiser-sauvegarde-des-zones-dns/
