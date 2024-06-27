@@ -6,3 +6,12 @@ Au caractère Ligne:1 : 1
 + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : InvalidArgument : (:) [Get-ADUser], ArgumentException
     + FullyQualifiedErrorId : ActiveDirectoryCmdlet:System.ArgumentException,Microsoft.ActiveDirectory.Management.Commands.GetADUser
+
+
+///
+# Importer le module Active Directory
+Import-Module ActiveDirectory
+
+# Récupérer les informations des utilisateurs sous le conteneur Users du domaine cabinet.local
+Get-ADUser -Filter * -SearchBase "CN=Users,DC=cabinet,DC=local" -Server LDAP1.cabinet.local
+///
