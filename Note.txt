@@ -7,7 +7,8 @@ Au caractère Ligne:1 : 1
     + CategoryInfo          : InvalidArgument : (:) [Get-ADUser], ArgumentException
     + FullyQualifiedErrorId : ActiveDirectoryCmdlet:System.ArgumentException,Microsoft.ActiveDirectory.Management.Commands.GetADUser
 
-
+///
+faut se brancher Shell Money
 ///
 # Importer le module Active Directory
 Import-Module ActiveDirectory

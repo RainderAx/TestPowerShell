@@ -29,7 +29,9 @@ $tabcontrol_Cabinet = New-Object System.Windows.Forms.TabControl
 $tabpage_newuser = New-Object System.Windows.Forms.TabPage
 
 #ajout
-$tabpage_newuser.Controls.Add($LabelLOGIN)
+$tabpage_newuser.Controls.Add($LabelLogin)
+$tabpage_newuser.Controls.Add($TextBoxLogin)
+
 
 $tabpage_newuser.Controls.Add($LabelNom)
 $tabpage_newuser.Controls.Add($LabelNomError)
@@ -418,13 +420,11 @@ $LabelLogin.Text = 'Login'
 #
 # TextBoxLogin
 #
-$TextBoxLogin.Location = New-Object System.Drawing.Point(150, 220)
+$TextBoxLogin.Location = New-Object System.Drawing.Point(150, 275)
 $TextBoxLogin.Name = 'TextBoxLogin'
 $TextBoxLogin.Size = New-Object System.Drawing.Size(200, 20)
 $TextBoxLogin.TabIndex = 3
 ####
-
-
 
 #
 # Form1
