@@ -1,1 +1,8 @@
-Je dois le faire sur une machine virtuel (Ubuntu)
+PS C:\Users\alexis.joseph.cab> Get-ADUser -Filter * -SearchBase "CN=Users,DC=IT-CONNECT,DC=LOCAL" -Server LDAP1.cabinet.local
+Get-ADUser : Le nom unique (distinguishedName) fourni doit appartenir à l’une des partitions suivantes: «DC=cabinet,DC=local , CN=Configuration,DC=cabinet,DC=local , 
+CN=Schema,CN=Configuration,DC=cabinet,DC=local , DC=ForestDnsZones,DC=cabinet,DC=local , DC=DomainDnsZones,DC=cabinet,DC=local».
+Au caractère Ligne:1 : 1
++ Get-ADUser -Filter * -SearchBase "CN=Users,DC=IT-CONNECT,DC=LOCAL" -S ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Get-ADUser], ArgumentException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:System.ArgumentException,Microsoft.ActiveDirectory.Management.Commands.GetADUser
