@@ -1,4 +1,4 @@
-Get-ADUser -Filter * -SearchBase "CN=Users,DC=IT-CONNECT,DC=LOCAL" -Server LDAP1.cabinet.local
+Get-ADUser -Filter * -SearchBase "CN=Users,DC=cabinet,DC=local" -Server LDAP1.cabinet.local
 
 #connaitre le nom de domaine 
 $domaine = Get-ADDomainController -Discover
