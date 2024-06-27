@@ -1,6 +1,6 @@
 #Charge en mÃ©moire les Ã©lÃ©ments graphiques necessaires
 [void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
-$Form10 = new-object System.Windows.Forms.form
+$Form10 = New-object System.Windows.Forms.form
 $TextBoxPrenom = New-Object System.Windows.Forms.TextBox
 $TextBoxNom = New-Object System.Windows.Forms.TextBox
 $TextTelephone = New-Object System.Windows.Forms.TextBox
