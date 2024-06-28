@@ -16,8 +16,12 @@ Import-Module ActiveDirectory
 # Récupérer les informations des utilisateurs sous le conteneur Users du domaine cabinet.local
 Get-ADUser -Filter * -SearchBase "CN=Users,DC=cabinet,DC=local" -Server LDAP1.cabinet.local
 ///
-Already on 'main'
-Your branch and 'origin/main' have diverged,
-and have 2 and 2 different commits each, respectively.
-  (use "git pull" if you want to integrate the remote branch with yours)
-@RainderAx2 ➜ /workspaces/TestPowerShell (main) $ 
+
+Out-File : Le format du chemin d'accès donné n'est pas pris en charge.
+Au caractère Ligne:313 : 16
++     $donnees | Out-File "\\C:\Scripts\Alexis\$Login _ $Nom.txt"
++                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OpenError: (:) [Out-File], NotSupportedException
+    + FullyQualifiedErrorId : FileOpenFailure,Microsoft.PowerShell.Commands.OutFileCommand
+
+    \\\
