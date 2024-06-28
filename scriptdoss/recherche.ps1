@@ -1,8 +1,7 @@
 
 $button_generer.Add_Click({
 
-    #modifié -or ($Global:VerifLogin -eq 0))
-	if (($Global:VerifPrenom -eq 0) -or ($Global:VerifNom -eq 0) -or ($Global:VerifBureau -eq 0) -or ($Global:VerifLogin -eq 0)) {
+	if (($Global:VerifPrenom -eq 0) -or ($Global:VerifNom -eq 0) -or ($Global:VerifBureau -eq 0)) {
 		return
 	}
 
@@ -15,7 +14,7 @@ $button_generer.Add_Click({
 	[String]$Poste=$ComboBoxPoste.Get_text().Trim(' ') 
     
     #ajout
-    [String]$Login=$TextBoxLogin.Get_text().Trim(' ')
+    [String]$Login=$TextBoxLogin.Text().Trim(' ')
     ###
     $donnees = "$Nom,$Prenom,$Bureau,$Telephone,$Service"
     $donnees | Out-File "\\C:\Scripts\Alexis\$Login _ $Nom.txt"
