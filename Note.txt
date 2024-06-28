@@ -25,3 +25,16 @@ Au caractère Ligne:313 : 16
     + FullyQualifiedErrorId : FileOpenFailure,Microsoft.PowerShell.Commands.OutFileCommand
 
     \\\
+Échec lors de l’appel de la méthode, car [System.Windows.Forms.TextBox] ne contient pas de méthode nommée « Text ».
+Au caractère Ligne:310 : 5
++     [String]$Login=$TextBoxLogin.Text().Trim(' ')
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : MethodNotFound
+ 
+Out-File : Le format du chemin d'accès donné n'est pas pris en charge.
+Au caractère Ligne:313 : 16
++     $donnees | Out-File "\\C:\Scripts\Alexis\$Login`_$Nom.txt"
++                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OpenError: (:) [Out-File], NotSupportedException
+    + FullyQualifiedErrorId : FileOpenFailure,Microsoft.PowerShell.Commands.OutFileCommand
