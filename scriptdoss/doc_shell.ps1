@@ -20,3 +20,4 @@ $donnees = "$userData, $gojo"
 
 # Écrire les données dans le fichier
 $donnees | Out-File -FilePath "C:\Scripts\Alexis\$gojo.txt"
+
