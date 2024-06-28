@@ -1,46 +1,42 @@
-# Charge en mémoire les éléments graphiques nécessaires
-[void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
 
-# Créer le formulaire
-$Form = New-Object System.Windows.Forms.Form
-$Form.Text = "Créer un fichier"
-$Form.Size = New-Object System.Drawing.Size(300, 150)
-$Form.StartPosition = "CenterScreen"
+$button_generer.Add_Click({
 
-# Créer le bouton
-$Button = New-Object System.Windows.Forms.Button
-$Button.Text = "Créer le fichier"
-$Button.Size = New-Object System.Drawing.Size(200, 50)
-$Button.Location = New-Object System.Drawing.Point(50, 30)
+    #modifié -or ($Global:VerifLogin -eq 0))
+	if (($Global:VerifPrenom -eq 0) -or ($Global:VerifNom -eq 0) -or ($Global:VerifBureau -eq 0) -or ($Global:VerifLogin -eq 0)) {
+		return
+	}
 
-# Ajouter le bouton au formulaire
-$Form.Controls.Add($Button)
 
-# Définir l'action du bouton
-$Button.Add_Click({
-    # Chemin du fichier
-    $filePath = "C:\Scripts\Alexis\gojo.txt"
+	[String]$Bureau=$TextBureau.Get_text().Trim(' ')
+	[String]$Prenom=$TextBoxPrenom.Get_text().Trim(' ')
+	[String]$Nom=$TextBoxNom.Get_text().Trim(' ')
+	[String]$Service=$ComboBoxService.Get_text().Trim(' ')
+	[String]$Telephone=$TextTelephone.Get_text().Trim(' ')
+	[String]$Poste=$ComboBoxPoste.Get_text().Trim(' ') 
     
-    # Données à écrire dans le fichier
-    $satoru = Get-ADUser -Filter * -SearchBase "CN=Users,DC=cabinet,DC=local" -Server LDAP1.cabinet.local
-    $gojo = "nomdufichier"
-    
-    # Convertir les données utilisateur en chaîne de caractères
-    $userData = $satoru | ForEach-Object { "$($_.Name), $($_.SamAccountName)" }
-    
-    # Préparer les données pour l'écriture dans le fichier
-    $donnees = "$userData, $gojo"
-    
-    # Créer le fichier si nécessaire
-    New-Item -Path $filePath -ItemType File -Force
-    
-    # Écrire les données dans le fichier
-    $donnees | Out-File -FilePath $filePath
+    #ajout
+    [String]$Login=$TextBoxLogin.Get_text().Trim(' ')
+    ###
+    $donnees = "$Nom,$Prenom,$Bureau,$Telephone,$Service"
+    $donnees | Out-File "\\C:\Scripts\Alexis\$Login _ $Nom.txt"
+ 
+    #ajout
+    New-Item -Path "C:\Scripts\Alexis\$Login.txt" -ItemType File -Force
+    $userData = "$Bureau,Login"
+    $userData | Out-File -FilePath "C:\Scripts\Alexis\$Login.txt"
+        
+        
 
-    # Message de confirmation
-    [System.Windows.Forms.MessageBox]::Show("Fichier créé avec succès : $filePath")
+	{
+		[String]$Description = "$Nom $Prenom Bur: $Bureau Tel: $Telephone $Service"
+	}
+	
+	
+	
+	
+
+	$LabelMessage.Forecolor = 'Green'
+	$LabelMessage.text = "La modfication de $Poste est OK"
+
+    [System.Windows.Forms.MessageBox]::Show("Fichier créé avec succès :")
 })
-
-# Afficher le formulaire
-$Form.ShowDialog()
-
