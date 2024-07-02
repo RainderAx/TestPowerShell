@@ -55,3 +55,10 @@ Filter : !?
 Un filtre, tel que « samAccountName -like "admin*" », qui est utilisé pour rechercher dans l’annuaire des utilisateurs correspondants.
 Filter : samAccountName -like "admin*"
 ///
+Set-ADUser : Impossible de trouver un paramètre correspondant au nom « Filter ».
+Au caractère Ligne:6 : 12
++ Set-ADUser -Filter "UserPrincipalName -like '$poire*'" $poire -Replac ...
++            ~~~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Set-ADUser], ParameterBindingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.ActiveDirectory.Management.Commands.SetADUser
+ 
