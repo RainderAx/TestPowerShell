@@ -1,1 +1,1 @@
-Get-ADUser samAccountName -like "admin*"
+Get-ADUser -Filter 'samAccountName -like "admin*"'
