@@ -1,1 +1,5 @@
-Get-ADUser -Filter 'samAccountName -like "admin*"'
+
+$poire = "alex"
+
+
+Get-ADUser -Filter 'samAccountName -like "$poire"*'
