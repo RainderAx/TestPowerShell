@@ -1,3 +1,7 @@
-Set-ADUser -Identity $UtilisateurLogin -Description $Utilisateur.Fonction
+$poire = "alexis.joseph"
 
-#modif
+$buro = 6013
+
+Set-ADUser -Identity $poire -Office $Utilisateur.Fonction = buro
+
+Get-ADUser -Filter "UserPrincipalName -like '$poire*'" -Properties *
