@@ -2,6 +2,9 @@ $poire = "alexis.joseph"
 
 $buro = 6013
 
-Set-ADUser -Identity $poire -Office $Utilisateur.Fonction = buro
+# Mettre à jour le bureau de l'utilisateur ou Office
+Set-ADUser -Identity $poire -Replace @{physicalDeliveryOfficeName = $buro}
 
 Get-ADUser -Filter "UserPrincipalName -like '$poire*'" -Properties *
+
+
