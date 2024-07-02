@@ -35,7 +35,7 @@ $destination = "\\cabinet.local\partages\support-informatique\Info_Computer\Arch
 $fichier = $null
 
 
-# varible pour ignorer toutes les erreurs et ne pas les afficher
+# variable pour ignorer toutes les erreurs et ne pas les afficher
 
 
 $ErrorActionPreference= 'silentlycontinue'

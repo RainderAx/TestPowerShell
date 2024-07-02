@@ -38,3 +38,20 @@ Au caractère Ligne:313 : 16
 +                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : OpenError: (:) [Out-File], NotSupportedException
     + FullyQualifiedErrorId : FileOpenFailure,Microsoft.PowerShell.Commands.OutFileCommand
+///
+Get-ADUser : Impossible de trouver un paramètre correspondant au nom « like ».
+Au caractère Ligne:1 : 27
++ Get-ADUser samAccountName -like "admin*"
++                           ~~~~~
+    + CategoryInfo          : InvalidArgument : (:) [Get-ADUser], ParameterBindingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.ActiveDirectory.Management.Commands.GetADUser
+
+PS C:\Users\alexis.joseph.cab> Get-ADUser
+
+applet de commande Get-ADUser à la position 1 du pipeline de la commande
+Fournissez des valeurs pour les paramètres suivants :
+(Tapez !? pour obtenir de l’aide.)
+Filter : !?
+Un filtre, tel que « samAccountName -like "admin*" », qui est utilisé pour rechercher dans l’annuaire des utilisateurs correspondants.
+Filter : samAccountName -like "admin*"
+///
