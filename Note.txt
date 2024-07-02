@@ -61,4 +61,11 @@ Au caractère Ligne:6 : 12
 +            ~~~~~~~
     + CategoryInfo          : InvalidArgument : (:) [Set-ADUser], ParameterBindingException
     + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.ActiveDirectory.Management.Commands.SetADUser
- 
+ ////
+ Set-ADUser : Impossible de valider l'argument sur le paramètre «Identity». L’argument est Null. Spécifiez une valeur valide pour 
+l’argument, puis réessayez.
+Au caractère Ligne:10 : 22
++ Set-ADUser -Identity $user -Replace @{physicalDeliveryOfficeName = $b ...
++                      ~~~~~
+    + CategoryInfo          : InvalidData : (:) [Set-ADUser], ParameterBindingValidationException
+    + FullyQualifiedErrorId : ParameterArgumentValidationError,Microsoft.ActiveDirectory.Management.Commands.SetADUser
