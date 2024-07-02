@@ -21,3 +21,24 @@ $donnees = "$userData, $gojo"
 # Écrire les données dans le fichier
 $donnees | Out-File -FilePath "C:\Scripts\Alexis\$gojo.txt"
 
+#comparaison vérifié si une valeur est nulle
+if ($TextTelephone -eq $null -or $TextTelephone -eq '') {
+    Write-Output "Gojo > Jogo"
+} 
+
+#envoyé mail
+$utilisateur =$env:username.Split(".")[1].ToUpper()
+$From  = "$env:username@cabinet.local"
+$To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
+$body = " Bonjour,
+
+Ci-dessous la description du PC $env:computername appartenant à $Nom  :
+
+$Nom $Prenom Bur: $Bureau Tel: $Telephone $Service
+       
+Ce rapport a été généré par $utilisateur.
+
+Merci de vérifier si ces informations sont correctes" 
+$Subject = 'Check_New_Computer'
+$SmtpServer = 'mail.cabinet.local'
+$Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
