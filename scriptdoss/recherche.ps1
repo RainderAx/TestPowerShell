@@ -1,4 +1,3 @@
-
-        if $TextTelephone -eq null{
-            Write-Output "Gojo > Jogo"
-        } 
+if ([string]::IsNullOrEmpty($TextTelephone)) {
+    Write-Output "Gojo > Jogo"
+}
