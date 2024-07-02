@@ -1,10 +1,17 @@
+# Spécifiez le samAccountName de l'utilisateur
 $poire = "alexis.joseph"
 
-$buro = 6013
+# Spécifiez le nouveau numéro de bureau
+$buro = "6013"
 
-# Mettre à jour le bureau de l'utilisateur ou Office
-Set-ADUser -Identity $poire -Replace @{physicalDeliveryOfficeName = $buro}
+# Récupérer l'utilisateur pour obtenir l'Identity unique
+$user = Get-ADUser -Filter "samAccountName -eq '$poire'"
 
-Get-ADUser -Filter "UserPrincipalName -like '$poire*'" -Properties *
+# Mettre à jour le bureau de l'utilisateur
+Set-ADUser -Identity $user -Replace @{physicalDeliveryOfficeName = $buro}
+
+# Vérifier la mise à jour en récupérant à nouveau l'utilisateur
+Get-ADUser -Filter "samAccountName -eq '$poire'" -Properties *
+
 
 
