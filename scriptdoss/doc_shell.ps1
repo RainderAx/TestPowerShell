@@ -44,7 +44,7 @@ $SmtpServer = 'mail.cabinet.local'
 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
 
 
-### cherche un utilisateur dans l AD
+### cherche un utilisateur dans l AD recupere TOUTE ses infos
 $poire = "alex"
 
 Get-ADUser -Filter "samAccountName -like '$poire*'"
