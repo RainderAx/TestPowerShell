@@ -42,3 +42,9 @@ Merci de vérifier si ces informations sont correctes"
 $Subject = 'Check_New_Computer'
 $SmtpServer = 'mail.cabinet.local'
 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
+
+
+### cherche un utilisateur dans l AD
+$poire = "alex"
+
+Get-ADUser -Filter "samAccountName -like '$poire*'"
