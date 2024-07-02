@@ -1,5 +1,5 @@
 
-#recuperer la liste des users 
+#recuperer la liste des bases du serveur
 Get-ADUser -Filter * -SearchBase "CN=Users,DC=cabinet,DC=local" -Server LDAP1.cabinet.local
 
 #connaitre le nom de domaine 
