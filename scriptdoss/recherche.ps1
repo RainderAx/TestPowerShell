@@ -4,7 +4,7 @@ Add-Type -AssemblyName System.Windows.Forms
 # Créer la fenêtre
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Exemple de Menu Déroulant"
-$form.Size = New-Object System.Drawing.Size(300, 250)
+$form.Size = New-Object System.Drawing.Size(300, 200)
 
 # Créer une étiquette pour le menu déroulant
 $label = New-Object System.Windows.Forms.Label
