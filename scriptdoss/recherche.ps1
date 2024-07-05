@@ -1,44 +1,15 @@
-# Importer le module Windows Forms
-Add-Type -AssemblyName System.Windows.Forms
 
-# Créer la fenêtre
-$form = New-Object System.Windows.Forms.Form
-$form.Text = "Exemple de Menu Déroulant"
-$form.Size = New-Object System.Drawing.Size(300, 150)
 
-# Créer une étiquette pour le menu déroulant
-$label = New-Object System.Windows.Forms.Label
-$label.Location = New-Object System.Drawing.Point(10, 20)
-$label.Size = New-Object System.Drawing.Size(150, 20)
-$label.Text = "Choisissez une option :"
-$form.Controls.Add($label)
-
-# Créer le menu déroulant (ComboBox)
-$comboBox = New-Object System.Windows.Forms.ComboBox
-$comboBox.Location = New-Object System.Drawing.Point(170, 20)
-$comboBox.Size = New-Object System.Drawing.Size(100, 20)
-$comboBox.DropDownStyle = [System.Windows.Forms.ComboBoxStyle]::DropDownList
-
-# Ajouter des options au menu déroulant
-$options = @("Option 1", "Option 2", "Option 3", "Option 4")
-$comboBox.Items.AddRange($options)
-
-# Ajouter le ComboBox à la fenêtre
-$form.Controls.Add($comboBox)
-
-# Créer un bouton pour valider la sélection
-$button = New-Object System.Windows.Forms.Button
-$button.Location = New-Object System.Drawing.Point(10, 60)
-$button.Size = New-Object System.Drawing.Size(100, 30)
-$button.Text = "Valider"
-$form.Controls.Add($button)
-
-# Ajouter un événement au bouton pour afficher la sélection
+# Ajouter un événement au bouton pour afficher la sélection avec switch
 $button.Add_Click({
     $selectedOption = $comboBox.SelectedItem
-    [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption")
+
+    switch ($selectedOption) {
+        "Option 1" { [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : Option 1") }
+        "Option 2" { [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : Option 2") }
+        "Option 3" { [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : Option 3") }
+        "Option 4" { [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : Option 4") }
+        default { [System.Windows.Forms.MessageBox]::Show("Option non reconnue") }
+    }
 })
 
-# Afficher la fenêtre
-$form.Add_Shown({$form.Activate()})
-[void]$form.ShowDialog()
