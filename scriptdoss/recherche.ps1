@@ -1,42 +1,10 @@
 # Importer le module Windows Forms
 Add-Type -AssemblyName System.Windows.Forms
 
-##########################################################
-$TextBoxBureau = New-Object System.Windows.Forms.TextBox
-$LabelBureau = New-Object System.Windows.Forms.Label
-$tabpage_newuser.Controls.Add($LabelLogin)
-$tabpage_newuser.Controls.Add($TextBoxLogin)
-[bool]$Global:VerifBureau=$false
-
-$TextBureau.Add_LostFocus({
-	$chars = '0123456789'
-	
-	for ( $i=0; $i -lt ($TextBureau.text).Length; $i++ ) {
-		if ($chars -match $TextBureau.Text[$i] -ne $true) {
-			ChangeLabelError $LabelBureauError 'Le champ doit contenir que des chiffres'
-			$Global:VerifBureau = $false
-			Break
-		}
-		
-		elseif ($TextBureau.Text.Length -ne 3) {
-			ChangeLabelError $LabelBureauError 'Le champ doit contenir 3 caractÃ¨res'
-			return
-		}
-		else {
-			ChangeLabelOK $LabelBureauError
-			$Global:VerifBureau = $true
-		}
-	}
-})
-
-
-########################################################
-
-
 # Créer la fenêtre
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Exemple de Menu Déroulant"
-$form.Size = New-Object System.Drawing.Size(300, 150)
+$form.Size = New-Object System.Drawing.Size(300, 250)
 
 # Créer une étiquette pour le menu déroulant
 $label = New-Object System.Windows.Forms.Label
@@ -58,9 +26,29 @@ $comboBox.Items.AddRange($options)
 # Ajouter le ComboBox à la fenêtre
 $form.Controls.Add($comboBox)
 
+# Créer un TextBox pour le bureau
+$TextBureau = New-Object System.Windows.Forms.TextBox
+$TextBureau.Location = New-Object System.Drawing.Point(170, 50)
+$TextBureau.Size = New-Object System.Drawing.Size(100, 20)
+$form.Controls.Add($TextBureau)
+
+# Créer une étiquette pour le bureau
+$LabelBureau = New-Object System.Windows.Forms.Label
+$LabelBureau.Location = New-Object System.Drawing.Point(10, 50)
+$LabelBureau.Size = New-Object System.Drawing.Size(150, 20)
+$LabelBureau.Text = "Bureau :"
+$form.Controls.Add($LabelBureau)
+
+# Créer une étiquette pour afficher les erreurs
+$LabelBureauError = New-Object System.Windows.Forms.Label
+$LabelBureauError.Location = New-Object System.Drawing.Point(10, 80)
+$LabelBureauError.Size = New-Object System.Drawing.Size(260, 20)
+$LabelBureauError.ForeColor = [System.Drawing.Color]::Red
+$form.Controls.Add($LabelBureauError)
+
 # Créer un bouton pour valider la sélection
 $button = New-Object System.Windows.Forms.Button
-$button.Location = New-Object System.Drawing.Point(10, 60)
+$button.Location = New-Object System.Drawing.Point(10, 110)
 $button.Size = New-Object System.Drawing.Size(100, 30)
 $button.Text = "Valider"
 $form.Controls.Add($button)
@@ -70,37 +58,28 @@ $button.Add_Click({
     $selectedOption = $comboBox.SelectedItem
 
     switch ($selectedOption) {
-        "BAT4" {    [String]$Bureau='4',$TextBureau.Get_text().Trim(' ')
-        
-                    # LabelBureau
-                    $LabelBureau.AutoSize = $true
-                    $LabelBureau.Location = New-Object System.Drawing.Point(15, 25)
-                    $LabelBureau.Name = 'LabelBureau'
-                    $LabelBureau.Size = New-Object System.Drawing.Size(71, 13)
-                    $LabelBureau.Text = 'Batiment  4'
-                    #
-                    # LabelBureauerror
-                    #
-                    $LabelBureauerror.AutoSize = $true
-                    $LabelBureauerror.Location = New-Object System.Drawing.Point(375, 25)
-                    $LabelBureauerror.Name = 'LabelBureauerror'
-                    $LabelBureauerror.Size = New-Object System.Drawing.Size(71, 13)
-                    $LabelBureauerror.Text = '' }
-
-
-
-
-        "BAT5" { [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : Option 2") }
-
-        "BAT6" { [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : Option 3") }
-
-        "ROQUELAURE" { [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : Option 4") }
-
-        "LEPLAY" { [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : Option 4") }
-
-        "LESDIGUIERE" { [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : Option 4") }
-
-        default { [System.Windows.Forms.MessageBox]::Show("Option non reconnue") }
+        "BAT4" {    
+            $LabelBureau.Text = "Bâtiment 4"
+            $LabelBureauError.Text = ""
+        }
+        "BAT5" { 
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT5") 
+        }
+        "BAT6" { 
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT6") 
+        }
+        "ROQUELAURE" { 
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : ROQUELAURE") 
+        }
+        "LEPLAY" { 
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LEPLAY") 
+        }
+        "LESDIGUIERE" { 
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LESDIGUIERE") 
+        }
+        default { 
+            [System.Windows.Forms.MessageBox]::Show("Option non reconnue") 
+        }
     }
 })
 
