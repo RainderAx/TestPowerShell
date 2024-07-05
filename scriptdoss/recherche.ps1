@@ -4,19 +4,20 @@ Add-Type -AssemblyName System.Windows.Forms
 # Créer la fenêtre
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Exemple de Menu Déroulant"
-$form.Size = New-Object System.Drawing.Size(300, 200)
+$form.Size = New-Object System.Drawing.Size(300, 150)
 
 # Créer une étiquette pour le menu déroulant
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10, 20)
-$label.Size = New-Object System.Drawing.Size(100, 20)
+$label.Size = New-Object System.Drawing.Size(150, 20)
 $label.Text = "Choisissez une option :"
 $form.Controls.Add($label)
 
 # Créer le menu déroulant (ComboBox)
 $comboBox = New-Object System.Windows.Forms.ComboBox
-$comboBox.Location = New-Object System.Drawing.Point(120, 20)
-$comboBox.Size = New-Object System.Drawing.Size(150, 20)
+$comboBox.Location = New-Object System.Drawing.Point(170, 20)
+$comboBox.Size = New-Object System.Drawing.Size(100, 20)
+$comboBox.DropDownStyle = [System.Windows.Forms.ComboBoxStyle]::DropDownList
 
 # Ajouter des options au menu déroulant
 $options = @("Option 1", "Option 2", "Option 3", "Option 4")
