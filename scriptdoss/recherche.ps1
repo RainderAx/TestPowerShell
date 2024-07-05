@@ -1,15 +1,43 @@
-#Set-ADUser : Droits d’accès insuffisants pour effectuer cette opération
-Au caractère Ligne:8 : 1
-+ Set-ADUser -Identity $user -Office '$buro'
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (alexis.joseph.cab:ADUser) [Set-ADUser], ADException
-    + FullyQualifiedErrorId : ActiveDirectoryServer:8344,Microsoft.ActiveDirectory.Management.Commands.SetADUser
-##
+# Importer le module Windows Forms
+Add-Type -AssemblyName System.Windows.Forms
 
-$poire = "alexis.joseph"
+# Créer la fenêtre
+$form = New-Object System.Windows.Forms.Form
+$form.Text = "Exemple de Menu Déroulant"
+$form.Size = New-Object System.Drawing.Size(300, 200)
 
-$buro = 6013
+# Créer une étiquette pour le menu déroulant
+$label = New-Object System.Windows.Forms.Label
+$label.Location = New-Object System.Drawing.Point(10, 20)
+$label.Size = New-Object System.Drawing.Size(100, 20)
+$label.Text = "Choisissez une option :"
+$form.Controls.Add($label)
 
-$user = (Get-ADUser -Filter "UserPrincipalName -like '$poire*'" -Properties *).SamAccountName
+# Créer le menu déroulant (ComboBox)
+$comboBox = New-Object System.Windows.Forms.ComboBox
+$comboBox.Location = New-Object System.Drawing.Point(120, 20)
+$comboBox.Size = New-Object System.Drawing.Size(150, 20)
 
-Set-ADUser -Identity $user -Office '$buro'
+# Ajouter des options au menu déroulant
+$options = @("Option 1", "Option 2", "Option 3", "Option 4")
+$comboBox.Items.AddRange($options)
+
+# Ajouter le ComboBox à la fenêtre
+$form.Controls.Add($comboBox)
+
+# Créer un bouton pour valider la sélection
+$button = New-Object System.Windows.Forms.Button
+$button.Location = New-Object System.Drawing.Point(10, 60)
+$button.Size = New-Object System.Drawing.Size(100, 30)
+$button.Text = "Valider"
+$form.Controls.Add($button)
+
+# Ajouter un événement au bouton pour afficher la sélection
+$button.Add_Click({
+    $selectedOption = $comboBox.SelectedItem
+    [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption")
+})
+
+# Afficher la fenêtre
+$form.Add_Shown({$form.Activate()})
+[void]$form.ShowDialog()

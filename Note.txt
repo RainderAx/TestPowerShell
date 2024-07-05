@@ -69,3 +69,12 @@ Au caractère Ligne:10 : 22
 +                      ~~~~~
     + CategoryInfo          : InvalidData : (:) [Set-ADUser], ParameterBindingValidationException
     + FullyQualifiedErrorId : ParameterArgumentValidationError,Microsoft.ActiveDirectory.Management.Commands.SetADUser
+\\\
+
+#Set-ADUser : Droits d’accès insuffisants pour effectuer cette opération
+Au caractère Ligne:8 : 1
++ Set-ADUser -Identity $user -Office '$buro'
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (alexis.joseph.cab:ADUser) [Set-ADUser], ADException
+    + FullyQualifiedErrorId : ActiveDirectoryServer:8344,Microsoft.ActiveDirectory.Management.Commands.SetADUser
+##
