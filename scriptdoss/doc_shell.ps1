@@ -48,3 +48,13 @@ $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body
 $poire = "alex"
 
 Get-ADUser -Filter "samAccountName -like '$poire*'"
+
+# Créer le menu déroulant (ComboBox)
+$comboBox = New-Object System.Windows.Forms.ComboBox
+$comboBox.Location = New-Object System.Drawing.Point(170, 20)
+$comboBox.Size = New-Object System.Drawing.Size(100, 20)
+$comboBox.DropDownStyle = [System.Windows.Forms.ComboBoxStyle]::DropDownList
+
+# Ajouter des options au menu déroulant
+$options = @("BAT4", "BAT5", "BAT6", "ROQUELAURE", "LEPLAY", "LESDIGUIERE")
+$comboBox.Items.AddRange($options)
