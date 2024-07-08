@@ -69,3 +69,7 @@ $selectedOption = $comboBox.SelectedItem
         "Option 4" { [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : Option 4") }
         default { [System.Windows.Forms.MessageBox]::Show("Option non reconnue") }
     }
+
+
+$button.Size = New-Object System.Drawing.Size(48, 20)
+##### (X , Y)
