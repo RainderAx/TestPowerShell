@@ -1,20 +1,32 @@
+#ce script permet de renseigner le champs de desciption de l'ordinateur 
+
+#22/02/23 (modif faite par Ali)
+# la maj un email de notification
+
+
+#16/03/23 (modif faite par Ali)
+# ce script génére un fichier txt qui va être traité par un autre script en tâche planifier
+
+
 #Charge en mÃ©moire les Ã©lÃ©ments graphiques necessaires
 [void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
-$Form10 = New-object System.Windows.Forms.form
+$Form10 = new-object System.Windows.Forms.form
+
+#
 $TextBoxPrenom = New-Object System.Windows.Forms.TextBox
 $TextBoxNom = New-Object System.Windows.Forms.TextBox
 $TextTelephone = New-Object System.Windows.Forms.TextBox
-$TextBureau = New-Object System.Windows.Forms.TextBox
 
+$button_generer = New-Object System.Windows.Forms.Button
+$button_quitter = New-Object System.Windows.Forms.Button
 $LabelPrenom = New-Object System.Windows.Forms.Label
 $LabelPrenomError = New-Object System.Windows.Forms.Label
 $LabelNom = New-Object System.Windows.Forms.Label
 $LabelNomError = New-Object System.Windows.Forms.Label
 $LabelTelephone = New-Object System.Windows.Forms.Label
 $LabelTelephoneError = New-Object System.Windows.Forms.Label
+$LabelPoste = New-Object System.Windows.Forms.Label
 
-$labelBureau = New-Object System.Windows.Forms.Label
-$labelBureauError = New-Object System.Windows.Forms.Label
 $Labelservice = New-Object System.Windows.Forms.Label
 $labelMessage = New-Object System.Windows.Forms.Label
 $ComboBoxService = New-Object System.Windows.Forms.ComboBox
@@ -23,15 +35,38 @@ $ComboBoxPoste = New-Object System.Windows.Forms.ComboBox
 #ajout
 $TextBoxLogin = New-Object System.Windows.Forms.TextBox
 $LabelLogin = New-Object System.Windows.Forms.Label
-
+###
 
 $tabcontrol_Cabinet = New-Object System.Windows.Forms.TabControl
 $tabpage_newuser = New-Object System.Windows.Forms.TabPage
 
+
+
+# Créer la fenêtre
+$form = New-Object System.Windows.Forms.Form
+$form.Text = "Exemple de Menu Déroulant"
+$form.Size = New-Object System.Drawing.Size(300, 200)
+
+# Créer une étiquette pour le menu déroulant
+$labelbur = New-Object System.Windows.Forms.Label
+$labelbur.Location = New-Object System.Drawing.Point(10, 20)
+$labelbur.Size = New-Object System.Drawing.Size(150, 20)
+$labelbur.Text = "Choisissez un batiment :"
+$tabpage_newuser.Controls.Add($labelbur)
+
+# Créer le menu déroulant (ComboBox)
+$comboBox = New-Object System.Windows.Forms.ComboBox
+$comboBox.Location = New-Object System.Drawing.Point(170, 20)
+$comboBox.Size = New-Object System.Drawing.Size(100, 20)
+$comboBox.DropDownStyle = [System.Windows.Forms.ComboBoxStyle]::DropDownList
+
+# Ajouter le ComboBox à la fenêtre
+$tabpage_newuser.Controls.Add($comboBox)
+
 #ajout
 $tabpage_newuser.Controls.Add($LabelLogin)
 $tabpage_newuser.Controls.Add($TextBoxLogin)
-
+###
 
 $tabpage_newuser.Controls.Add($LabelNom)
 $tabpage_newuser.Controls.Add($LabelNomError)
@@ -39,19 +74,21 @@ $tabpage_newuser.Controls.Add($LabelPrenom)
 $tabpage_newuser.Controls.Add($LabelPrenomError)
 $tabpage_newuser.Controls.Add($LabelTelephone)
 $tabpage_newuser.Controls.Add($LabelTelephoneError)
+$tabpage_newuser.Controls.Add($LabelPoste)
 
-$tabpage_newuser.Controls.Add($labelBureau)
 $tabpage_newuser.Controls.Add($labelBureauerror)
 $tabpage_newuser.Controls.Add($Labelservice)
 $tabpage_newuser.Controls.Add($LabelMessage)
-
+$tabpage_newuser.Controls.Add($button_quitter)
+$tabpage_newuser.Controls.Add($button_generer)
 $tabpage_newuser.Controls.Add($TextTelephone)
 $tabpage_newuser.Controls.Add($TextBoxPrenom)
 $tabpage_newuser.Controls.Add($TextBoxNom)
+$tabpage_newuser.Controls.Add($ComboBoxPoste)
 
-$tabpage_newuser.Controls.Add($textBureau)
 $tabpage_newuser.Controls.Add($ComboBoxService)
 
+$tabpage_newuser.Controls.Add($button)
 
 #Valeurs qui permettent de vÃ©rifier les valeurs des champs necessaires pour crÃ©er un utilisateur
 [bool]$Global:VerifPrenom=$false
@@ -106,6 +143,7 @@ $TextTelephone.Add_LostFocus({
 	ChangeLabelOk $LabelTelephoneError
 })
 
+###
 #ajout 
 $TextBoxLogin.Add_LostFocus({
 	
@@ -113,19 +151,17 @@ $TextBoxLogin.Add_LostFocus({
 		return
 	}
 	
-		$Global:VerifPrenom = $true
 })
 
 
 
-#AJOUT
+#ajout
 $TextBoxLogin.Add_textChanged({
-	$TextBoxLogin.Text = ($TextBoxNom.Get_Text())
+	$TextBoxLogin.Text = ($TextBoxLogin.Get_Text())
 	$TextBoxLogin.SelectionStart = $TextBoxLogin.Text.Length
 	$TextBoxLogin.SelectionLength = 0
 })
-
-
+###
 
 $TextBoxPrenom.Add_LostFocus({
 	
@@ -260,12 +296,149 @@ function Generate-Pwd {
 }
 
 
+Function Get-InfoDomaine {
+	Param($strCategory=$args[0], $DirectoryEntry=$args[1], $Element=$arg[2], $Scope=$arg[3])
+	$objDomain = New-Object System.DirectoryServices.DirectoryEntry($DirectoryEntry)
+	$objSearcher = New-Object System.DirectoryServices.DirectorySearcher($objDomain,"(objectCategory=$strCategory)",@('name'))
+	
+	if ($Element -eq 'Name') {
+		if ($Scope -ne $null) {
+			$objSearcher.SearchScope = $Scope
+		}	
+		$Clients=$objSearcher.FindAll() | %{$_.properties.name} 
+	}
+	elseif ($Element -eq 'adspath') {
+		$Clients=$objSearcher.FindAll() | %{$_.properties.adspath} 
+	}
+	Return $Clients
+}
+
+$button_generer.Add_Click({
+
+    
+	if (($Global:VerifPrenom -eq 0) -or ($Global:VerifNom -eq 0) -or ($Global:VerifBureau -eq 0)) {
+		return
+	}
 
 
+	[String]$Bureau=$TextBureau.Get_text().Trim(' ')
+	[String]$Prenom=$TextBoxPrenom.Get_text().Trim(' ')
+	[String]$Nom=$TextBoxNom.Get_text().Trim(' ')
+	[String]$Service=$ComboBoxService.Get_text().Trim(' ')
+	[String]$Telephone=$TextTelephone.Get_text().Trim(' ')
+	[String]$Poste=$ComboBoxPoste.Get_text().Trim(' ') 
+    
+    #ajout
+    [String]$Login=$TextBoxLogin.Text.Trim(' ')
+    ###
+    New-Item -Path "C:\Scripts\Alexis\$Nom.txt" -ItemType File -Force
+    $donnees = "$Nom,$Prenom,$Bureau,$Telephone,$Service"
+    $donnees | Out-File  -FilePath "C:\Scripts\Alexis\$Nom.txt"
+ 
+    #ajout
+    New-Item -Path "C:\Scripts\Alexis\$Login.txt" -ItemType File -Force
+    $userData = "$Bureau,$Login"
+    $userData | Out-File -FilePath "C:\Scripts\Alexis\$Login.txt"
+    ####    
+        
+
+	{
+		[String]$Description = "$Nom $Prenom Bur: $Bureau Tel: $Telephone $Service"
+	}
+	
+	
+	
+	
+
+	$LabelMessage.Forecolor = 'Green'
+	$LabelMessage.text = "La modfication de $Poste est OK"
+
+})
+
+# Créer un bouton pour valider la sélection
+$button = New-Object System.Windows.Forms.Button
+$button.Location = New-Object System.Drawing.Point(300, 20)
+$button.Size = New-Object System.Drawing.Size(45, 20)
+$button.Text = "Valider"
+$form.Controls.Add($button)
+
+# Ajouter des options au menu déroulant
+$options = @("BAT4", "BAT5", "BAT6", "ROQUELAURE", "LEPLAY", "LESDIGUIERE")
+$comboBox.Items.AddRange($options)
+
+$button.Add_Click({
+    $selectedOption = $comboBox.SelectedItem
+
+    switch ($selectedOption) {
+        "BAT4" {    
+
+            # Créer un TextBox pour le bureau
+            $TextBureau = New-Object System.Windows.Forms.TextBox
+            $TextBureau.Location = New-Object System.Drawing.Point(15, 35)
+            $TextBureau.Size = New-Object System.Drawing.Size(71, 13)
+            $tabpage_newuser.Controls.Add($TextBureau)
+
+            # Créer une étiquette pour le bureau
+            $TextBureau.Location = New-Object System.Drawing.Point(150, 55)
+            $TextBureau.MaxLength = 20
+            $TextBureau.Name = 'TextBureau'
+            $TextBureau.Size = New-Object System.Drawing.Size(200, 20)
+            $TextBureau.TabIndex = 1
+            
+
+            $LabelBureau.Text = "Bâtiment 4"
+            $LabelBureauError.Text = "Entrez les 3 derniers chiffres"
+
+            [String]$bur=$TextBureau.Get_text().Trim(' ')
+            $Bureau = '4',$bur
+
+        }
+        "BAT5" { 
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT5") 
+        }
+        "BAT6" { 
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT6") 
+        }
+        "ROQUELAURE" { 
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : ROQUELAURE") 
+        }
+        "LEPLAY" { 
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LEPLAY") 
+        }
+        "LESDIGUIERE" { 
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LESDIGUIERE") 
+        }
+        default { 
+            [System.Windows.Forms.MessageBox]::Show("Option non reconnue") 
+        }
+    }
+})
+
+
+#
+# button_quitter
+#
+$button_quitter.Location = New-Object System.Drawing.Point(450, 400)
+$button_quitter.Name = 'button_quitter'
+$button_quitter.Size = New-Object System.Drawing.Size(94, 24)
+$button_quitter.TabIndex = 9
+$button_quitter.Text = 'Quitter'
+$button_quitter.UseVisualStyleBackColor = $true
+$button_quitter.Add_Click({$Form10.close()})
+#
+# button_generer
+#
+$button_generer.Location = New-Object System.Drawing.Point(53, 400)
+$button_generer.Name = 'button_generer'
+$button_generer.Size = New-Object System.Drawing.Size(94, 24)
+$button_generer.TabIndex = 8
+$button_generer.Text = 'Generer'
+$button_generer.UseVisualStyleBackColor = $true
+#
 # LabelPrenom
 #
 $LabelPrenom.AutoSize = $true
-$LabelPrenom.Location = New-Object System.Drawing.Point(15, 75)
+$LabelPrenom.Location = New-Object System.Drawing.Point(15, 105)
 $LabelPrenom.Name = 'LabelPrenom'
 $LabelPrenom.Size = New-Object System.Drawing.Size(129, 15)
 $LabelPrenom.Text = 'Prenom'
@@ -273,7 +446,7 @@ $LabelPrenom.Text = 'Prenom'
 # LabelPrenomError
 #
 $LabelPrenomError.AutoSize = $true
-$LabelPrenomError.Location = New-Object System.Drawing.Point(375, 75)
+$LabelPrenomError.Location = New-Object System.Drawing.Point(375, 105)
 $LabelPrenomError.Name = 'LabelPrenomError'
 $LabelPrenomError.Size = New-Object System.Drawing.Size(129, 15)
 $LabelPrenomError.Text = ''
@@ -281,7 +454,7 @@ $LabelPrenomError.Text = ''
 # LabelNom
 #
 $LabelNom.AutoSize = $true
-$LabelNom.Location = New-Object System.Drawing.Point(15, 125)
+$LabelNom.Location = New-Object System.Drawing.Point(15, 155)
 $LabelNom.Name = 'LabelNom'
 $LabelNom.Size = New-Object System.Drawing.Size(71, 13)
 $LabelNom.Text = 'Nom'
@@ -289,47 +462,40 @@ $LabelNom.Text = 'Nom'
 # LabelNomError
 #
 $LabelNomError.AutoSize = $true
-$LabelNomError.Location = New-Object System.Drawing.Point(375, 125)
+$LabelNomError.Location = New-Object System.Drawing.Point(375, 155)
 $LabelNomError.Name = 'LabelNomError'
 $LabelNomError.Size = New-Object System.Drawing.Size(71, 13)
 #
 # LabelTelephone
 #
 $LabelTelephone.AutoSize = $true
-$LabelTelephone.Location = New-Object System.Drawing.Point(15, 225)
+$LabelTelephone.Location = New-Object System.Drawing.Point(15, 255)
 $LabelTelephone.Name = 'LabelTelephone'
 $LabelTelephone.Size = New-Object System.Drawing.Size(71, 13)
 $LabelTelephone.Text = 'Telephone (optionel)'
 #
-
+# LabelPoste
+#
+$LabelPoste.AutoSize = $true
+$LabelPoste.Location = New-Object System.Drawing.Point(15, 305)
+$LabelPoste.Name = 'LabelNumeroEmploye'
+$LabelPoste.Size = New-Object System.Drawing.Size(71, 13)
+$LabelPoste.Text = 'Poste'
+#
 # LabelTelephoneError
 #
 $LabelTelephoneError.AutoSize = $true
-$LabelTelephoneError.Location = New-Object System.Drawing.Point(260, 225)
+$LabelTelephoneError.Location = New-Object System.Drawing.Point(260, 255)
 $LabelTelephoneError.Name = 'LabelTelephoneError'
 $LabelTelephoneError.Size = New-Object System.Drawing.Size(71, 13)
 $LabelTelephoneError.Text = ''
 #
-# LabelBureau
-#
-$LabelBureau.AutoSize = $true
-$LabelBureau.Location = New-Object System.Drawing.Point(15, 25)
-$LabelBureau.Name = 'LabelBureau'
-$LabelBureau.Size = New-Object System.Drawing.Size(71, 13)
-$LabelBureau.Text = 'Bureau'
-#
-# LabelBureauerror
-#
-$LabelBureauerror.AutoSize = $true
-$LabelBureauerror.Location = New-Object System.Drawing.Point(375, 25)
-$LabelBureauerror.Name = 'LabelBureauerror'
-$LabelBureauerror.Size = New-Object System.Drawing.Size(71, 13)
-$LabelBureauerror.Text = ''
+
 #
 # Labelservice
 #
 $Labelservice.AutoSize = $true
-$Labelservice.Location = New-Object System.Drawing.Point(15, 175)
+$Labelservice.Location = New-Object System.Drawing.Point(15, 205)
 $Labelservice.Name = 'Labelservice'
 $Labelservice.Size = New-Object System.Drawing.Size(71, 13)
 $Labelservice.Text = 'Service'
@@ -337,35 +503,31 @@ $Labelservice.Text = 'Service'
 # LabelMessage
 #
 $LabelMessage.AutoSize = $true
-$LabelMessage.Location = New-Object System.Drawing.Point(200, 415)
+$LabelMessage.Location = New-Object System.Drawing.Point(200, 445)
 $LabelMessage.Name = 'LabelMessage'
 $LabelMessage.Text = ''
 #
 # TextBureau
 #
-$TextBureau.Location = New-Object System.Drawing.Point(150, 25)
-$TextBureau.MaxLength = 20
-$TextBureau.Name = 'TextBureau'
-$TextBureau.Size = New-Object System.Drawing.Size(200, 20)
-$TextBureau.TabIndex = 1
+
 #
 # TextBoxPrenom
 #
-$TextBoxPrenom.Location = New-Object System.Drawing.Point(150, 75)
+$TextBoxPrenom.Location = New-Object System.Drawing.Point(150, 105)
 $TextBoxPrenom.Name = 'TextBoxPrenom'
 $TextBoxPrenom.Size = New-Object System.Drawing.Size(200, 20)
 $TextBoxPrenom.TabIndex = 2
 #
 # TextBoxNom
 #
-$TextBoxNom.Location = New-Object System.Drawing.Point(150, 125)
+$TextBoxNom.Location = New-Object System.Drawing.Point(150, 155)
 $TextBoxNom.Name = 'TextBoxNom'
 $TextBoxNom.Size = New-Object System.Drawing.Size(200, 20)
 $TextBoxNom.TabIndex = 3
 #
 # TextTelephone
 #
-$TextTelephone.Location = New-Object System.Drawing.Point(150, 225)
+$TextTelephone.Location = New-Object System.Drawing.Point(150, 255)
 $TextTelephone.MaxLength = 7
 $TextTelephone.Name = 'TextTelephone'
 $TextTelephone.Size = New-Object System.Drawing.Size(100, 20)
@@ -373,7 +535,7 @@ $TextTelephone.TabIndex = 5
 #
 # ComboBoxPoste
 #
-$ComboBoxPoste.Location = New-Object System.Drawing.Point(150, 275)
+$ComboBoxPoste.Location = New-Object System.Drawing.Point(150, 305)
 $ComboBoxPoste.Name = 'ComboBoxPoste'
 $ComboBoxPoste.Size = New-Object System.Drawing.Size(200, 20)
 $ComboBoxPoste.TabIndex = 6
@@ -382,7 +544,7 @@ $ComboBoxPoste.DropDownStyle='DropDownList'
 #
 # ComboBoxService
 #
-$ComboBoxService.Location = New-Object System.Drawing.Point(150, 175)
+$ComboBoxService.Location = New-Object System.Drawing.Point(150, 205)
 $ComboBoxService.Name = 'ComboBoxService'
 $ComboBoxService.Size = New-Object System.Drawing.Size(200, 20)
 $ComboBoxService.DropDownStyle='DropDownList'
@@ -391,7 +553,7 @@ $ComboBoxService.TabIndex = 4
 # tabpage_newuser
 #
 $tabpage_newuser.AutoSize = $true
-$tabpage_newuser.Location = New-Object System.Drawing.Point(4, 22)
+$tabpage_newuser.Location = New-Object System.Drawing.Point(4, 32)
 $tabpage_newuser.Name = 'tabpage_newuser_'
 $tabpage_newuser.Size = new-object System.Drawing.Size(600, 500)
 $tabpage_newuser.TabIndex = 100
@@ -400,7 +562,7 @@ $tabpage_newuser.Text = 'Cabinet'
 # tabcontrol_Cabinet
 #
 $tabcontrol_Cabinet.AutoSize = $true
-$tabcontrol_Cabinet.Location = New-Object System.Drawing.Point(0, 0)
+$tabcontrol_Cabinet.Location = New-Object System.Drawing.Point(0, 10)
 $tabcontrol_Cabinet.Name = 'tabcontrol_User'
 $tabcontrol_Cabinet.Size = new-object System.Drawing.Size(600, 500)
 $tabcontrol_Cabinet.TabIndex = 99
@@ -412,7 +574,7 @@ $tabcontrol_Cabinet.Controls.Add($tabpage_newuser)
 # LabelLogin
 #
 $LabelLogin.AutoSize = $true
-$LabelLogin.Location = New-Object System.Drawing.Point(15, 275)
+$LabelLogin.Location = New-Object System.Drawing.Point(15, 305)
 $LabelLogin.Name = 'LabelLogin'
 $LabelLogin.Size = New-Object System.Drawing.Size(71, 13)
 $LabelLogin.Text = 'Login'
@@ -420,10 +582,10 @@ $LabelLogin.Text = 'Login'
 #
 # TextBoxLogin
 #
-$TextBoxLogin.Location = New-Object System.Drawing.Point(150, 275)
+$TextBoxLogin.Location = New-Object System.Drawing.Point(150, 305)
 $TextBoxLogin.Name = 'TextBoxLogin'
 $TextBoxLogin.Size = New-Object System.Drawing.Size(200, 20)
-$TextBoxLogin.TabIndex = 3
+$TextBoxLogin.TabIndex = 7
 ####
 
 #
