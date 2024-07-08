@@ -358,7 +358,7 @@ $button_generer.Add_Click({
 # Créer un bouton pour valider la sélection
 $button = New-Object System.Windows.Forms.Button
 $button.Location = New-Object System.Drawing.Point(300, 20)
-$button.Size = New-Object System.Drawing.Size(45, 20)
+$button.Size = New-Object System.Drawing.Size(49, 20)
 $button.Text = "Valider"
 $form.Controls.Add($button)
 
