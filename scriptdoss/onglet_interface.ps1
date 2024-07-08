@@ -387,7 +387,7 @@ $button.Add_Click({
             
 
             $LabelBureau.Text = "Bâtiment 4"
-            $LabelBureauError.Text = "Entrez les 3 derniers chiffres"
+            $LabelBureauError.Text = "Entrez les 3 derniers chiffres du bureau"
 
             [String]$bur=$TextBureau.Get_text().Trim(' ')
             $Bureau = '4',$bur
