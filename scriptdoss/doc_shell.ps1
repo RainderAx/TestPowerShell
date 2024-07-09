@@ -87,3 +87,6 @@ switch -Wildcard ($NomLogiciel)
     "regedit" { Start-Process regedit.exe }
     Default { "Désolé, je n'ai pas trouvé ce logiciel" }
 }
+
+###crere un tableau
+$valeur = 0..10
