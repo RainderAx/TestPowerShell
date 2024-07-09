@@ -54,3 +54,17 @@ $buro = 6013
 $user = (Get-ADUser -Filter "UserPrincipalName -like '$poire*'" -Properties *).SamAccountName
 
 Set-ADUser -Identity $user -Office '$buro'
+\\\
+Impossible d’appeler une méthode dans une expression Null.
+Au caractère Ligne:20 : 1
++ $window.FindName("Close_Click").Add_Click({
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+ 
+Impossible d’appeler une méthode dans une expression Null.
+Au caractère Ligne:24 : 1
++ $window.ShowDialog()
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
