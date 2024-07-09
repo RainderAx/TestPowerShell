@@ -73,3 +73,17 @@ $selectedOption = $comboBox.SelectedItem
 
 $button.Size = New-Object System.Drawing.Size(48, 20)
 ##### (X , Y)
+
+
+
+###lancer des exec
+$NomLogiciel = "calc"
+
+switch -Wildcard ($NomLogiciel)
+{
+    "N?TEPAD" { Start-Process notepad.exe }
+    "note*" { Start-Process notepad.exe }
+    "calc" { Start-Process calc.exe }
+    "regedit" { Start-Process regedit.exe }
+    Default { "Désolé, je n'ai pas trouvé ce logiciel" }
+}
