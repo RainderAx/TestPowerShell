@@ -90,3 +90,4 @@ switch -Wildcard ($NomLogiciel)
 
 ###crere un tableau
 $valeur = 0..10
+$langages = @("PowerShell","Python","PHP","JavaScript","C-Sharp")
