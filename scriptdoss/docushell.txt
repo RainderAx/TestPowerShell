@@ -68,3 +68,13 @@ Au caractère Ligne:24 : 1
 + ~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
     + FullyQualifiedErrorId : InvokeMethodOnNull
+
+
+nommer le bouton dans le XAML 
+<Button x:Name="CloseButton" Content="Fermer" Width="100" Margin="10" HorizontalAlignment="Center"/>
+
+Utiliser le nom pour attacher l'événement Click :
+$closeButton = $window.FindName("CloseButton")
+$closeButton.Add_Click({
+    $window.Close()
+})
