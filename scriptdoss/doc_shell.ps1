@@ -91,3 +91,13 @@ switch -Wildcard ($NomLogiciel)
 ###crere un tableau
 $valeur = 0..10
 $langages = @("PowerShell","Python","PHP","JavaScript","C-Sharp")
+
+###return
+PS C:\temp> function ContrivedFolderMakerFunction {
+    >>    $folderName = [DateTime]::Now.ToFileTime()
+    >>    $folderPath = Join-Path -Path . -ChildPath $folderName
+    >>    New-Item -Path $folderPath -ItemType Directory
+    >>    return $true
+    >> }
+    PS C:\temp> $result = ContrivedFolderMakerFunction
+    PS C:\temp> $result
