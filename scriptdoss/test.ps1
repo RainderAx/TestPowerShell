@@ -286,6 +286,7 @@ $button.Add_Click({
 
 
 
+
 #Fonction qui permet de prendre les initials de plusieurs prÃ©noms
 function MultiPrenom{
 	Param($Prenom=$args[0])
