@@ -28,10 +28,12 @@ $path = "C:\Scripts\Alexis\test_pour_script2 "
 
 # répertoire de destination 
 
+#variable modifier
 $emplacement = "C:\Scripts\Alexis\test_pour_script2\Deuxième_Dossier"
 
 # réinitilaisation de la variable
 
+#variable modifier
 $file = $null
 
 
@@ -43,7 +45,7 @@ $ErrorActionPreference= 'silentlycontinue'
 
 # Pour chaque fichier, affichez le contenu
 
-
+#variable modifier
 foreach ($file in $Userfiler) {  
 
     Get-Content $path\$file | ForEach-Object {
@@ -63,6 +65,7 @@ foreach ($file in $Userfiler) {
 
 # les variables nécessaires au fonctionnement du script
 
+#variable modifier
 $Utilis = (Get-ADUser -Filter "UserPrincipalName -like '$Login*'" -Properties *).SamAccountName
 
 
@@ -97,10 +100,13 @@ $Ou_Pc = "OU=$Cab_OH, OU=$Cab_OH_0,OU=OH,OU=ordinateurs,OU=infra,DC=cabinet,DC=l
 Manage-Computer -Computer $Computer  -Description_Pc $Description_Pc -Grp_Pc $Grp_Pc -Ou_Pc $Ou_Pc 
 
 }
+####
+
 #
 # verifier de l'envoie de notification email
 #
 
+#ajout
 $second_mail = "administrateurs.psnsm@cabinet.local"
 
 $Sujet = "Deplacement $Nom $Prenom au bureau $Bureau"
@@ -114,6 +120,8 @@ $corps = @"
     Le bureau de $Nom $Prenom est maintenant en $Bureau         
 
 "@
+#####
+
 
 if ($Cabinet -like "SETI4") {
 
@@ -171,7 +179,6 @@ if ($Cabinet -like "SETI4") {
 
 
         #ajout
-
         Send-MailMessage -From $second_mail -To $second_mail -Subject $Subject  -Body $corps -SmtpServer $SmtpServer -port 587 -Encoding unicode
 
         ###ajout
