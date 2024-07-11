@@ -10,7 +10,7 @@ $form.Size = New-Object System.Drawing.Size(300, 200)
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10, 20)
 $label.Size = New-Object System.Drawing.Size(150, 20)
-$label.Text = "Choisissez un batiment :"
+$label.Text = "Choisissez un bâtiment :"
 $form.Controls.Add($label)
 
 # Créer le menu déroulant (ComboBox)
@@ -26,8 +26,6 @@ $comboBox.Items.AddRange($options)
 # Ajouter le ComboBox à la fenêtre
 $form.Controls.Add($comboBox)
 
-
-
 # Créer une étiquette pour afficher les erreurs
 $LabelBureauError = New-Object System.Windows.Forms.Label
 $LabelBureauError.Location = New-Object System.Drawing.Point(10, 80)
@@ -42,46 +40,20 @@ $button.Size = New-Object System.Drawing.Size(100, 30)
 $button.Text = "Valider"
 $form.Controls.Add($button)
 
-
+# Définir la variable globale VerifBureau
+[bool]$Global:VerifBureau = $false
 
 # Ajouter un événement au bouton pour afficher la sélection
 $button.Add_Click({
     $selectedOption = $comboBox.SelectedItem
 
-
-    
     switch ($selectedOption) {
-        "BAT4" {    
+        "BAT4" {
             # Créer un TextBox pour le bureau
             $TextBureau = New-Object System.Windows.Forms.TextBox
             $TextBureau.Location = New-Object System.Drawing.Point(170, 50)
             $TextBureau.Size = New-Object System.Drawing.Size(100, 20)
             $form.Controls.Add($TextBureau)
-
-            $LabelBureauError = New-Object System.Windows.Forms.Label
-            $LabelBureauError.Location = New-Object System.Drawing.Point(170, 75)
-            $LabelBureauError.Size = New-Object System.Drawing.Size(100, 20)
-            $form.Controls.Add($LabelBureauError)
-
-            $TextBureau.Add_LostFocus({
-	        $chars = '0123456789'
-	
-	        for ( $i=0; $i -lt ($TextBureau.text).Length; $i++ ) {
-		        if ($chars -match $TextBureau.Text[$i] -ne $true) {
-			        $LabelBureauError.Text = 'Le champ doit contenir que des chiffres'
-			        $Global:VerifBureau = $false
-			        Break
-		        }
-		
-		        elseif ($TextBureau.Text.Length -ne 3) {
-			        ChangeLabelError $LabelBureauError 'Le champ doit contenir 3 caractÃ¨res'
-			        return
-		        }
-		        else {
-			        ChangeLabelOK $LabelBureauError
-			        $Global:VerifBureau = $true
-		        }
-	        }})
 
             # Créer une étiquette pour le bureau
             $LabelBureau = New-Object System.Windows.Forms.Label
@@ -90,13 +62,28 @@ $button.Add_Click({
             $LabelBureau.Text = "Bureau :"
             $form.Controls.Add($LabelBureau)
 
-            $LabelBureau.Text = "Bâtiment 4"
-            
+            # Ajouter un événement LostFocus pour le TextBox
+            $TextBureau.Add_LostFocus({
+                $chars = '0123456789'
+                $textValid = $true
 
-            [String]$bur=$TextBureau.Get_text().Trim(' ')
-            $Bureau = '4',$bur
+                for ($i=0; $i -lt $TextBureau.Text.Length; $i++) {
+                    if ($chars -notmatch $TextBureau.Text[$i]) {
+                        $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
+                        $Global:VerifBureau = $false
+                        $textValid = $false
+                        break
+                    }
+                }
 
-           
+                if ($textValid -and $TextBureau.Text.Length -ne 3) {
+                    $LabelBureauError.Text = 'Le champ doit contenir 3 caractères'
+                    $Global:VerifBureau = $false
+                } elseif ($textValid) {
+                    $LabelBureauError.Text = ''
+                    $Global:VerifBureau = $true
+                }
+            })
         }
         
         "BAT5" { 
@@ -119,8 +106,6 @@ $button.Add_Click({
         }
     }
 })
-
-
 
 # Afficher la fenêtre
 $form.Add_Shown({$form.Activate()})
