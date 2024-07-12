@@ -33,12 +33,27 @@ $LabelBureauError.Size = New-Object System.Drawing.Size(260, 20)
 $LabelBureauError.ForeColor = [System.Drawing.Color]::Red
 $form.Controls.Add($LabelBureauError)
 
+# Créer un TextBox pour le bureau et le rendre invisible par défaut
+$TextBureau = New-Object System.Windows.Forms.TextBox
+$TextBureau.Location = New-Object System.Drawing.Point(20, 50)
+$TextBureau.Size = New-Object System.Drawing.Size(100, 30)
+$TextBureau.Visible = $false
+$form.Controls.Add($TextBureau)
+
 # Créer un bouton pour valider la sélection
 $button = New-Object System.Windows.Forms.Button
 $button.Location = New-Object System.Drawing.Point(10, 110)
 $button.Size = New-Object System.Drawing.Size(100, 30)
 $button.Text = "Valider"
 $form.Controls.Add($button)
+
+# Créer un bouton pour valider la sélection
+$butt = New-Object System.Windows.Forms.Button
+$butt.Location = New-Object System.Drawing.Point(70, 110)
+$butt.Size = New-Object System.Drawing.Size(100, 30)
+$butt.Text = "Vr"
+$form.Controls.Add($butt)
+$butt.Add_Click({ Write-Host "grrrt baw"})
 
 # Définir la variable globale VerifBureau
 [bool]$Global:VerifBureau = $false
@@ -49,62 +64,64 @@ $button.Add_Click({
 
     switch ($selectedOption) {
         "BAT4" {
-            # Créer un TextBox pour le bureau
-            $TextBureau = New-Object System.Windows.Forms.TextBox
-            $TextBureau.Location = New-Object System.Drawing.Point(170, 50)
-            $TextBureau.Size = New-Object System.Drawing.Size(100, 20)
-            $form.Controls.Add($TextBureau)
-
-            # Créer une étiquette pour le bureau
-            $LabelBureau = New-Object System.Windows.Forms.Label
-            $LabelBureau.Location = New-Object System.Drawing.Point(10, 50)
-            $LabelBureau.Size = New-Object System.Drawing.Size(150, 20)
-            $LabelBureau.Text = "Bureau :"
-            $form.Controls.Add($LabelBureau)
-
-            # Ajouter un événement LostFocus pour le TextBox
-            $TextBureau.Add_LostFocus({
-                $chars = '0123456789'
-                $textValid = $true
-
-                for ($i=0; $i -lt $TextBureau.Text.Length; $i++) {
-                    if ($chars -notmatch $TextBureau.Text[$i]) {
-                        $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
-                        $Global:VerifBureau = $false
-                        $textValid = $false
-                        break
-                    }
-                }
-
-                if ($textValid -and $TextBureau.Text.Length -ne 3) {
-                    $LabelBureauError.Text = 'Le champ doit contenir 3 caractères'
-                    $Global:VerifBureau = $false
-                } elseif ($textValid) {
-                    $LabelBureauError.Text = ''
-                    $Global:VerifBureau = $true
-                }
-            })
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
         }
-        
         "BAT5" { 
+            $TextBureau.Visible = $false
             [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT5") 
         }
         "BAT6" { 
+            $TextBureau.Visible = $false
             [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT6") 
         }
         "ROQUELAURE" { 
+            $TextBureau.Visible = $false
             [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : ROQUELAURE") 
         }
         "LEPLAY" { 
+            $TextBureau.Visible = $false
             [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LEPLAY") 
         }
         "LESDIGUIERE" { 
+            $TextBureau.Visible = $false
             [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LESDIGUIERE") 
         }
         default { 
+            $TextBureau.Visible = $false
             [System.Windows.Forms.MessageBox]::Show("Option non reconnue") 
         }
     }
+})
+
+# Ajouter un événement LostFocus au TextBox pour la validation
+$TextBureau.Add_LostFocus({
+    [String]$Bureau = $TextBureau.Text.Trim()
+
+    # Ajouter une vérification et un message de débogage
+    if ($Bureau -ne $null) {
+        $Global:VerifBureau = $false
+
+        Write-Host "c est Bureau: '$Bureau'"
+        Write-Host "Length: $($Bureau.Length)"
+
+        # Vérifier si la longueur du texte est de 3 caractères
+        if ($Bureau.Length -ne 3) {
+            $LabelBureauError.Text = 'Le champ doit contenir 3 caractères'
+        } elseif ($Bureau -notmatch '^[0-9]+$') {
+            # Vérifier si le texte contient uniquement des chiffres
+            $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
+        } else {
+            # Si toutes les conditions sont remplies
+            $LabelBureauError.Text = ''
+            $Global:VerifBureau = $true
+        }
+    } else {
+        $LabelBureauError.Text = 'Le champ ne peut pas être vide'
+        Write-Host "TextBox est null ou TextBox.Text est null"
+    }
+    Write-Host "c est Bureau: '$Bureau'"
+    Write-Host "Length: $($Bureau.Length)"
 })
 
 # Afficher la fenêtre
