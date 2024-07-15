@@ -37,4 +37,58 @@ Au caractère Ligne:14 : 9
     + FullyQualifiedErrorId : ActiveDirectoryServer:8344,Microsoft.ActiveDirectory.Management.Commands.SetADUser
 
 
-$Log = "$Prenom" + "." + "$Nom" + ".cab"
+
+
+
+$TextBoxNom.Add_LostFocus({
+	if ($Global:VerifNom -eq $true) {
+		return
+	}
+		
+	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ '
+	
+	for ( $i=0; $i -lt ($TextBoxNom.text).Length; $i++ ) {
+		if ($chars -match $TextBoxNom.Text[$i] -ne $true) {
+			ChangeLabelError $LabelNomError 'Le champ doit contenir que des lettres'
+			$Global:VerifNom = $false
+			Break
+		}
+		else {
+			$Global:VerifNom = $true
+		}
+	}
+	if ($Global:VerifNom -eq $true) {
+		ChangeLabelOK $LabelNomError
+
+
+        $Log = "$Prenom" + "." + "$Nom" + ".cab"
+        $Login=(Get-ADUser -Filter "UserPrincipalName -like '$Log*'" -Properties *).SamAccountName
+        # LabelLogin
+        #
+        $button = New-Object System.Windows.Forms.Button
+        $button.AutoSize = $true
+        $buton.Location = New-Object System.Drawing.Point(75, 305)
+        $button.Name = 'LabelLogin'
+        $button.Size = New-Object System.Drawing.Size(71, 13)
+        $button.Text = 'Login'
+        $tabpage_newuser.Controls.Add($button)
+
+        #
+        # TextBoxLogin
+        #
+        $LabelLogin.AutoSize = $true
+        $LabelLogin.Location = New-Object System.Drawing.Point(15, 305)
+        $LabelLogin.Name = 'LabelLogin'
+        $LabelLogin.Size = New-Object System.Drawing.Size(71, 13)
+        $LabelLogin.Text = 'Login'
+
+        Write-Output $Login
+        ####
+	}
+})
+La propriété «Location» est introuvable dans cet objet. Vérifiez qu’elle existe et qu’elle peut être définie.
+Au caractère Ligne:194 : 9
++         $buton.Location = New-Object System.Drawing.Point(75, 305)
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : PropertyNotFound
