@@ -78,3 +78,10 @@ $closeButton = $window.FindName("CloseButton")
 $closeButton.Add_Click({
     $window.Close()
 })
+\\\\
+Get-ADUser : Impossible de valider l'argument sur le paramètre « Identity ». La propriété Identity sur l’argument est nulle ou vide.
+Au caractère C:\Scripts\Alexis\doss\test.ps1:57 : 51
++                   $blablou = Get-ADUser -Identity "$Bureau" -Properti ...
++                                                   ~~~~~~~~~
+    + CategoryInfo          : InvalidData : (:) [Get-ADUser], ParameterBindingValidationException
+    + FullyQualifiedErrorId : ParameterArgumentValidationError,Microsoft.ActiveDirectory.Management.Commands.GetADUser
