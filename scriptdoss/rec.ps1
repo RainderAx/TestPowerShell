@@ -53,7 +53,11 @@ $butt.Location = New-Object System.Drawing.Point(70, 110)
 $butt.Size = New-Object System.Drawing.Size(100, 30)
 $butt.Text = "Vr"
 $form.Controls.Add($butt)
-$butt.Add_Click({ Write-Host "grrrt baw"})
+$butt.Add_Click({ Write-Host "grrrt baw"
+                  $blablou = Get-ADUser -Filter "samAccountName -like '$Bureau*'"
+                  
+                  Write-Host "$blablou"  
+})
 
 # Définir la variable globale VerifBureau
 [bool]$Global:VerifBureau = $false
