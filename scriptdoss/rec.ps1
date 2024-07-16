@@ -49,18 +49,13 @@ $form.Controls.Add($button)
 
 # Créer un bouton pour valider la sélection
 $butt = New-Object System.Windows.Forms.Button
-$butt.Location = New-Object System.Drawing.Point(70, 110)
+$butt.Location = New-Object System.Drawing.Point(120, 110)
 $butt.Size = New-Object System.Drawing.Size(100, 30)
 $butt.Text = "Vr"
 $form.Controls.Add($butt)
-$butt.Add_Click({ Write-Host "grrrt baw"
-                  $blablou = Get-ADUser -Filter "samAccountName -like '$Bureau*'"
-                  
-                  Write-Host "$blablou"  
-})
 
-# Définir la variable globale VerifBureau
-[bool]$Global:VerifBureau = $false
+# Déclarer une variable globale pour stocker la valeur de Bureau
+$Global:Bureau = ""
 
 # Ajouter un événement au bouton pour afficher la sélection
 $button.Add_Click({
@@ -100,19 +95,19 @@ $button.Add_Click({
 
 # Ajouter un événement LostFocus au TextBox pour la validation
 $TextBureau.Add_LostFocus({
-    [String]$Bureau = $TextBureau.Text.Trim()
+    $Global:Bureau = $TextBureau.Text.Trim()
 
     # Ajouter une vérification et un message de débogage
-    if ($Bureau -ne $null) {
+    if ($Global:Bureau -ne $null) {
         $Global:VerifBureau = $false
 
-        Write-Host "c est Bureau: '$Bureau'"
-        Write-Host "Length: $($Bureau.Length)"
+        Write-Host "c est Bureau: '$Global:Bureau'"
+        Write-Host "Length: $($Global:Bureau.Length)"
 
         # Vérifier si la longueur du texte est de 3 caractères
-        if ($Bureau.Length -ne 3) {
+        if ($Global:Bureau.Length -ne 3) {
             $LabelBureauError.Text = 'Le champ doit contenir 3 caractères'
-        } elseif ($Bureau -notmatch '^[0-9]+$') {
+        } elseif ($Global:Bureau -notmatch '^[0-9]+$') {
             # Vérifier si le texte contient uniquement des chiffres
             $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
         } else {
@@ -124,8 +119,15 @@ $TextBureau.Add_LostFocus({
         $LabelBureauError.Text = 'Le champ ne peut pas être vide'
         Write-Host "TextBox est null ou TextBox.Text est null"
     }
-    Write-Host "c est Bureau: '$Bureau'"
-    Write-Host "Length: $($Bureau.Length)"
+    Write-Host "c est Bureau: '$Global:Bureau'"
+    Write-Host "Length: $($Global:Bureau.Length)"
+})
+
+# Ajouter un événement Click au bouton $butt pour utiliser la valeur de Bureau
+$butt.Add_Click({
+    Write-Host "grrrt baw"
+    $blablou = Get-ADUser -Filter "samAccountName -like '$Global:Bureau*'"
+    Write-Host "$blablou"
 })
 
 # Afficher la fenêtre
