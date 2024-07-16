@@ -1,74 +1,129 @@
-# Adding a button to the tab page
-$tabpage_newuser.Controls.Add($button)
+# Importer le module Windows Forms
+Add-Type -AssemblyName System.Windows.Forms
 
-# Handling the button click event
+# Créer la fenêtre
+$form = New-Object System.Windows.Forms.Form
+$form.Text = "Exemple de Menu Déroulant"
+$form.Size = New-Object System.Drawing.Size(300, 200)
+
+# Créer une étiquette pour le menu déroulant
+$label = New-Object System.Windows.Forms.Label
+$label.Location = New-Object System.Drawing.Point(10, 20)
+$label.Size = New-Object System.Drawing.Size(150, 20)
+$label.Text = "Choisissez un bâtiment :"
+$form.Controls.Add($label)
+
+# Créer le menu déroulant (ComboBox)
+$comboBox = New-Object System.Windows.Forms.ComboBox
+$comboBox.Location = New-Object System.Drawing.Point(170, 20)
+$comboBox.Size = New-Object System.Drawing.Size(100, 20)
+$comboBox.DropDownStyle = [System.Windows.Forms.ComboBoxStyle]::DropDownList
+
+# Ajouter des options au menu déroulant
+$options = @("BAT4", "BAT5", "BAT6", "ROQUELAURE", "LEPLAY", "LESDIGUIERE")
+$comboBox.Items.AddRange($options)
+
+# Ajouter le ComboBox à la fenêtre
+$form.Controls.Add($comboBox)
+
+# Créer une étiquette pour afficher les erreurs
+$LabelBureauError = New-Object System.Windows.Forms.Label
+$LabelBureauError.Location = New-Object System.Drawing.Point(10, 80)
+$LabelBureauError.Size = New-Object System.Drawing.Size(260, 20)
+$LabelBureauError.ForeColor = [System.Drawing.Color]::Red
+$form.Controls.Add($LabelBureauError)
+
+# Créer un TextBox pour le bureau et le rendre invisible par défaut
+$TextBureau = New-Object System.Windows.Forms.TextBox
+$TextBureau.Location = New-Object System.Drawing.Point(20, 50)
+$TextBureau.Size = New-Object System.Drawing.Size(100, 30)
+$TextBureau.Visible = $false
+$form.Controls.Add($TextBureau)
+
+# Créer un bouton pour valider la sélection
+$button = New-Object System.Windows.Forms.Button
+$button.Location = New-Object System.Drawing.Point(10, 110)
+$button.Size = New-Object System.Drawing.Size(100, 30)
+$button.Text = "Valider"
+$form.Controls.Add($button)
+
+# Créer un bouton pour valider la sélection
+$butt = New-Object System.Windows.Forms.Button
+$butt.Location = New-Object System.Drawing.Point(70, 110)
+$butt.Size = New-Object System.Drawing.Size(100, 30)
+$butt.Text = "Vr"
+$form.Controls.Add($butt)
+$butt.Add_Click({ Write-Host "grrrt baw"})
+
+# Définir la variable globale VerifBureau
+[bool]$Global:VerifBureau = $false
+
+# Ajouter un événement au bouton pour afficher la sélection
 $button.Add_Click({
     $selectedOption = $comboBox.SelectedItem
 
-    # Defining the TextBox LostFocus event handler within the button click event
-    $TextBureau_LostFocus = {
-        $chars = '0123456789'
-        $TextBureauText = $TextBureau.Text
-        $isNumeric = $TextBureauText -cmatch '^[0-9]{3}$'
-        
-        if (-not $isNumeric) {
-            if ($TextBureauText.Length -ne 3) {
-                ChangeLabelError $LabelBureauError 'Le champ doit contenir 3 caractères'
-            } else {
-                ChangeLabelError $LabelBureauError 'Le champ doit contenir que des chiffres'
-            }
-            $Global:VerifBureau = $false
-        } else {
-            ChangeLabelOK $LabelBureauError
-            $Global:VerifBureau = $true
-        }
-    }
-
     switch ($selectedOption) {
         "BAT4" {
-            # Creating a TextBox for the bureau
-            $TextBureau = New-Object System.Windows.Forms.TextBox
-            $TextBureau.Location = New-Object System.Drawing.Point(150, 55)
-            $TextBureau.Size = New-Object System.Drawing.Size(200, 20)
-            $TextBureau.MaxLength = 3
-            $TextBureau.Name = 'TextBureau'
-            $TextBureau.TabIndex = 1
-            $tabpage_newuser.Controls.Add($TextBureau)
-            
-            # Assigning the LostFocus event to the TextBox
-            $TextBureau.Add_LostFocus($TextBureau_LostFocus)
-
-            # Creating a label for the bureau
-            $LabelBureau = New-Object System.Windows.Forms.Label
-            $LabelBureau.Location = New-Object System.Drawing.Point(15, 50)
-            $LabelBureau.Size = New-Object System.Drawing.Size(150, 20)
-            $LabelBureau.Text = "Bâtiment 4"
-            $tabpage_newuser.Controls.Add($LabelBureau)
-
-            # Creating an error label for the bureau
-            $LabelBureauError = New-Object System.Windows.Forms.Label
-            $LabelBureauError.Location = New-Object System.Drawing.Point(15, 75)
-            $LabelBureauError.Size = New-Object System.Drawing.Size(335, 20)
-            $LabelBureauError.Text = "Entrez les 3 derniers chiffres du bureau"
-            $tabpage_newuser.Controls.Add($LabelBureauError)
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
         }
-        "BAT5" {
-            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT5")
+        "BAT5" { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT5") 
         }
-        "BAT6" {
-            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT6")
+        "BAT6" { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT6") 
         }
-        "ROQUELAURE" {
-            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : ROQUELAURE")
+        "ROQUELAURE" { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : ROQUELAURE") 
         }
-        "LEPLAY" {
-            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LEPLAY")
+        "LEPLAY" { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LEPLAY") 
         }
-        "LESDIGUIERE" {
-            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LESDIGUIERE")
+        "LESDIGUIERE" { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LESDIGUIERE") 
         }
-        default {
-            [System.Windows.Forms.MessageBox]::Show("Option non reconnue")
+        default { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Option non reconnue") 
         }
     }
 })
+
+# Ajouter un événement LostFocus au TextBox pour la validation
+$TextBureau.Add_LostFocus({
+    [String]$Bureau = $TextBureau.Text.Trim()
+
+    # Ajouter une vérification et un message de débogage
+    if ($Bureau -ne $null) {
+        $Global:VerifBureau = $false
+
+        Write-Host "c est Bureau: '$Bureau'"
+        Write-Host "Length: $($Bureau.Length)"
+
+        # Vérifier si la longueur du texte est de 3 caractères
+        if ($Bureau.Length -ne 3) {
+            $LabelBureauError.Text = 'Le champ doit contenir 3 caractères'
+        } elseif ($Bureau -notmatch '^[0-9]+$') {
+            # Vérifier si le texte contient uniquement des chiffres
+            $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
+        } else {
+            # Si toutes les conditions sont remplies
+            $LabelBureauError.Text = ''
+            $Global:VerifBureau = $true
+        }
+    } else {
+        $LabelBureauError.Text = 'Le champ ne peut pas être vide'
+        Write-Host "TextBox est null ou TextBox.Text est null"
+    }
+    Write-Host "c est Bureau: '$Bureau'"
+    Write-Host "Length: $($Bureau.Length)"
+})
+
+# Afficher la fenêtre
+$form.Add_Shown({$form.Activate()})
+[void]$form.ShowDialog()
