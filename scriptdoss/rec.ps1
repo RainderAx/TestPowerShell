@@ -54,21 +54,19 @@ $butt.Size = New-Object System.Drawing.Size(100, 30)
 $butt.Text = "Vr"
 $form.Controls.Add($butt)
 
-# Déclarer une variable globale pour stocker la valeur de Bureau
-$Global:Bureau = ""
-
-# Ajouter un événement au bouton pour afficher la sélection
+# Ajouter un événement au bouton "Valider"
 $button.Add_Click({
     $selectedOption = $comboBox.SelectedItem
-
-    switch ($selectedOption) {
-        "BAT4" {
+    if ($selectedOption -eq $null) {
+        [System.Windows.Forms.MessageBox]::Show("Veuillez sélectionner un bâtiment.")
+    } else {
+        [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption") 
+        if ($selectedOption -eq "ROQUELAURE") {
             $TextBureau.Visible = $true
-            $TextBureau.Focus()
-        }
-        default { 
+        } else {
             $TextBureau.Visible = $false
-            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption") 
+            $Global:VerifBureau = $false
+            [System.Windows.Forms.MessageBox]::Show("Bâtiment non pris en charge.")
         }
     }
 })
@@ -90,7 +88,6 @@ $TextBureau.Add_LostFocus({
         } elseif ($Global:Bureau -notmatch '^[0-9]+$') {
             # Vérifier si le texte contient uniquement des chiffres
             $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
-
         } else {
             # Si toutes les conditions sont remplies
             $LabelBureauError.Text = ''
@@ -108,8 +105,9 @@ $TextBureau.Add_LostFocus({
 $butt.Add_Click({
     if ($Global:VerifBureau) {
         try {
-            $users = Get-ADUser -Filter "samAccountName -like 'Alexis'+ '$jos*'"
-             Write-Host "c est Bureau: '$users'"
+            $filter = "samAccountName -like 'Alexis$($jos)*'"
+            $users = Get-ADUser -Filter $filter
+            [System.Windows.Forms.MessageBox]::Show("Utilisateurs trouvés : $($users.Count)")
         } catch {
             [System.Windows.Forms.MessageBox]::Show("Erreur : $_")
         }
@@ -117,15 +115,6 @@ $butt.Add_Click({
         [System.Windows.Forms.MessageBox]::Show("Le champ de bureau n'est pas valide")
     }
 })
-
-# Afficher la fenêtre
-$form.ShowDialog()
-
-
-$jos = "alexis"
-
-# Ajouter un événement Click au bouton $butt pour utiliser la valeur de Bureau
-
 
 # Afficher la fenêtre
 $form.Add_Shown({$form.Activate()})
