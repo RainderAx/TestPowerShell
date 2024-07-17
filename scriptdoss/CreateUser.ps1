@@ -5,7 +5,7 @@
 
 
 #16/03/23 (modif faite par Ali)
-# ce script génére un fichier txt qui va être traité par un autre script en tâche planifier
+# ce script gÃ©nÃ¨re un fichier txt qui va Ãªtre traitÃ© par un autre script en tÃ¢che planifier
 
 
 #Charge en mÃ©moire les Ã©lÃ©ments graphiques necessaires
@@ -277,13 +277,13 @@ $button_generer.Add_Click({
         $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
         $body = " Bonjour,
 
-        Ci-dessous la description du PC $env:computername appartenant à $Nom  :
+        Ci-dessous la description du PC $env:computername appartenant ï¿½ $Nom  :
 
         $Nom $Prenom Bur: $Bureau Tel: $Telephone $Service
        
-        Ce rapport a été généré par $utilisateur.
+        Ce rapport a ï¿½tï¿½ gï¿½nï¿½rï¿½ par $utilisateur.
 
-        Merci de vérifier si ces informations sont correctes" 
+        Merci de vï¿½rifier si ces informations sont correctes" 
         $Subject = 'Check_New_Computer'
         $SmtpServer = 'mail.cabinet.local'
         $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
