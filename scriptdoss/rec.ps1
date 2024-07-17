@@ -123,10 +123,12 @@ $TextBureau.Add_LostFocus({
     Write-Host "Length: $($Global:Bureau.Length)"
 })
 
+$tesr = "alexis"
+
 # Ajouter un événement Click au bouton $butt pour utiliser la valeur de Bureau
 $butt.Add_Click({
     Write-Host "grrrt baw"
-    $blablou = Get-ADUser -Filter "samAccountName -like '$Global:Bureau*'"
+    $blablou = Get-ADUser -Filter "samAccountName -like '$Global:Bureau*' + '$tesr*' "
     Write-Host "$blablou"
 })
 

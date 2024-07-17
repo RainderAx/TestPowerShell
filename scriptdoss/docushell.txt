@@ -85,3 +85,12 @@ Au caractère C:\Scripts\Alexis\doss\test.ps1:57 : 51
 +                                                   ~~~~~~~~~
     + CategoryInfo          : InvalidData : (:) [Get-ADUser], ParameterBindingValidationException
     + FullyQualifiedErrorId : ParameterArgumentValidationError,Microsoft.ActiveDirectory.Management.Commands.GetADUser
+\\\\
+Get-ADUser : Erreur lors de l’analyse de la requête: «samAccountName -like 'test*' + 'alexis*' » Message d’erreur: «Operator Not 
+supported: » à la position: «30».
+Au caractère Ligne:131 : 16
++ ...  $blablou = Get-ADUser -Filter "samAccountName -like '$Global:Bureau* ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ParserError: (:) [Get-ADUser], ADFilterParsingException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADFilterParsingException,Microsoft.ActiveDi 
+   rectory.Management.Commands.GetADUser
