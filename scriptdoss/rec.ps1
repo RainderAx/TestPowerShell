@@ -47,7 +47,7 @@ $button.Size = New-Object System.Drawing.Size(100, 30)
 $button.Text = "Valider"
 $form.Controls.Add($button)
 
-# Créer un bouton pour une action supplémentaire
+# Créer un bouton pour valider la sélection
 $butt = New-Object System.Windows.Forms.Button
 $butt.Location = New-Object System.Drawing.Point(120, 110)
 $butt.Size = New-Object System.Drawing.Size(100, 30)
@@ -66,9 +66,29 @@ $button.Add_Click({
             $TextBureau.Visible = $true
             $TextBureau.Focus()
         }
+        "BAT5" { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT5") 
+        }
+        "BAT6" { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : BAT6") 
+        }
+        "ROQUELAURE" { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : ROQUELAURE") 
+        }
+        "LEPLAY" { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LEPLAY") 
+        }
+        "LESDIGUIERE" { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : LESDIGUIERE") 
+        }
         default { 
             $TextBureau.Visible = $false
-            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption") 
+            [System.Windows.Forms.MessageBox]::Show("Option non reconnue") 
         }
     }
 })
@@ -102,34 +122,3 @@ $TextBureau.Add_LostFocus({
     Write-Host "c est Bureau: '$Global:Bureau'"
     Write-Host "Length: $($Global:Bureau.Length)"
 })
-
-# Ajouter un événement au bouton "Vr"
-$butt.Add_Click({
-    if ($Global:VerifBureau) {
-        try {
-            $users = Get-ADUser -Filter "samAccountName -like '$Global:Bureau*'"
-            [System.Windows.Forms.MessageBox]::Show("Utilisateurs trouvés : $($users.Count)")
-        } catch {
-            [System.Windows.Forms.MessageBox]::Show("Erreur : $_")
-        }
-    } else {
-        [System.Windows.Forms.MessageBox]::Show("Le champ de bureau n'est pas valide")
-    }
-})
-
-# Afficher la fenêtre
-$form.ShowDialog()
-
-
-$tesr = "alexis"
-
-# Ajouter un événement Click au bouton $butt pour utiliser la valeur de Bureau
-$butt.Add_Click({
-    Write-Host "grrrt baw"
-    $blablou = Get-ADUser -Filter "samAccountName -like '$Global:Bureau*' + '$tesr*' "
-    Write-Host "$blablou"
-})
-
-# Afficher la fenêtre
-$form.Add_Shown({$form.Activate()})
-[void]$form.ShowDialog()
