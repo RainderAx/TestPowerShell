@@ -109,7 +109,7 @@ $butt.Add_Click({
     if ($Global:VerifBureau) {
         try {
             $users = Get-ADUser -Filter "samAccountName -like 'Alexis'+ '$jos*'"
-            [System.Windows.Forms.MessageBox]::Show("Utilisateurs trouvés : $($users.Count)")
+             Write-Host "c est Bureau: '$users'"
         } catch {
             [System.Windows.Forms.MessageBox]::Show("Erreur : $_")
         }
