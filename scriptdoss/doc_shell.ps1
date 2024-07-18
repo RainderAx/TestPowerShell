@@ -101,3 +101,51 @@ PS C:\temp> function ContrivedFolderMakerFunction {
     >> }
     PS C:\temp> $result = ContrivedFolderMakerFunction
     PS C:\temp> $result
+
+
+
+# Charger l'assemblage Windows.Forms
+Add-Type -AssemblyName System.Windows.Forms
+[System.Windows.Forms.Application]::EnableVisualStyles()
+
+# Créer et configurer le formulaire principal
+$Form = New-Object System.Windows.Forms.Form
+$Form.ClientSize = ‘500,500’ # Taille de la fenêtre
+$Form.Text = "Mon UI en PS ep. II" # Titre de la fenêtre
+$Form.FormBorderStyle = ‘Fixed3D’ # Style de bordure
+$Form.MaximizeBox = $false # Désactiver le bouton de maximisation
+
+# Créer et configurer le MenuStrip
+$Menu = New-Object System.Windows.Forms.MenuStrip
+$Menu.Location = New-Object System.Drawing.Point(0, 0) # Positionner le MenuStrip en haut à gauche
+$Menu.ShowItemToolTips = $True # Afficher les infobulles
+
+# Créer et configurer les éléments de menu
+$MenuFile = New-Object System.Windows.Forms.ToolStripMenuItem
+$MenuFile.Text = " &Fichier " # Texte du menu Fichier
+
+$MenuAbout = New-Object System.Windows.Forms.ToolStripMenuItem
+$MenuAbout.Text = " &A propos " # Texte du menu À propos
+
+# Créer et configurer l'élément de menu Quitter
+$MenuFileQuit = New-Object System.Windows.Forms.ToolStripMenuItem
+$MenuFileQuit.Text = " &Quitter " # Texte de l'élément Quitter
+$MenuFileQuit.ToolTipText = " Infobulle d’aide " # Texte de l'infobulle
+
+# Ajouter un gestionnaire d'événements pour l'élément Quitter
+$MenuFileQuit.Add_Click({
+    $Form.Close() # Fermer le formulaire quand l'élément Quitter est cliqué
+})
+
+# Ajouter l'élément Quitter au menu Fichier
+$MenuFile.DropDownItems.Add($MenuFileQuit)
+
+# Ajouter les éléments Fichier et À propos au MenuStrip
+$Menu.Items.AddRange(@($MenuFile, $MenuAbout))
+
+# Ajouter le MenuStrip au formulaire
+$Form.Controls.Add($Menu)
+
+# Afficher la fenêtre
+$Form.Add_Shown({ $Form.Activate() }) # Activer le formulaire lorsqu'il est affiché
+[void]$Form.ShowDialog() # Afficher la fenêtre en mode dialogue
