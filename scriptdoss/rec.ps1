@@ -1,5 +1,4 @@
-$prenom= "Alexis"
-$nom= "JOSEPH"
-Get-ADUser -Filter "samAccountName -like '$prenom*'+'$nom*'"
-
-
+$prenom = "Alexis"
+$nom = "JOSEPH"
+$filter = "samAccountName -like '$($prenom)*$($nom)*'"
+Get-ADUser -Filter $filter
