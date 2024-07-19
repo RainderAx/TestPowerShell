@@ -26,76 +26,103 @@ $comboBox.Items.AddRange($options)
 # Ajouter le ComboBox à la fenêtre
 $form.Controls.Add($comboBox)
 
+# Créer une étiquette pour afficher le bureau
+$LabelBureau = New-Object System.Windows.Forms.Label
+$LabelBureau.Location = New-Object System.Drawing.Point(10, 50)
+$LabelBureau.Size = New-Object System.Drawing.Size(150, 20)
+$LabelBureau.Text = "Numéro de bureau :"
+$LabelBureau.Visible = $false
+$form.Controls.Add($LabelBureau)
+
 # Créer une étiquette pour afficher les erreurs
 $LabelBureauError = New-Object System.Windows.Forms.Label
-$LabelBureauError.Location = New-Object System.Drawing.Point(10, 80)
+$LabelBureauError.Location = New-Object System.Drawing.Point(10, 110)
 $LabelBureauError.Size = New-Object System.Drawing.Size(260, 20)
 $LabelBureauError.ForeColor = [System.Drawing.Color]::Red
 $form.Controls.Add($LabelBureauError)
 
 # Créer un TextBox pour le bureau et le rendre invisible par défaut
 $TextBureau = New-Object System.Windows.Forms.TextBox
-$TextBureau.Location = New-Object System.Drawing.Point(20, 50)
-$TextBureau.Size = New-Object System.Drawing.Size(100, 30)
+$TextBureau.Location = New-Object System.Drawing.Point(170, 50)
+$TextBureau.Size = New-Object System.Drawing.Size(100, 20)
 $TextBureau.Visible = $false
 $form.Controls.Add($TextBureau)
 
 # Créer un bouton pour valider la sélection
 $button = New-Object System.Windows.Forms.Button
-$button.Location = New-Object System.Drawing.Point(10, 110)
+$button.Location = New-Object System.Drawing.Point(10, 140)
 $button.Size = New-Object System.Drawing.Size(100, 30)
 $button.Text = "Valider"
 $form.Controls.Add($button)
 
 $butt = New-Object System.Windows.Forms.Button
-$butt.Location = New-Object System.Drawing.Point(120, 110)
+$butt.Location = New-Object System.Drawing.Point(120, 140)
 $butt.Size = New-Object System.Drawing.Size(100, 30)
 $butt.Text = "Vr"
 $form.Controls.Add($butt)
 
 # Déclarer une variable globale pour stocker la valeur de Bureau
 $Global:Bureau = ""
-$Global:choice =""
+$Global:choice = ""
 
 # Ajouter un événement au bouton pour afficher la sélection
 $button.Add_Click({
     $selectedOption = $comboBox.SelectedItem
 
-#switchcase pour afficher les batiments 
+    # Mettre à jour l'étiquette LabelBureau en fonction de l'option choisie
+    $LabelBureau.Text = "Numéro de bureau ($selectedOption) :"
+    $LabelBureau.Visible = $true
+
+    # switchcase pour afficher les bâtiments 
     switch ($selectedOption) {
         "BAT4" {
             $TextBureau.Visible = $true
             $TextBureau.Focus()
-            $Global:choice = '4' 
+            $Global:choice = '4'
+            $LabelBureau.Text = "Batiment 4 :"
+            $LabelBureau.Visible = $true
         }
         "BAT5"{
             $TextBureau.Visible = $true
             $TextBureau.Focus()
-            $Global:choice = '5'            
+            $Global:choice = '5'
+            $LabelBureau.Text = "Batiment 5 :"
+            $LabelBureau.Visible = $true
         }
+
         "BAT6"{
             $TextBureau.Visible = $true
             $TextBureau.Focus()
             $Global:choice = '6'
+            $LabelBureau.Text = "Batiment 6 :"
+            $LabelBureau.Visible = $true
         }
+
         "ROQUELAURE"{
             $TextBureau.Visible = $true
             $TextBureau.Focus()
             $Global:choice = 'ROQ'
+            $LabelBureau.Text = "Roquelaure :"
+            $LabelBureau.Visible = $true
         }
+
         "LEPLAY"{
             $TextBureau.Visible = $true
             $TextBureau.Focus()
             $Global:choice = '7'
+            $LabelBureau.Text = "Leplay :"
+            $LabelBureau.Visible = $true
         }
+
         "LESDIGUIERE"{
             $TextBureau.Visible = $true
             $TextBureau.Focus()
             $Global:choice = 'LES'
+            $LabelBureau.Text = "Lesdiguiere :"
+            $LabelBureau.Visible = $true 
         }
         default { 
             $TextBureau.Visible = $false
-            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption") 
         }
     }
 })
