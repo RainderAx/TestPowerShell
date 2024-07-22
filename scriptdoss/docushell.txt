@@ -94,3 +94,12 @@ Au caractère Ligne:131 : 16
     + CategoryInfo          : ParserError: (:) [Get-ADUser], ADFilterParsingException
     + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADFilterParsingException,Microsoft.ActiveDi 
    rectory.Management.Commands.GetADUser
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Au caractère Ligne:311 : 1
++ [void]$Form10.MainMenuStrip = $Menu
++ ~~~~~~
+[void] ne peut pas être utilisé en tant que type de paramètre ou à gauche d’une affectation.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : VoidTypeConstraintNotAllowed
