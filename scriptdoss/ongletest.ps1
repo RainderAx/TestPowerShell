@@ -622,7 +622,8 @@ $buttonToTabA.Text = "Aller à form1"
 $buttonToTabA.Add_Click({
     $TabControl.SelectedTab = $tabpage_newuser
 })
+
 $TabPage2.Controls.Add($buttonToTabA)
 # Afficher la fenêtre
-$Form.Add_Shown({ $Form.Activate() })
-[void]$Form.ShowDialog()
+$Form10.Add_Shown({ $Form.Activate() })
+[void]$Form10.ShowDialog()
