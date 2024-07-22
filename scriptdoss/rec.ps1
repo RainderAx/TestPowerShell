@@ -35,6 +35,7 @@ $LabelLogin = New-Object System.Windows.Forms.Label
 
 $tabcontrol_Cabinet = New-Object System.Windows.Forms.TabControl
 $tabpage_newuser = New-Object System.Windows.Forms.TabPage
+$tabpage_newuser.Text = "Nouvel Utilisateur"
 
 # Créer et configurer le MenuStrip
 $Menu = New-Object System.Windows.Forms.MenuStrip
@@ -44,7 +45,8 @@ $Menu.ShowItemToolTips = $true
 $MenuFileQuit = New-Object System.Windows.Forms.ToolStripMenuItem
 $MenuFileQuit.Text = " &Quitter "
 $MenuFileQuit.ToolTipText = " Infobulle d’aide "
-$MenuFileQuit.Add_Click({ $Form.Close() })
+$MenuFileQuit.Add_Click({ $Form10.Close() })
+$Menu.Items.Add($MenuFileQuit)
 
 # Créer et configurer le TabControl
 $TabControl = New-Object System.Windows.Forms.TabControl
@@ -59,31 +61,55 @@ $TabControl.TabPages.Add($TabPage2)
 # Ajouter le TabControl au formulaire
 $Form10.Controls.Add($TabControl)
 
-# Contenu de l'Onglet A
+# Contenu de l'Onglet Nouvel Utilisateur
+$TextBoxPrenom.Location = New-Object System.Drawing.Point(150, 30)
+$TextBoxNom.Location = New-Object System.Drawing.Point(150, 60)
+$TextTelephone.Location = New-Object System.Drawing.Point(150, 90)
+$button_generer.Location = New-Object System.Drawing.Point(150, 120)
+$button_quitter.Location = New-Object System.Drawing.Point(250, 120)
 
-# Valeurs pour vérifier les champs nécessaires pour créer un utilisateur
-[bool]$Global:VerifPrenom = $false
-[bool]$Global:VerifNom = $false
-[bool]$Global:VerifTelephone = $false
+$LabelPrenom.Location = New-Object System.Drawing.Point(30, 30)
+$LabelPrenom.Text = "Prénom:"
+$LabelNom.Location = New-Object System.Drawing.Point(30, 60)
+$LabelNom.Text = "Nom:"
+$LabelTelephone.Location = New-Object System.Drawing.Point(30, 90)
+$LabelTelephone.Text = "Téléphone:"
+$LabelPoste.Location = New-Object System.Drawing.Point(30, 150)
+$LabelPoste.Text = "Poste:"
+$Labelservice.Location = New-Object System.Drawing.Point(30, 180)
+$Labelservice.Text = "Service:"
 
-# Chargement des paramètres de domaine
-[string]$settingsFile = "PwdCabinet.xml"
+$ComboBoxService.Location = New-Object System.Drawing.Point(150, 180)
+$ComboBoxPoste.Location = New-Object System.Drawing.Point(150, 150)
 
-# TextBox Nom
+$TextBoxLogin.Location = New-Object System.Drawing.Point(150, 210)
+$LabelLogin.Location = New-Object System.Drawing.Point(30, 210)
+$LabelLogin.Text = "Login:"
+
+$LabelPrenomError.Location = New-Object System.Drawing.Point(300, 30)
+$LabelNomError.Location = New-Object System.Drawing.Point(300, 60)
+$LabelTelephoneError.Location = New-Object System.Drawing.Point(300, 90)
+
+# Ajouter les contrôles à l'onglet Nouvel Utilisateur
+$tabpage_newuser.Controls.AddRange(@(
+    $TextBoxPrenom, $TextBoxNom, $TextTelephone, $button_generer, $button_quitter,
+    $LabelPrenom, $LabelPrenomError, $LabelNom, $LabelNomError, $LabelTelephone, $LabelTelephoneError,
+    $LabelPoste, $Labelservice, $ComboBoxService, $ComboBoxPoste, $TextBoxLogin, $LabelLogin
+))
+
+# Fonctions et événements des contrôles
 $TextBoxNom.Add_textChanged({
     $TextBoxNom.Text = ($TextBoxNom.Get_Text()).ToUpper()
     $TextBoxNom.SelectionStart = $TextBoxNom.Text.Length
     $TextBoxNom.SelectionLength = 0
 })
 
-# TextBox Prénom
 $TextBoxPrenom.Add_textChanged({
     $TextBoxPrenom.Text = (Get-Culture).TextInfo.ToTitleCase($TextBoxPrenom.Text.Split(' '))
     $TextBoxPrenom.SelectionStart = $TextBoxPrenom.Text.Length
     $TextBoxPrenom.SelectionLength = 0
 })
 
-# Validation du numéro de téléphone
 $TextTelephone.Add_LostFocus({
     if ($TextTelephone.Text.Length -eq 0) {
         ChangeLabelOk $LabelTelephoneError
@@ -106,7 +132,6 @@ $TextTelephone.Add_LostFocus({
     ChangeLabelOk $LabelTelephoneError
 })
 
-# Validation du prénom
 $TextBoxPrenom.Add_LostFocus({
     if ($Global:VerifPrenom -eq $true) {
         return
@@ -128,7 +153,6 @@ $TextBoxPrenom.Add_LostFocus({
     }
 })
 
-# Validation du nom
 $TextBoxNom.Add_LostFocus({
     if ($Global:VerifNom -eq $true) {
         return
@@ -150,7 +174,6 @@ $TextBoxNom.Add_LostFocus({
     }
 })
 
-# Fonction pour obtenir les initiales de plusieurs prénoms
 function MultiPrenom {
     Param($Prenom = $args[0])
     $MultiPrenom = ''
@@ -160,7 +183,6 @@ function MultiPrenom {
     return $MultiPrenom
 }
 
-# Fonction pour obtenir l'initiale d'un prénom
 function InitialPrenom {
     Param($Prenom = $args[0])
 
@@ -172,21 +194,18 @@ function InitialPrenom {
     }
 }
 
-# Fonction pour l'affichage des messages d'erreurs
 function ChangeLabelError {
     Param($LabelError = $args[0], $TextError = $args[1])
     $LabelError.ForeColor = 'Red'
     $LabelError.Text = $TextError
 }
 
-# Fonction pour l'affichage des messages d'informations
 function ChangeLabelOk {
     Param($LabelError = $args[0])
     $LabelError.ForeColor = 'Green'
     $LabelError.Text = 'OK'
 }
 
-# Fonction pour générer un mot de passe aléatoire
 function Generate-Pwd {
     Param(
         [bool]$chiffres = $args[0],
@@ -255,7 +274,6 @@ function Get-InfoDomaine {
     }
 }
 
-# Populate ComboBox
 function PopulateComboBox {
     $ComboBoxService.Items.Clear()
     $ComboBoxPoste.Items.Clear()
@@ -263,7 +281,6 @@ function PopulateComboBox {
     Get-InfoDomaine 'group' $directoryEntry 'name' 'Poste'
 }
 
-# Bouton générer
 $button_generer.Add_Click({
     if ($Global:VerifPrenom -eq $false -or $Global:VerifNom -eq $false -or $Global:VerifTelephone -eq $false) {
         [System.Windows.Forms.MessageBox]::Show("Veuillez vérifier les informations saisies", "Erreur", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
@@ -285,20 +302,11 @@ $button_generer.Add_Click({
     [System.Windows.Forms.MessageBox]::Show("Le mot de passe généré est : $Password", "Mot de passe", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 })
 
-# Bouton quitter
 $button_quitter.Add_Click({
     $Form10.Close()
 })
 
-# Ajouter les contrôles au formulaire
-$tabpage_newuser.Controls.AddRange(@(
-    $TextBoxPrenom, $TextBoxNom, $TextTelephone, $button_generer, $button_quitter,
-    $LabelPrenom, $LabelPrenomError, $LabelNom, $LabelNomError, $LabelTelephone, $LabelTelephoneError,
-    $LabelPoste, $Labelservice, $ComboBoxService, $ComboBoxPoste, $TextBoxLogin, $LabelLogin
-))
-
 # Afficher la fenêtre
 [void]$Form10.Controls.Add($Menu)
 [void]$Form10.MainMenuStrip = $Menu
-[void]$Form10.Controls.Add($TabControl)
 [void]$Form10.ShowDialog()
