@@ -55,14 +55,10 @@ $MenuFileQuit.Add_Click({ $Form.Close() })
 $TabControl = New-Object System.Windows.Forms.TabControl
 $TabControl.Dock = [System.Windows.Forms.DockStyle]::Fill
 
-# Créer les onglets
-$TabPage1.Text = "Onglet A"
-
 $TabPage2 = New-Object System.Windows.Forms.TabPage
 $TabPage2.Text = "Onglet B"
 
-# Ajouter les onglets au TabControl
-$TabControl.TabPages.Add($TabPage1)
+$TabControl.TabPages.Add($tabpage_newuser)
 $TabControl.TabPages.Add($TabPage2)
 
 # Ajouter le TabControl au formulaire
@@ -70,30 +66,13 @@ $Form.Controls.Add($TabControl)
 
 # Contenu de l'Onglet A
 
-
-#ce script permet de renseigner le champs de desciption de l'ordinateur 
-
-#22/02/23 (modif faite par Ali)
-# la maj un email de notification
-
-
-#16/03/23 (modif faite par Ali)
-# ce script génére un fichier txt qui va être traité par un autre script en tâche planifier
-
-
-
-
 #Valeurs qui permettent de vÃ©rifier les valeurs des champs necessaires pour crÃ©er un utilisateur
 [bool]$Global:VerifPrenom=$false
 [bool]$Global:VerifNom=$false
 [bool]$Global:VerifTelephone=$false
 
-
-
 #Chargement parametre domaine 
 [string]$settingsFile = "PwdCabinet.xml" 
-
-
 
 $TextBoxNom.Add_textChanged({
 	$TextBoxNom.Text = ($TextBoxNom.Get_Text()).ToUpper()
@@ -453,22 +432,13 @@ $button_generer.Add_Click({
 
 
     ####    
-        
-
 	{
 		[String]$Description = "$Nom $Prenom Bur: $Bureau Tel: $Telephone $Service"
-	}
-	
-	
-	
-	
-
+	}	
 	$LabelMessage.Forecolor = 'Green'
 	$LabelMessage.text = "La modfication de $Poste est OK"
 
 })
-
-
 #
 # button_quitter
 #
@@ -544,8 +514,6 @@ $LabelTelephoneError.Name = 'LabelTelephoneError'
 $LabelTelephoneError.Size = New-Object System.Drawing.Size(71, 13)
 $LabelTelephoneError.Text = ''
 #
-
-#
 # Labelservice
 #
 $Labelservice.AutoSize = $true
@@ -617,7 +585,6 @@ $tabcontrol_Cabinet.Size = new-object System.Drawing.Size(600, 500)
 $tabcontrol_Cabinet.TabIndex = 99
 $tabcontrol_Cabinet.Text = 'Droit'
 $tabcontrol_Cabinet.Controls.Add($tabpage_newuser)
-
 #
 # Form1
 #
@@ -638,7 +605,7 @@ $buttonToTabB.Text = "Aller à l'onglet B"
 $buttonToTabB.Add_Click({
     $TabControl.SelectedTab = $TabPage2
 })
-$TabPage1.Controls.Add($buttonToTabB)
+$tabpage_newuser.Controls.Add($buttonToTabB)
 
 # Contenu de l'Onglet B
 # Ajouter des contrôles spécifiques à l'onglet B, par exemple un message de bienvenue
@@ -647,17 +614,15 @@ $labelB.Location = New-Object System.Drawing.Point(10, 20)
 $labelB.Size = New-Object System.Drawing.Size(200, 20)
 $labelB.Text = "Bienvenue dans l'onglet B!"
 $TabPage2.Controls.Add($labelB)
-
 # Ajouter un bouton pour passer à l'onglet A
 $buttonToTabA = New-Object System.Windows.Forms.Button
 $buttonToTabA.Location = New-Object System.Drawing.Point(10, 50)
 $buttonToTabA.Size = New-Object System.Drawing.Size(100, 30)
-$buttonToTabA.Text = "Aller à l'onglet A"
+$buttonToTabA.Text = "Aller à form1"
 $buttonToTabA.Add_Click({
-    $TabControl.SelectedTab = $TabPage1
+    $TabControl.SelectedTab = $tabpage_newuser
 })
 $TabPage2.Controls.Add($buttonToTabA)
-
 # Afficher la fenêtre
 $Form.Add_Shown({ $Form.Activate() })
 [void]$Form.ShowDialog()
