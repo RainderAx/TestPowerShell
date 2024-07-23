@@ -15,7 +15,7 @@ New-Item -Path "C:\Scripts\Alexis\$gojo.txt" -ItemType File -Force
 # Convertir les données utilisateur en chaîne de caractères
 $userData = $satoru | ForEach-Object { "$($_.Name), $($_.SamAccountName)" }
 
-# Cominer des données 
+# Combiner des données 
 $donnees = "$userData, $gojo"
 
 # Écrire les données dans le fichier
