@@ -12,3 +12,9 @@ if ($user) {
 } else {
     Write-Host "Utilisateur non trouvé"
 }
+
+
+$prenom = "Alexis"
+$nom = "JOSEPH"
+ 
+ $test=(Get-ADUser -Filter "samAccountName -like '$($prenom)*$($nom)*'")-Properties* | UserPrincipalName
