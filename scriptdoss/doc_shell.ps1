@@ -152,4 +152,4 @@ if (-not $Global:VerifPrenom -or -not $Global:VerifNom -or -not $Global:VerifTel
 }
 
 ####properties
-mail/Office/AccountExpirationDate/telephoneNumber/Name
+mail/Office/AccountExpirationDate/telephoneNumber/Name/Title
