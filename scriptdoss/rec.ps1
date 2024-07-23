@@ -1,6 +1,5 @@
-# Variables contenant le prénom et le nom de l'utilisateur
-$prenom = "Alexis"
-$nom = "JOSEPH"
+$prenom = "alexis"
+$nom = "joseph"
 
 # Récupérer l'utilisateur correspondant au prénom et nom fournis
 $user = Get-ADUser -Filter "GivenName -like '$($prenom)*' -and Surname -like '$($nom)*'" -Properties *
@@ -8,16 +7,14 @@ $user = Get-ADUser -Filter "GivenName -like '$($prenom)*' -and Surname -like '$(
 # Vérifier si un utilisateur a été trouvé
 if ($user) {
     # Afficher toutes les propriétés de l'utilisateur
-    $user | Select-Object *
+    $mail = $user | Select-Object mail
+    Write-Host = $mail
 } else {
     Write-Host "Utilisateur non trouvé"
 }
 
 
-$prenom = "Alexis"
-$nom = "JOSEPH"
- 
- $test=(Get-ADUser -Filter "samAccountName -like '$($prenom)*$($nom)*'")-Properties* | UserPrincipalName
-
-
- .UserPrincipalName
+$OngletBLabelMail =  New-Object System.Windows.Forms.Label
+$OngletBLabelMail.Location = New-Object System.Drawing.Point(45, 150)
+$OngletBLabelMail.Size = New-Object System.Drawing.Size(71, 13)
+$OngletBLabelPrenom.Text='[String]$mail'
