@@ -16,8 +16,8 @@ $tabControl = New-Object System.Windows.Forms.TabControl
 $tabControl.Dock = [System.Windows.Forms.DockStyle]::Fill
 
 # Créer le TabPage pour les informations utilisateur
-$tabPage = New-Object System.Windows.Forms.TabPage
-$tabPage.Text = "Détails Utilisateur"
+$TabPage2 = New-Object System.Windows.Forms.TabPage
+$TabPage2.Text = "Détails Utilisateur"
 
 if ($user) {
     # Récupérer les propriétés de l'utilisateur
@@ -55,21 +55,21 @@ if ($user) {
     $OngletBlalbelLog.Text = "Login: $log"
 
     # Ajouter les labels au TabPage
-    $tabPage.Controls.Add($OngletBLabelPrenom)
-    $tabPage.Controls.Add($OngletBLabelMail)
-    $tabPage.Controls.Add($OngletBLabelAccExp)
-    $tabPage.Controls.Add($OngletBLabelTelephone)
-    $tabPage.Controls.Add($OngletBlalbelLog)
+    $TabPage2.Controls.Add($OngletBLabelPrenom)
+    $TabPage2.Controls.Add($OngletBLabelMail)
+    $TabPage2.Controls.Add($OngletBLabelAccExp)
+    $TabPage2.Controls.Add($OngletBLabelTelephone)
+    $TabPage2.Controls.Add($OngletBlalbelLog)
 } else {
     $noUserLabel = New-Object System.Windows.Forms.Label
     $noUserLabel.Location = New-Object System.Drawing.Point(30, 20)
     $noUserLabel.Size = New-Object System.Drawing.Size(300, 20)
     $noUserLabel.Text = "Utilisateur non trouvé"
-    $tabPage.Controls.Add($noUserLabel)
+    $TabPage2.Controls.Add($noUserLabel)
 }
 
 # Ajouter le TabPage au TabControl
-$tabControl.TabPages.Add($tabPage)
+$tabControl.TabPages.Add($TabPage2)
 
 # Ajouter le TabControl au formulaire
 $form.Controls.Add($tabControl)
