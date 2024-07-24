@@ -5,7 +5,7 @@ $button.Add_Click({
     
     $LabelBureau.Visible = $true
 
-#switchcase pour afficher les batiments 
+    # switchcase pour afficher les batiments 
     switch ($selectedOption) {
         "BAT4" {
             $TextBureau.Visible = $true
@@ -14,54 +14,48 @@ $button.Add_Click({
             $LabelBureau.Text = "Batiment 4 :"
             $LabelBureau.Visible = $true
         }
-        "BAT5"{
+        "BAT5" {
             $TextBureau.Visible = $true
             $TextBureau.Focus()
             $Global:choice = '5'
             $LabelBureau.Text = "Batiment 5 :"
             $LabelBureau.Visible = $true
         }
-
-        "BAT6"{
+        "BAT6" {
             $TextBureau.Visible = $true
             $TextBureau.Focus()
             $Global:choice = '6'
             $LabelBureau.Text = "Batiment 6 :"
             $LabelBureau.Visible = $true
         }
-
-        "ROQUELAURE"{
+        "ROQUELAURE" {
             $TextBureau.Visible = $true
             $TextBureau.Focus()
             $Global:choice = 'ROQ'
             $LabelBureau.Text = "Roquelaure :"
             $LabelBureau.Visible = $true
         }
-
-        "LEPLAY"{
+        "LEPLAY" {
             $TextBureau.Visible = $true
             $TextBureau.Focus()
             $Global:choice = '7'
             $LabelBureau.Text = "Leplay :"
             $LabelBureau.Visible = $true
         }
-
-        "LESDIGUIERE"{
+        "LESDIGUIERE" {
             $TextBureau.Visible = $true
             $TextBureau.Focus()
             $Global:choice = 'LES'
             $LabelBureau.Text = "Lesdiguiere :"
             $LabelBureau.Visible = $true 
         }
-
-        "Saisie Manuelle"{
+        "Saisie Manuelle" {
             $TextBureau.Visible = $true
             $TextBureau.Focus()
             $Global:choice = ''
             $LabelBureau.Text = "Saisie Manuelle "
             $LabelBureau.Visible = $true
         }
-
         default { 
             $TextBureau.Visible = $false
             [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption") 
@@ -69,11 +63,10 @@ $button.Add_Click({
     }
 })
 
-
 $TextBureau.Add_LostFocus({
     $Global:Bureau = $TextBureau.Text.Trim()
 
-    #Vérifie si le champ est vide
+    # Vérifie si le champ est vide
     if ($Global:Bureau -ne $null) {
         $Global:VerifBureau = $false
 
@@ -88,15 +81,14 @@ $TextBureau.Add_LostFocus({
         } elseif ($Global:Bureau -notmatch '^[0-9]+$') {
             # Vérifie si le texte contient uniquement des chiffres
             $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
-
         } else {
             # Si toutes les conditions sont remplies
             $LabelBureauError.Text = ''
             $Global:VerifBureau = $true
             $Global:bur = "$Global:choice" + "$Global:Bureau"
         }
-    } elseif ($selectedOption = "Saisie automatique"){
-                $Global:VerifBureau = $true
+    } elseif ($comboBox.SelectedItem -eq "Saisie automatique") {
+        $Global:VerifBureau = $true
     } else {
         $LabelBureauError.Text = 'Le champ ne peut pas être vide'
         #### test sur la console
@@ -107,5 +99,4 @@ $TextBureau.Add_LostFocus({
     Write-Host "c est Bureau: '$Global:Bureau'"
     Write-Host "Length: $($Global:Bureau.Length)"
     Write-Host "$Global:bur"
-    ####
 })
