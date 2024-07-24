@@ -1,3 +1,4 @@
+# Ajouter un événement au bouton pour afficher la sélection
 $button.Add_Click({
     $selectedOption = $comboBox.SelectedItem
 
@@ -87,7 +88,7 @@ $TextBureau.Add_LostFocus({
             $Global:VerifBureau = $true
             $Global:bur = "$Global:choice" + "$Global:Bureau"
         }
-    } elseif ($comboBox.SelectedItem -eq "Saisie automatique") {
+    } elseif ($comboBox.SelectedItem -eq "Saisie Manuelle") {
         $Global:VerifBureau = $true
     } else {
         $LabelBureauError.Text = 'Le champ ne peut pas être vide'
