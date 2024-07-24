@@ -1,78 +1,111 @@
-Add-Type -AssemblyName System.Windows.Forms
+$button.Add_Click({
+    $selectedOption = $comboBox.SelectedItem
 
-$prenom = "alexis"
-$nom = "joseph"
+    # Mettre à jour l'étiquette LabelBureau en fonction de l'option choisie
+    
+    $LabelBureau.Visible = $true
 
-# Récupérer l'utilisateur correspondant au prénom et nom fournis
-$user = Get-ADUser -Filter "GivenName -like '$($prenom)*' -and Surname -like '$($nom)*'" -Properties *
+#switchcase pour afficher les batiments 
+    switch ($selectedOption) {
+        "BAT4" {
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = '4'
+            $LabelBureau.Text = "Batiment 4 :"
+            $LabelBureau.Visible = $true
+        }
+        "BAT5"{
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = '5'
+            $LabelBureau.Text = "Batiment 5 :"
+            $LabelBureau.Visible = $true
+        }
 
-# Créer un formulaire
-$form = New-Object System.Windows.Forms.Form
-$form.Text = "Informations Utilisateur AD"
-$form.Size = New-Object System.Drawing.Size(400, 300)
+        "BAT6"{
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = '6'
+            $LabelBureau.Text = "Batiment 6 :"
+            $LabelBureau.Visible = $true
+        }
 
-# Créer un TabControl
-$tabControl = New-Object System.Windows.Forms.TabControl
-$tabControl.Dock = [System.Windows.Forms.DockStyle]::Fill
+        "ROQUELAURE"{
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = 'ROQ'
+            $LabelBureau.Text = "Roquelaure :"
+            $LabelBureau.Visible = $true
+        }
 
-# Créer le TabPage pour les informations utilisateur
-$TabPage2 = New-Object System.Windows.Forms.TabPage
-$TabPage2.Text = "Détails Utilisateur"
+        "LEPLAY"{
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = '7'
+            $LabelBureau.Text = "Leplay :"
+            $LabelBureau.Visible = $true
+        }
 
-if ($user) {
-    # Récupérer les propriétés de l'utilisateur
-    $Na = $user.Name
-    $Mail = $user.mail 
-    $AccountExpirationDate = $user.AccountExpirationDate
-    $telephoneNumber = $user.telephoneNumber
-    $Title = $user.Title
-    $log = $user.SamAccountName
+        "LESDIGUIERE"{
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = 'LES'
+            $LabelBureau.Text = "Lesdiguiere :"
+            $LabelBureau.Visible = $true 
+        }
 
-    # Afficher les propriétés dans des labels
-    $OngletBLabelPrenom = New-Object System.Windows.Forms.Label
-    $OngletBLabelPrenom.Location = New-Object System.Drawing.Point(30, 20)
-    $OngletBLabelPrenom.Size = New-Object System.Drawing.Size(300, 20)
-    $OngletBLabelPrenom.Text = "Nom: $Na"
+        "Saisie Manuelle"{
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = ''
+            $LabelBureau.Text = "Saisie Manuelle "
+            $LabelBureau.Visible = $true
+        }
 
-    $OngletBLabelMail = New-Object System.Windows.Forms.Label
-    $OngletBLabelMail.Location = New-Object System.Drawing.Point(30, 50)
-    $OngletBLabelMail.Size = New-Object System.Drawing.Size(300, 20)
-    $OngletBLabelMail.Text = "Email: $Mail"
+        default { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption") 
+        }
+    }
+})
 
-    $OngletBLabelAccExp = New-Object System.Windows.Forms.Label
-    $OngletBLabelAccExp.Location = New-Object System.Drawing.Point(30, 80)
-    $OngletBLabelAccExp.Size = New-Object System.Drawing.Size(300, 20)
-    $OngletBLabelAccExp.Text = "Expiration du compte: $AccountExpirationDate"
 
-    $OngletBLabelTelephone = New-Object System.Windows.Forms.Label
-    $OngletBLabelTelephone.Location = New-Object System.Drawing.Point(30, 110)
-    $OngletBLabelTelephone.Size = New-Object System.Drawing.Size(300, 20)
-    $OngletBLabelTelephone.Text = "Téléphone: $telephoneNumber"
+$TextBureau.Add_LostFocus({
+    $Global:Bureau = $TextBureau.Text.Trim()
 
-    $OngletBlalbelLog = New-Object System.Windows.Forms.Label
-    $OngletBlalbelLog.Location = New-Object System.Drawing.Point(30, 140)
-    $OngletBlalbelLog.Size = New-Object System.Drawing.Size(300, 20)
-    $OngletBlalbelLog.Text = "Login: $log"
+    #Vérifie si le champ est vide
+    if ($Global:Bureau -ne $null) {
+        $Global:VerifBureau = $false
 
-    # Ajouter les labels au TabPage
-    $TabPage2.Controls.Add($OngletBLabelPrenom)
-    $TabPage2.Controls.Add($OngletBLabelMail)
-    $TabPage2.Controls.Add($OngletBLabelAccExp)
-    $TabPage2.Controls.Add($OngletBLabelTelephone)
-    $TabPage2.Controls.Add($OngletBlalbelLog)
-} else {
-    $noUserLabel = New-Object System.Windows.Forms.Label
-    $noUserLabel.Location = New-Object System.Drawing.Point(30, 20)
-    $noUserLabel.Size = New-Object System.Drawing.Size(300, 20)
-    $noUserLabel.Text = "Utilisateur non trouvé"
-    $TabPage2.Controls.Add($noUserLabel)
-}
+        #### test sur la console
+        Write-Host "c est Bureau: '$Global:Bureau'"
+        Write-Host "Length: $($Global:Bureau.Length)"
+        ####
 
-# Ajouter le TabPage au TabControl
-$tabControl.TabPages.Add($TabPage2)
+        # Vérifie si la longueur du texte est de 3 caractères
+        if ($Global:Bureau.Length -ne 3) {
+            $LabelBureauError.Text = 'Le champ doit contenir 3 caractères'
+        } elseif ($Global:Bureau -notmatch '^[0-9]+$') {
+            # Vérifie si le texte contient uniquement des chiffres
+            $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
 
-# Ajouter le TabControl au formulaire
-$form.Controls.Add($tabControl)
-
-# Afficher le formulaire
-$form.ShowDialog()
+        } else {
+            # Si toutes les conditions sont remplies
+            $LabelBureauError.Text = ''
+            $Global:VerifBureau = $true
+            $Global:bur = "$Global:choice" + "$Global:Bureau"
+        }
+    } elseif ($selectedOption = "Saisie automatique"){
+                $Global:VerifBureau = $true
+    } else {
+        $LabelBureauError.Text = 'Le champ ne peut pas être vide'
+        #### test sur la console
+        Write-Host "TextBox est null ou TextBox.Text est null"
+        ####
+    }
+    #### test sur la console
+    Write-Host "c est Bureau: '$Global:Bureau'"
+    Write-Host "Length: $($Global:Bureau.Length)"
+    Write-Host "$Global:bur"
+    ####
+})
