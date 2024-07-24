@@ -66,6 +66,7 @@ $button.Add_Click({
 
 $TextBureau.Add_LostFocus({
     $Global:Bureau = $TextBureau.Text.Trim()
+    $selectedOption = $comboBox.SelectedItem
 
     # Vérifie si le champ est vide
     if ($Global:Bureau -ne $null) {
@@ -76,20 +77,32 @@ $TextBureau.Add_LostFocus({
         Write-Host "Length: $($Global:Bureau.Length)"
         ####
 
-        # Vérifie si la longueur du texte est de 3 caractères
-        if ($Global:Bureau.Length -ne 3) {
-            $LabelBureauError.Text = 'Le champ doit contenir 3 caractères'
-        } elseif ($Global:Bureau -notmatch '^[0-9]+$') {
-            # Vérifie si le texte contient uniquement des chiffres
-            $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
-        } else {
-            # Si toutes les conditions sont remplies
+        # Si l'option sélectionnée est "Saisie Manuelle", ignorer les vérifications
+        if ($selectedOption -eq "Saisie Manuelle") {
             $LabelBureauError.Text = ''
             $Global:VerifBureau = $true
-            $Global:bur = "$Global:choice" + "$Global:Bureau"
+            Write-Host "Saisie Manuelle sélectionnée, aucune vérification appliquée"
+        }
+        else {
+            # Vérifie si la longueur du texte est de 3 caractères
+            if ($Global:Bureau.Length -ne 3) {
+                $LabelBureauError.Text = 'Le champ doit contenir 3 caractères'
+                Write-Host "Le champ doit contenir 3 caractères"
+            } elseif ($Global:Bureau -notmatch '^[0-9]+$') {
+                # Vérifie si le texte contient uniquement des chiffres
+                $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
+                Write-Host "Le champ doit contenir uniquement des chiffres"
+            } else {
+                # Si toutes les conditions sont remplies
+                $LabelBureauError.Text = ''
+                $Global:VerifBureau = $true
+                $Global:bur = "$Global:choice" + "$Global:Bureau"
+                Write-Host "Toutes les conditions sont remplies"
+            }
         }
     } elseif ($comboBox.SelectedItem -eq "Saisie Manuelle") {
         $Global:VerifBureau = $true
+        Write-Host "Saisie Manuelle sélectionnée, aucune vérification appliquée"
     } else {
         $LabelBureauError.Text = 'Le champ ne peut pas être vide'
         #### test sur la console
@@ -100,4 +113,5 @@ $TextBureau.Add_LostFocus({
     Write-Host "c est Bureau: '$Global:Bureau'"
     Write-Host "Length: $($Global:Bureau.Length)"
     Write-Host "$Global:bur"
+    Write-Host "Verification: $Global:VerifBureau"
 })
