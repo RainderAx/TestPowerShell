@@ -743,5 +743,3 @@ $Form10.Controls.Add($tabcontrol_Cabinet)
 $Form10.Name = 'Form1'
 $Form10.Text = 'Createur Utilisateur Cabinet'
 $Form10.ShowDialog()
-
-
