@@ -450,7 +450,7 @@ $button_generer.Add_Click({
         $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
 
         $donnees = "$Nom,$Prenom,$Bureau,$Telephone,$Service,$env:computername"
-        $donnees | Out-File "\\cabinet.local\partages\support-informatique\Info_Computer\Description-PC\$env:computername _ $Nom.txt"
+        $donnees | Out-File "\\C:\Scripts\Alexis\test_pour_script2 $env:computername _ $Nom.txt"
 
  	####ajout
 	$uD = ( Get-ADUser -Filter "samAccountName -like '$($Prenom)*$($Nom)*'").SamAccountName
@@ -550,6 +550,28 @@ $button_generer.Add_Click({
     }
     #########
 
+    # ajout Vérifie si le numéro de téléphone n'est pas renseigné
+    if ($Telephone -eq $null -or $Telephone -eq '') {
+
+
+        $utilisateur =$env:username.Split(".")[1].ToUpper()
+        #a changer
+        $From  = "$env:username@cabinet.local"
+        $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
+        $body = " Bonjour,
+
+        Le numéro de $Nom $Prenom Bur: $Bureau n'a pas été enregistré.
+         
+        Merci de vérifier si cette information est correcte
+       
+        Ce rapport a été généré par $utilisateur."
+         
+        $Subject = 'Check_New_Computer'
+        $SmtpServer = 'mail.cabinet.local'
+        $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
+
+    }  
+    #########
 })
 
 # Cherche les valeurs des OU des services
