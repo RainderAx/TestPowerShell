@@ -585,7 +585,7 @@ $button_generer.UseVisualStyleBackColor = $true
 # LabelPrenom
 #
 $LabelPrenom.AutoSize = $true
-$LabelPrenom.Location = New-Object System.Drawing.Point(15, 75)
+$LabelPrenom.Location = New-Object System.Drawing.Point(15, 105)
 $LabelPrenom.Name = 'LabelPrenom'
 $LabelPrenom.Size = New-Object System.Drawing.Size(129, 15)
 $LabelPrenom.Text = 'Prenom'
@@ -593,7 +593,7 @@ $LabelPrenom.Text = 'Prenom'
 # LabelPrenomError
 #
 $LabelPrenomError.AutoSize = $true
-$LabelPrenomError.Location = New-Object System.Drawing.Point(375, 75)
+$LabelPrenomError.Location = New-Object System.Drawing.Point(375, 105)
 $LabelPrenomError.Name = 'LabelPrenomError'
 $LabelPrenomError.Size = New-Object System.Drawing.Size(129, 15)
 $LabelPrenomError.Text = ''
@@ -601,7 +601,7 @@ $LabelPrenomError.Text = ''
 # LabelNom
 #
 $LabelNom.AutoSize = $true
-$LabelNom.Location = New-Object System.Drawing.Point(15, 125)
+$LabelNom.Location = New-Object System.Drawing.Point(15, 155)
 $LabelNom.Name = 'LabelNom'
 $LabelNom.Size = New-Object System.Drawing.Size(71, 13)
 $LabelNom.Text = 'Nom'
@@ -609,7 +609,7 @@ $LabelNom.Text = 'Nom'
 # LabelNomError
 #
 $LabelNomError.AutoSize = $true
-$LabelNomError.Location = New-Object System.Drawing.Point(375, 125)
+$LabelNomError.Location = New-Object System.Drawing.Point(375, 155)
 $LabelNomError.Name = 'LabelNomError'
 $LabelNomError.Size = New-Object System.Drawing.Size(71, 13)
 #
@@ -624,7 +624,7 @@ $LabelTelephone.Text = 'Telephone (optionel)'
 # LabelPoste
 #
 $LabelPoste.AutoSize = $true
-$LabelPoste.Location = New-Object System.Drawing.Point(15, 275)
+$LabelPoste.Location = New-Object System.Drawing.Point(15, 305)
 $LabelPoste.Name = 'LabelNumeroEmploye'
 $LabelPoste.Size = New-Object System.Drawing.Size(71, 13)
 $LabelPoste.Text = 'Poste'
@@ -632,31 +632,15 @@ $LabelPoste.Text = 'Poste'
 # LabelTelephoneError
 #
 $LabelTelephoneError.AutoSize = $true
-$LabelTelephoneError.Location = New-Object System.Drawing.Point(260, 225)
+$LabelTelephoneError.Location = New-Object System.Drawing.Point(260, 255)
 $LabelTelephoneError.Name = 'LabelTelephoneError'
 $LabelTelephoneError.Size = New-Object System.Drawing.Size(71, 13)
 $LabelTelephoneError.Text = ''
 #
-# LabelBureau
-#
-$LabelBureau.AutoSize = $true
-$LabelBureau.Location = New-Object System.Drawing.Point(15, 25)
-$LabelBureau.Name = 'LabelBureau'
-$LabelBureau.Size = New-Object System.Drawing.Size(71, 13)
-$LabelBureau.Text = 'Bureau'
-#
-# LabelBureauerror
-#
-$LabelBureauerror.AutoSize = $true
-$LabelBureauerror.Location = New-Object System.Drawing.Point(375, 25)
-$LabelBureauerror.Name = 'LabelBureauerror'
-$LabelBureauerror.Size = New-Object System.Drawing.Size(71, 13)
-$LabelBureauerror.Text = ''
-#
 # Labelservice
 #
 $Labelservice.AutoSize = $true
-$Labelservice.Location = New-Object System.Drawing.Point(15, 175)
+$Labelservice.Location = New-Object System.Drawing.Point(15, 205)
 $Labelservice.Name = 'Labelservice'
 $Labelservice.Size = New-Object System.Drawing.Size(71, 13)
 $Labelservice.Text = 'Service'
@@ -664,35 +648,27 @@ $Labelservice.Text = 'Service'
 # LabelMessage
 #
 $LabelMessage.AutoSize = $true
-$LabelMessage.Location = New-Object System.Drawing.Point(200, 415)
+$LabelMessage.Location = New-Object System.Drawing.Point(200, 445)
 $LabelMessage.Name = 'LabelMessage'
 $LabelMessage.Text = ''
 #
-# TextBureau
-#
-$TextBureau.Location = New-Object System.Drawing.Point(150, 25)
-$TextBureau.MaxLength = 20
-$TextBureau.Name = 'TextBureau'
-$TextBureau.Size = New-Object System.Drawing.Size(200, 20)
-$TextBureau.TabIndex = 1
-#
 # TextBoxPrenom
 #
-$TextBoxPrenom.Location = New-Object System.Drawing.Point(150, 75)
+$TextBoxPrenom.Location = New-Object System.Drawing.Point(150, 105)
 $TextBoxPrenom.Name = 'TextBoxPrenom'
 $TextBoxPrenom.Size = New-Object System.Drawing.Size(200, 20)
 $TextBoxPrenom.TabIndex = 2
 #
 # TextBoxNom
 #
-$TextBoxNom.Location = New-Object System.Drawing.Point(150, 125)
+$TextBoxNom.Location = New-Object System.Drawing.Point(150, 155)
 $TextBoxNom.Name = 'TextBoxNom'
 $TextBoxNom.Size = New-Object System.Drawing.Size(200, 20)
 $TextBoxNom.TabIndex = 3
 #
 # TextTelephone
 #
-$TextTelephone.Location = New-Object System.Drawing.Point(150, 225)
+$TextTelephone.Location = New-Object System.Drawing.Point(150, 255)
 $TextTelephone.MaxLength = 7
 $TextTelephone.Name = 'TextTelephone'
 $TextTelephone.Size = New-Object System.Drawing.Size(100, 20)
@@ -700,7 +676,7 @@ $TextTelephone.TabIndex = 5
 #
 # ComboBoxPoste
 #
-$ComboBoxPoste.Location = New-Object System.Drawing.Point(150, 275)
+$ComboBoxPoste.Location = New-Object System.Drawing.Point(150, 305)
 $ComboBoxPoste.Name = 'ComboBoxPoste'
 $ComboBoxPoste.Size = New-Object System.Drawing.Size(200, 20)
 $ComboBoxPoste.TabIndex = 6
@@ -709,7 +685,7 @@ $ComboBoxPoste.DropDownStyle='DropDownList'
 #
 # ComboBoxService
 #
-$ComboBoxService.Location = New-Object System.Drawing.Point(150, 175)
+$ComboBoxService.Location = New-Object System.Drawing.Point(150, 205)
 $ComboBoxService.Name = 'ComboBoxService'
 $ComboBoxService.Size = New-Object System.Drawing.Size(200, 20)
 $ComboBoxService.DropDownStyle='DropDownList'
@@ -718,7 +694,7 @@ $ComboBoxService.TabIndex = 4
 # tabpage_newuser
 #
 $tabpage_newuser.AutoSize = $true
-$tabpage_newuser.Location = New-Object System.Drawing.Point(4, 22)
+$tabpage_newuser.Location = New-Object System.Drawing.Point(4, 32)
 $tabpage_newuser.Name = 'tabpage_newuser_'
 $tabpage_newuser.Size = new-object System.Drawing.Size(600, 500)
 $tabpage_newuser.TabIndex = 100
