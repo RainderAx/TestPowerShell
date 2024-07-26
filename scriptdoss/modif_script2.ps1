@@ -1,7 +1,6 @@
 ####
 ####
 ##################################################################################################################################################################
-
 #############################  Ce Script manipule des fichiers géénérés par autre script (description-ordinateur) lors de l'installation du PC ###################
 
 #############################  Ce Script met à jour le champ description pc ######################################################################################
@@ -11,67 +10,40 @@
 #############################  Ce script supprime le pc du groupe "grp-ordinateurs-Stock_Tampon"  #################################################################
 
 ####################################################################################################################################################################
-
-
 # ce script sera executé avec une tâche planifiée.
-
 # Spécifiez le chemin du répertoire à traiter
 
-
 $path = "C:\Scripts\Alexis\test_pour_script2 "
-
 # Obtenez tous les fichiers dans le répertoire
-
  $Userfiler = Get-ChildItem $path
-
-
-
 # répertoire de destination 
-
 #variable modifiée
 $emplacement = "C:\Scripts\Alexis\test_pour_script2\Deuxième_Dossier"
-
 # réinitilaisation de la variable
-
 #variable modifiée
 $file = $null
-
-
 # variable pour ignorer toutes les erreurs et ne pas les afficher
-
-
 $ErrorActionPreference= 'silentlycontinue'
-
-
 # Pour chaque fichier, affichez le contenu
 
 #variable modifiée
 foreach ($file in $Userfiler) {  
-
     Get-Content $path\$file | ForEach-Object {
             
         # Séparez le contenu avec le délimiteur ","
 
         $Nom= $_.Split(",")[0]
-
         $Prenom = $_.Split(",")[1]
-
         $Bureau = $_.Split(",")[2]
-
         $Login = $_.Split(",")[3]
-
         $Telephone = $_.Split(",")[4]
-    
 
 # les variables nécessaires au fonctionnement du script
 
 #variable modifiée
 $Utilis = (Get-ADUser -Filter "UserPrincipalName -like '$Login*'" -Properties *).SamAccountName
 
-
-
 $Ou_Pc = "OU=$Cabinet,OU=ordinateurs,OU=infra,DC=cabinet,DC=local"
-
 
 #
 ######################## manipulation de l'objet.
@@ -122,7 +94,6 @@ $corps = @"
 "@
 #####
 
-
 if ($Cabinet -like "SETI4") {
 
             $SET4 = "set4"
@@ -135,9 +106,7 @@ if ($Cabinet -like "SETI4") {
 
 
             Manage-Computer -Computer $Computer  -Description_Pc $Description_Pc -Grp_Pc $Grp_Pc -Ou_Pc $Ou_Pc
-
-
-      
+     
             }
 
              elseif ($Cabinet -match "DSP") {
@@ -152,10 +121,7 @@ if ($Cabinet -like "SETI4") {
 
              
                      Manage-Computer -Computer $Computer  -Description_Pc $Description_Pc -Grp_Pc $Grp_Pc -Ou_Pc $Ou_Pc
-
-                 
-
-       
+      
                         } else {
 
                          Manage-Computer -Computer $Computer  -Description_Pc $Description_Pc -Grp_Pc $Grp_Pc -Ou_Pc $Ou_Pc
