@@ -7,6 +7,7 @@
 #16/03/23 (modif faite par Ali)
 # ce script génère un fichier txt qui va être traité par un autre script en tâche planifier
 
+#26/07/24 (modif faite par Alexis)
 
 #Charge en mémoire les éléments graphiques necessaires
 [void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
@@ -16,7 +17,6 @@ $Form10 = new-object System.Windows.Forms.form
 $TextBoxPrenom = New-Object System.Windows.Forms.TextBox
 $TextBoxNom = New-Object System.Windows.Forms.TextBox
 $TextTelephone = New-Object System.Windows.Forms.TextBox
-$TextBureau = New-Object System.Windows.Forms.TextBox
 $button_generer = New-Object System.Windows.Forms.Button
 $button_quitter = New-Object System.Windows.Forms.Button
 $LabelPrenom = New-Object System.Windows.Forms.Label
@@ -26,8 +26,6 @@ $LabelNomError = New-Object System.Windows.Forms.Label
 $LabelTelephone = New-Object System.Windows.Forms.Label
 $LabelTelephoneError = New-Object System.Windows.Forms.Label
 $LabelPoste = New-Object System.Windows.Forms.Label
-$labelBureau = New-Object System.Windows.Forms.Label
-$labelBureauError = New-Object System.Windows.Forms.Label
 $Labelservice = New-Object System.Windows.Forms.Label
 $labelMessage = New-Object System.Windows.Forms.Label
 $ComboBoxService = New-Object System.Windows.Forms.ComboBox
@@ -44,8 +42,6 @@ $tabpage_newuser.Controls.Add($LabelPrenomError)
 $tabpage_newuser.Controls.Add($LabelTelephone)
 $tabpage_newuser.Controls.Add($LabelTelephoneError)
 $tabpage_newuser.Controls.Add($LabelPoste)
-$tabpage_newuser.Controls.Add($labelBureau)
-$tabpage_newuser.Controls.Add($labelBureauerror)
 $tabpage_newuser.Controls.Add($Labelservice)
 $tabpage_newuser.Controls.Add($LabelMessage)
 $tabpage_newuser.Controls.Add($button_quitter)
@@ -54,14 +50,12 @@ $tabpage_newuser.Controls.Add($TextTelephone)
 $tabpage_newuser.Controls.Add($TextBoxPrenom)
 $tabpage_newuser.Controls.Add($TextBoxNom)
 $tabpage_newuser.Controls.Add($ComboBoxPoste)
-$tabpage_newuser.Controls.Add($textBureau)
 $tabpage_newuser.Controls.Add($ComboBoxService)
 
 
 #Valeurs qui permettent de vérifier les valeurs des champs necessaires pour créer un utilisateur
 [bool]$Global:VerifPrenom=$false
 [bool]$Global:VerifNom=$false
-[bool]$Global:VerifBureau=$false
 [bool]$Global:VerifTelephone=$false
 
 #Chargement parametre domaine 
@@ -257,14 +251,181 @@ Function Get-InfoDomaine {
 	Return $Clients
 }
 
+############# ajout
+
+# Créer une étiquette pour le menu déroulant
+$label = New-Object System.Windows.Forms.Label
+$label.Location = New-Object System.Drawing.Point(10, 20)
+$label.Size = New-Object System.Drawing.Size(150, 20)
+$label.Text = "Choisissez un bâtiment :"
+$tabpage_newuser.Controls.Add($label)
+
+$comboBox = New-Object System.Windows.Forms.ComboBox
+$comboBox.Location = New-Object System.Drawing.Point(170, 20)
+$comboBox.Size = New-Object System.Drawing.Size(100, 20)
+$comboBox.DropDownStyle = [System.Windows.Forms.ComboBoxStyle]::DropDownList
+
+$options = @("BAT4", "BAT5", "BAT6", "ROQUELAURE", "LEPLAY", "LESDIGUIERE","Saisie Manuelle")
+$comboBox.Items.AddRange($options)
+
+$tabpage_newuser.Controls.Add($comboBox)
+
+$LabelBureauError = New-Object System.Windows.Forms.Label
+$LabelBureauError.Location = New-Object System.Drawing.Point(240, 65)
+$LabelBureauError.Size = New-Object System.Drawing.Size(400, 20)
+$LabelBureauError.ForeColor = [System.Drawing.Color]::Red
+$tabpage_newuser.Controls.Add($LabelBureauError)
+
+$TextBureau = New-Object System.Windows.Forms.TextBox
+$TextBureau.Location = New-Object System.Drawing.Point(150, 65)
+$TextBureau.Size = New-Object System.Drawing.Size(205, 30)
+$TextBureau.Visible = $false
+$tabpage_newuser.Controls.Add($TextBureau)
+
+$LabelBureau = New-Object System.Windows.Forms.Label
+$LabelBureau.Location = New-Object System.Drawing.Point(15, 65)
+$LabelBureau.Size = New-Object System.Drawing.Size(100, 20)
+
+$LabelBureau.Visible = $false
+$tabpage_newuser.Controls.Add($LabelBureau)
+
+$button = New-Object System.Windows.Forms.Button
+$button.Location = New-Object System.Drawing.Point(300, 20)
+$button.Size = New-Object System.Drawing.Size(100, 30)
+$button.Text = "Valider"
+$tabpage_newuser.Controls.Add($button)
+
+$Global:Bureau = ""
+$Global:choice =""
+
+$button.Add_Click({
+    $selectedOption = $comboBox.SelectedItem    
+    $LabelBureau.Visible = $true
+
+    # switchcase pour afficher les batiments 
+    switch ($selectedOption) {
+        "BAT4" {
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = '4'
+            $LabelBureau.Text = "Batiment 4 :"
+            $LabelBureau.Visible = $true
+        }
+        "BAT5" {
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = '5'
+            $LabelBureau.Text = "Batiment 5 :"
+            $LabelBureau.Visible = $true
+        }
+        "BAT6" {
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = '6'
+            $LabelBureau.Text = "Batiment 6 :"
+            $LabelBureau.Visible = $true
+        }
+        "ROQUELAURE" {
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = 'ROQ'
+            $LabelBureau.Text = "Roquelaure :"
+            $LabelBureau.Visible = $true
+        }
+        "LEPLAY" {
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = '7'
+            $LabelBureau.Text = "Leplay :"
+            $LabelBureau.Visible = $true
+        }
+        "LESDIGUIERE" {
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = 'LES'
+            $LabelBureau.Text = "Lesdiguiere :"
+            $LabelBureau.Visible = $true 
+        }
+        "Saisie Manuelle" {
+            $TextBureau.Visible = $true
+            $TextBureau.Focus()
+            $Global:choice = ''
+            $LabelBureau.Text = "Saisie Manuelle "
+            $LabelBureau.Visible = $true
+        }
+        default { 
+            $TextBureau.Visible = $false
+            [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption") 
+        }
+    }
+})
+
+$TextBureau.Add_LostFocus({
+    $Global:Bureau = $TextBureau.Text.Trim()
+    $selectedOption = $comboBox.SelectedItem
+
+    if ($Global:Bureau -ne $null) {
+        $Global:VerifBureau = $false
+
+        #### test console
+        Write-Host "c est Bureau: '$Global:Bureau'"
+        Write-Host "Length: $($Global:Bureau.Length)"
+        ####
+
+        # Ignore les conditions si "Saisie Manuelle"
+        if ($selectedOption -eq "Saisie Manuelle") {
+            $LabelBureauError.Text = ''
+            $Global:VerifBureau = $true
+        }
+	
+        else {
+            # Vérifie les conditions 
+            if ($Global:Bureau.Length -ne 3) {
+                $LabelBureauError.Text = 'Le champ doit contenir 3 caractères'
+            } elseif ($Global:Bureau -notmatch '^[0-9]+$') {
+                $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
+            } else {
+                $LabelBureauError.Text = ''
+                $Global:VerifBureau = $true
+                $Global:bur = "$Global:choice" + "$Global:Bureau"
+            }
+        }
+    } elseif ($comboBox.SelectedItem -eq "Saisie Manuelle") {
+        $Global:VerifBureau = $true
+        $Global:bur = "$Global:choice" + "$Global:Bureau"
+    } else {
+        $LabelBureauError.Text = 'Le champ ne peut pas être vide'
+        #### test console
+        Write-Host "TextBox est null ou TextBox.Text est null"
+        ####
+    }
+    $Global:bur = "$Global:choice" + "$Global:Bureau"
+    
+    #### test  console
+    Write-Host "c est Bureau: '$Global:Bureau'"
+    Write-Host "Length: $($Global:Bureau.Length)"
+    Write-Host "$Global:bur"
+    Write-Host "Verification: $Global:VerifBureau"
+    #######        
+})
+#############
+
+
+
 $button_generer.Add_Click({
 
-
+	#modifié
 	if (($Global:VerifPrenom -eq 0) -or ($Global:VerifNom -eq 0) -or ($Global:VerifBureau -eq 0)) {
 		return
 	}
-
-	[String]$Bureau=$TextBureau.Get_text().Trim(' ')
+	if (-not ($Global:VerifPrenom) -or -not ($Global:VerifNom) -or -not ($Global:VerifBureau)) {
+ 		[System.Windows.Forms.MessageBox]::Show("Tout les champs ne sont pas complétés.")
+	        return
+	 } else {
+	[System.Windows.Forms.MessageBox]::Show("le compte a été envoyé")
+} 
+	#####
+	
 	[String]$Prenom=$TextBoxPrenom.Get_text().Trim(' ')
 	[String]$Nom=$TextBoxNom.Get_text().Trim(' ')
 	[String]$Service=$ComboBoxService.Get_text().Trim(' ')
@@ -290,7 +451,12 @@ $button_generer.Add_Click({
 
         $donnees = "$Nom,$Prenom,$Bureau,$Telephone,$Service,$env:computername"
         $donnees | Out-File "\\cabinet.local\partages\support-informatique\Info_Computer\Description-PC\$env:computername _ $Nom.txt"
- 
+
+ 	####ajout
+	$uD = ( Get-ADUser -Filter "samAccountName -like '$($Prenom)*$($Nom)*'").SamAccountName
+	$userData = "$Global:bur,$test"
+	$userData | Out-File -FilePath "C:\Scripts\Alexis\$uD.txt"
+ 	#######"
 	
 	{
 		[String]$Description = "$Nom $Prenom Bur: $Bureau Tel: $Telephone $Service"
@@ -320,7 +486,69 @@ $button_generer.Add_Click({
 
 	$LabelMessage.Forecolor = 'Green'
 	$LabelMessage.text = "La modfication de $Poste est OK"
+   
+    ####ajout Onglet de validation    
+    $TabPage2 = New-Object System.Windows.Forms.TabPage
+    $TabPage2.Text = "Validation"
+    $tabcontrol_Cabinet.TabPages.Add($TabPage2)
+    $tabcontrol_Cabinet.SelectedTab = $TabPage2
+    
+    $user = Get-ADUser -Filter "GivenName -like '$($Prenom)*' -and Surname -like '$($Nom)*'" -Properties *
 
+    if ($user) {
+        $NP = $user.Name
+        $Mail = $user.mail 
+        $AccountExpirationDate = $user.AccountExpirationDate
+        $telephoneNumber = $user.telephoneNumber
+        $Title = $user.Title
+        $log = $user.SamAccountName
+
+        $OngletBLabelPrenom = New-Object System.Windows.Forms.Label
+        $OngletBLabelPrenom.Location = New-Object System.Drawing.Point(30, 20)
+        $OngletBLabelPrenom.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelPrenom.Text = "Nom: $NP"
+
+        $OngletBLabelMail = New-Object System.Windows.Forms.Label
+        $OngletBLabelMail.Location = New-Object System.Drawing.Point(30, 50)
+        $OngletBLabelMail.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelMail.Text = "Email: $Mail"
+ 
+        $OngletBLabelAccExp = New-Object System.Windows.Forms.Label
+        $OngletBLabelAccExp.Location = New-Object System.Drawing.Point(30, 80)
+        $OngletBLabelAccExp.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelAccExp.Text = "Expiration du compte: $AccountExpirationDate"
+
+        $OngletBLabelPhone = New-Object System.Windows.Forms.Label
+        $OngletBLabelPhone.Location = New-Object System.Drawing.Point(30, 110)
+        $OngletBLabelPhone.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelPhone.Text = "Numéro de téléphone: $telephoneNumber"
+
+        $OngletBLabelTitle = New-Object System.Windows.Forms.Label
+        $OngletBLabelTitle.Location = New-Object System.Drawing.Point(30, 140)
+        $OngletBLabelTitle.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelTitle.Text = "Poste: $Title"
+ 
+        $OngletBLabelLog = New-Object System.Windows.Forms.Label
+        $OngletBLabelLog.Location = New-Object System.Drawing.Point(30, 170)
+        $OngletBLabelLog.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelLog.Text = "Login: $log"
+
+        $OngletBLabelBur = New-Object System.Windows.Forms.Label
+        $OngletBLabelBur.Location = New-Object System.Drawing.Point(30, 200)
+        $OngletBLabelBur.size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelBur.Text = "Bureau: $Global:bur"
+
+        $TabPage2.Controls.Add($OngletBLabelPrenom)
+        $TabPage2.Controls.Add($OngletBLabelMail)
+        $TabPage2.Controls.Add($OngletBLabelAccExp)
+        $TabPage2.Controls.Add($OngletBLabelPhone)
+        $TabPage2.Controls.Add($OngletBLabelTitle)
+        $TabPage2.Controls.Add($OngletBLabelLog)
+        $TabPage2.Controls.Add($OngletBLabelBur)
+    } else {
+        [System.Windows.Forms.MessageBox]::Show("Utilisateur non trouvé.")
+    }
+    #########
 
 })
 
@@ -333,8 +561,6 @@ $comboBoxPoste.Items.Add($env:COMPUTERNAME)
 #Définit la valeur par défaut des listes déroulantes
 $ComboBoxService.SelectedIndex=0
 $comboBoxPoste.Selectedindex=0
-
-
 
 #
 # button_quitter
