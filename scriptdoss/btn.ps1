@@ -8,42 +8,42 @@ $form.Text = "Main Menu"
 $form.Size = New-Object System.Drawing.Size(300, 200)
 
 
-$buttonReportProblem = New-Object System.Windows.Forms.Button
-$buttonReportProblem.Text = "Signaler un problème"
-$buttonReportProblem.Location = New-Object System.Drawing.Point(50, 30)
-$buttonReportProblem.Size = New-Object System.Drawing.Size(200, 30)
-$buttonReportProblem.Add_Click({
-    $reportForm = New-Object System.Windows.Forms.Form
-    $reportForm.Text = "Signaler un problème"
-    $reportForm.Size = New-Object System.Drawing.Size(400, 200)
+$BtnPb = New-Object System.Windows.Forms.Button
+$BtnPb.Text = "Signaler un problème"
+$BtnPb.Location = New-Object System.Drawing.Point(50, 30)
+$BtnPb.Size = New-Object System.Drawing.Size(200, 30)
+$BtnPb.Add_Click({
+    $Formulaire = New-Object System.Windows.Forms.Form
+    $Formulaire.Text = "Signaler un problème"
+    $Formulaire.Size = New-Object System.Drawing.Size(400, 200)
     
-    $textBox = New-Object System.Windows.Forms.TextBox
-    $textBox.Location = New-Object System.Drawing.Point(20, 20)
-    $textBox.Size = New-Object System.Drawing.Size(350, 20)
+    $FormText = New-Object System.Windows.Forms.TextBox
+    $FormText.Location = New-Object System.Drawing.Point(20, 20)
+    $FormText.Size = New-Object System.Drawing.Size(350, 20)
     
-    $submitButton = New-Object System.Windows.Forms.Button
-    $submitButton.Text = "Submit"
-    $submitButton.Location = New-Object System.Drawing.Point(150, 60)
-    $submitButton.Add_Click({
-        $problemDescription = $textBox.Text
+    $BntEnvoi = New-Object System.Windows.Forms.Button
+    $BntEnvoi.Text = "Envoyer"
+    $BntEnvoi.Location = New-Object System.Drawing.Point(150, 60)
+    $BntEnvoi.Add_Click({
+        $problemDescription = $FormText.Text
         Send-Email -subject "Reported Problem" -body $problemDescription
-        $reportForm.Close()
+        $Formulaire.Close()
     })
     
-    $reportForm.Controls.Add($textBox)
-    $reportForm.Controls.Add($submitButton)
-    $reportForm.ShowDialog()
+    $Formulaire.Controls.Add($FormText)
+    $Formulaire.Controls.Add($BntEnvoi)
+    $Formulaire.ShowDialog()
 })
 
 # Phone Number Error Button
-$buttonPhoneError = New-Object System.Windows.Forms.Button
-$buttonPhoneError.Text = "Numéro de téléphone erroné"
-$buttonPhoneError.Location = New-Object System.Drawing.Point(50, 80)
-$buttonPhoneError.Size = New-Object System.Drawing.Size(200, 30)
-$buttonPhoneError.Add_Click({
-    $phoneForm = New-Object System.Windows.Forms.Form
-    $phoneForm.Text = "Numéro de téléphone erroné"
-    $phoneForm.Size = New-Object System.Drawing.Size(300, 200)
+$BtnTel = New-Object System.Windows.Forms.Button
+$BtnTel.Text = "Numéro de téléphone erroné"
+$BtnTel.Location = New-Object System.Drawing.Point(50, 80)
+$BtnTel.Size = New-Object System.Drawing.Size(200, 30)
+$BtnTel.Add_Click({
+    $FormulaireTel = New-Object System.Windows.Forms.Form
+    $FormulaireTel.Text = "Numéro de téléphone erroné"
+    $FormulaireTel.Size = New-Object System.Drawing.Size(300, 200)
     
     $absentButton = New-Object System.Windows.Forms.Button
     $absentButton.Text = "Numéro absent"
@@ -51,7 +51,7 @@ $buttonPhoneError.Add_Click({
     $absentButton.Size = New-Object System.Drawing.Size(200, 30)
     $absentButton.Add_Click({
         Send-Email -subject "Erreur de numéro" -body "Numéro absent"
-        $phoneForm.Close()
+        $FormulaireTel.Close()
     })
     
     $sizeErrorButton = New-Object System.Windows.Forms.Button
@@ -60,7 +60,7 @@ $buttonPhoneError.Add_Click({
     $sizeErrorButton.Size = New-Object System.Drawing.Size(200, 30)
     $sizeErrorButton.Add_Click({
         Send-Email -subject "Erreur de numéro" -body "Taille du numéro erroné"
-        $phoneForm.Close()
+        $FormulaireTel.Close()
     })
     
     $letterErrorButton = New-Object System.Windows.Forms.Button
@@ -69,7 +69,7 @@ $buttonPhoneError.Add_Click({
     $letterErrorButton.Size = New-Object System.Drawing.Size(200, 30)
     $letterErrorButton.Add_Click({
         Send-Email -subject "Erreur de numéro" -body "Lettre dans le numéro"
-        $phoneForm.Close()
+        $FormulaireTel.Close()
     })
     
     $otherButton = New-Object System.Windows.Forms.Button
@@ -84,17 +84,17 @@ $buttonPhoneError.Add_Click({
                 Send-Email -subject "Erreur de numéro" -body $errorDescription
             }
         }
-        $phoneForm.Close()
+        $FormulaireTel.Close()
     })
     
-    $phoneForm.Controls.Add($absentButton)
-    $phoneForm.Controls.Add($sizeErrorButton)
-    $phoneForm.Controls.Add($letterErrorButton)
-    $phoneForm.Controls.Add($otherButton)
-    $phoneForm.ShowDialog()
+    $FormulaireTel.Controls.Add($absentButton)
+    $FormulaireTel.Controls.Add($sizeErrorButton)
+    $FormulaireTel.Controls.Add($letterErrorButton)
+    $FormulaireTel.Controls.Add($otherButton)
+    $FormulaireTel.ShowDialog()
 })
 
-$form.Controls.Add($buttonReportProblem)
-$form.Controls.Add($buttonPhoneError)
+$form.Controls.Add($BtnPb)
+$form.Controls.Add($BtnTel)
 
 [void] $form.ShowDialog()
