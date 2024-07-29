@@ -43,38 +43,29 @@ $BtnTel.Add_Click({
     $FormulaireTel.Text = "Numéro de téléphone erroné"
     $FormulaireTel.Size = New-Object System.Drawing.Size(300, 200)
     
-    $absentButton = New-Object System.Windows.Forms.Button
-    $absentButton.Text = "Numéro absent"
-    $absentButton.Location = New-Object System.Drawing.Point(50, 20)
-    $absentButton.Size = New-Object System.Drawing.Size(200, 30)
-    $absentButton.Add_Click({
+    $Absent = New-Object System.Windows.Forms.Button
+    $Absent.Text = "Numéro absent"
+    $Absent.Location = New-Object System.Drawing.Point(50, 20)
+    $Absent.Size = New-Object System.Drawing.Size(200, 30)
+    $Absent.Add_Click({
         Send-Email -subject "Erreur de numéro" -body "Numéro absent"
         $FormulaireTel.Close()
     })
     
-    $sizeErrorButton = New-Object System.Windows.Forms.Button
-    $sizeErrorButton.Text = "Taille du numéro erroné"
-    $sizeErrorButton.Location = New-Object System.Drawing.Point(50, 60)
-    $sizeErrorButton.Size = New-Object System.Drawing.Size(200, 30)
-    $sizeErrorButton.Add_Click({
+    $Taille = New-Object System.Windows.Forms.Button
+    $Taille.Text = "Taille du numéro erroné"
+    $Taille.Location = New-Object System.Drawing.Point(50, 60)
+    $Taille.Size = New-Object System.Drawing.Size(200, 30)
+    $Taille.Add_Click({
         Send-Email -subject "Erreur de numéro" -body "Taille du numéro erroné"
         $FormulaireTel.Close()
     })
     
-    $letterErrorButton = New-Object System.Windows.Forms.Button
-    $letterErrorButton.Text = "Lettre dans le numéro"
-    $letterErrorButton.Location = New-Object System.Drawing.Point(50, 100)
-    $letterErrorButton.Size = New-Object System.Drawing.Size(200, 30)
-    $letterErrorButton.Add_Click({
-        Send-Email -subject "Erreur de numéro" -body "Lettre dans le numéro"
-        $FormulaireTel.Close()
-    })
-    
-    $otherButton = New-Object System.Windows.Forms.Button
-    $otherButton.Text = "Autre"
-    $otherButton.Location = New-Object System.Drawing.Point(50, 140)
-    $otherButton.Size = New-Object System.Drawing.Size(200, 30)
-    $otherButton.Add_Click({
+    $Autre = New-Object System.Windows.Forms.Button
+    $Autre.Text = "Autre"
+    $Autre.Location = New-Object System.Drawing.Point(50, 140)
+    $Autre.Size = New-Object System.Drawing.Size(200, 30)
+    $Autre.Add_Click({
         $errorType = [System.Windows.Forms.MessageBox]::Show("Entrez l'erreur:", "Erreur de numéro", [System.Windows.Forms.MessageBoxButtons]::OKCancel)
         if ($errorType -eq "OK") {
             $errorDescription = [System.Windows.Forms.MessageBox]::Show("Entrez la description de l'erreur:", "Erreur de numéro", [System.Windows.Forms.MessageBoxButtons]::OKCancel)
@@ -85,10 +76,9 @@ $BtnTel.Add_Click({
         $FormulaireTel.Close()
     })
     
-    $FormulaireTel.Controls.Add($absentButton)
-    $FormulaireTel.Controls.Add($sizeErrorButton)
-    $FormulaireTel.Controls.Add($letterErrorButton)
-    $FormulaireTel.Controls.Add($otherButton)
+    $FormulaireTel.Controls.Add($Absent)
+    $FormulaireTel.Controls.Add($Taille)
+    $FormulaireTel.Controls.Add($Autre)
     $FormulaireTel.ShowDialog()
 })
 
