@@ -1,13 +1,11 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-
-# Main form
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Main Menu"
 $form.Size = New-Object System.Drawing.Size(300, 200)
 
-
+#Bouton Problème
 $BtnPb = New-Object System.Windows.Forms.Button
 $BtnPb.Text = "Signaler un problème"
 $BtnPb.Location = New-Object System.Drawing.Point(50, 30)
@@ -35,7 +33,7 @@ $BtnPb.Add_Click({
     $Formulaire.ShowDialog()
 })
 
-# Phone Number Error Button
+#Bouton téléphone
 $BtnTel = New-Object System.Windows.Forms.Button
 $BtnTel.Text = "Numéro de téléphone erroné"
 $BtnTel.Location = New-Object System.Drawing.Point(50, 80)
