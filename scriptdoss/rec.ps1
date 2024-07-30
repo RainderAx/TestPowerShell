@@ -1,125 +1,199 @@
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -AssemblyName System.Drawing
+Échec lors de l’appel de la méthode, car [System.Windows.Forms.TabPage] ne contient pas de méthode nommée « ShowDialog ».
+Au caractère C:\Scripts\Alexis\doss\Sans titre8.ps1:734 : 13
++             $TabPage2.ShowDialog()
++             ~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : MethodNotFound
 
-# Function to send email
-function Send-Email {
-    param (
-        [string]$subject,
-        [string]$body
-    )
+        ####ajout Onglet de validation    
+    $TabPage2 = New-Object System.Windows.Forms.TabPage
+    $TabPage2.Text = "Validation"
+    $tabcontrol_Cabinet.TabPages.Add($TabPage2)
+    $tabcontrol_Cabinet.SelectedTab = $TabPage2
     
-    $smtpServer = "smtp.example.com"
-    $smtpFrom = "from@example.com"
-    $smtpTo = "to@example.com"
-    
-    $message = New-Object system.net.mail.mailmessage
-    $message.from = $smtpFrom
-    $message.To.Add($smtpTo)
-    $message.Subject = $subject
-    $message.Body = $body
-    
-    $smtp = New-Object Net.Mail.SmtpClient($smtpServer)
-    try {
-        $smtp.Send($message)
-        [System.Windows.Forms.MessageBox]::Show("Email sent successfully.")
-    } catch {
-        [System.Windows.Forms.MessageBox]::Show("Failed to send email: $_")
-    }
-}
+    $user = Get-ADUser -Filter "GivenName -like '$($Prenom)*' -and Surname -like '$($Nom)*'" -Properties *
 
-# Main form
-$form = New-Object System.Windows.Forms.Form
-$form.Text = "Main Menu"
-$form.Size = New-Object System.Drawing.Size(300, 200)
+    if ($user) {
+        $NP = $user.Name
+        $Mail = $user.mail 
+        $AccountExpirationDate = $user.AccountExpirationDate
+        $telephoneNumber = $user.telephoneNumber
+        $Title = $user.Title
+        $log = $user.SamAccountName
 
-# Report Problem Button
-$buttonReportProblem = New-Object System.Windows.Forms.Button
-$buttonReportProblem.Text = "Signaler un problème"
-$buttonReportProblem.Location = New-Object System.Drawing.Point(50, 30)
-$buttonReportProblem.Size = New-Object System.Drawing.Size(200, 30)
-$buttonReportProblem.Add_Click({
-    $reportForm = New-Object System.Windows.Forms.Form
-    $reportForm.Text = "Signaler un problème"
-    $reportForm.Size = New-Object System.Drawing.Size(400, 200)
-    
-    $textBox = New-Object System.Windows.Forms.TextBox
-    $textBox.Location = New-Object System.Drawing.Point(20, 20)
-    $textBox.Size = New-Object System.Drawing.Size(350, 20)
-    
-    $submitButton = New-Object System.Windows.Forms.Button
-    $submitButton.Text = "Submit"
-    $submitButton.Location = New-Object System.Drawing.Point(150, 60)
-    $submitButton.Add_Click({
-        $problemDescription = $textBox.Text
-        Send-Email -subject "Reported Problem" -body $problemDescription
-        $reportForm.Close()
-    })
-    
-    $reportForm.Controls.Add($textBox)
-    $reportForm.Controls.Add($submitButton)
-    $reportForm.ShowDialog()
-})
+        $OngletBLabelPrenom = New-Object System.Windows.Forms.Label
+        $OngletBLabelPrenom.Location = New-Object System.Drawing.Point(30, 20)
+        $OngletBLabelPrenom.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelPrenom.Text = "Nom: $NP"
 
-# Phone Number Error Button
-$buttonPhoneError = New-Object System.Windows.Forms.Button
-$buttonPhoneError.Text = "Numéro de téléphone erroné"
-$buttonPhoneError.Location = New-Object System.Drawing.Point(50, 80)
-$buttonPhoneError.Size = New-Object System.Drawing.Size(200, 30)
-$buttonPhoneError.Add_Click({
-    $phoneForm = New-Object System.Windows.Forms.Form
-    $phoneForm.Text = "Numéro de téléphone erroné"
-    $phoneForm.Size = New-Object System.Drawing.Size(300, 200)
-    
-    $absentButton = New-Object System.Windows.Forms.Button
-    $absentButton.Text = "Numéro absent"
-    $absentButton.Location = New-Object System.Drawing.Point(50, 20)
-    $absentButton.Size = New-Object System.Drawing.Size(200, 30)
-    $absentButton.Add_Click({
-        Send-Email -subject "Erreur de numéro" -body "Numéro absent"
-        $phoneForm.Close()
-    })
-    
-    $sizeErrorButton = New-Object System.Windows.Forms.Button
-    $sizeErrorButton.Text = "Taille du numéro erroné"
-    $sizeErrorButton.Location = New-Object System.Drawing.Point(50, 60)
-    $sizeErrorButton.Size = New-Object System.Drawing.Size(200, 30)
-    $sizeErrorButton.Add_Click({
-        Send-Email -subject "Erreur de numéro" -body "Taille du numéro erroné"
-        $phoneForm.Close()
-    })
-    
-    $letterErrorButton = New-Object System.Windows.Forms.Button
-    $letterErrorButton.Text = "Lettre dans le numéro"
-    $letterErrorButton.Location = New-Object System.Drawing.Point(50, 100)
-    $letterErrorButton.Size = New-Object System.Drawing.Size(200, 30)
-    $letterErrorButton.Add_Click({
-        Send-Email -subject "Erreur de numéro" -body "Lettre dans le numéro"
-        $phoneForm.Close()
-    })
-    
-    $otherButton = New-Object System.Windows.Forms.Button
-    $otherButton.Text = "Autre"
-    $otherButton.Location = New-Object System.Drawing.Point(50, 140)
-    $otherButton.Size = New-Object System.Drawing.Size(200, 30)
-    $otherButton.Add_Click({
-        $errorType = [System.Windows.Forms.MessageBox]::Show("Entrez l'erreur:", "Erreur de numéro", [System.Windows.Forms.MessageBoxButtons]::OKCancel)
-        if ($errorType -eq "OK") {
-            $errorDescription = [System.Windows.Forms.MessageBox]::Show("Entrez la description de l'erreur:", "Erreur de numéro", [System.Windows.Forms.MessageBoxButtons]::OKCancel)
-            if ($errorDescription -eq "OK") {
-                Send-Email -subject "Erreur de numéro" -body $errorDescription
-            }
-        }
-        $phoneForm.Close()
-    })
-    
-    $phoneForm.Controls.Add($absentButton)
-    $phoneForm.Controls.Add($sizeErrorButton)
-    $phoneForm.Controls.Add($letterErrorButton)
-    $phoneForm.Controls.Add($otherButton)
-    $phoneForm.ShowDialog()
-})
+        $OngletBLabelMail = New-Object System.Windows.Forms.Label
+        $OngletBLabelMail.Location = New-Object System.Drawing.Point(30, 50)
+        $OngletBLabelMail.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelMail.Text = "Email: $Mail"
+ 
+        $OngletBLabelAccExp = New-Object System.Windows.Forms.Label
+        $OngletBLabelAccExp.Location = New-Object System.Drawing.Point(30, 80)
+        $OngletBLabelAccExp.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelAccExp.Text = "Expiration du compte: $AccountExpirationDate"
 
-$form.Controls.Add($buttonReportProblem)
-$form.Controls.Add($buttonPhoneError)
+        $OngletBLabelPhone = New-Object System.Windows.Forms.Label
+        $OngletBLabelPhone.Location = New-Object System.Drawing.Point(30, 110)
+        $OngletBLabelPhone.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelPhone.Text = "Numéro de téléphone: $telephoneNumber"
 
-[void] $form.ShowDialog()
+        $OngletBLabelTitle = New-Object System.Windows.Forms.Label
+        $OngletBLabelTitle.Location = New-Object System.Drawing.Point(30, 140)
+        $OngletBLabelTitle.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelTitle.Text = "Poste: $Title"
+ 
+        $OngletBLabelLog = New-Object System.Windows.Forms.Label
+        $OngletBLabelLog.Location = New-Object System.Drawing.Point(30, 170)
+        $OngletBLabelLog.Size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelLog.Text = "Login: $log"
+
+        $OngletBLabelBur = New-Object System.Windows.Forms.Label
+        $OngletBLabelBur.Location = New-Object System.Drawing.Point(30, 200)
+        $OngletBLabelBur.size = New-Object System.Drawing.Size(300, 20)
+        $OngletBLabelBur.Text = "Bureau: $Global:bur2"
+
+        $TabPage2.Controls.Add($OngletBLabelPrenom)
+        $TabPage2.Controls.Add($OngletBLabelMail)
+        $TabPage2.Controls.Add($OngletBLabelAccExp)
+        $TabPage2.Controls.Add($OngletBLabelPhone)
+        $TabPage2.Controls.Add($OngletBLabelTitle)
+        $TabPage2.Controls.Add($OngletBLabelLog)
+        $TabPage2.Controls.Add($OngletBLabelBur)
+        
+        #Bouton Problème
+        $BtnPb = New-Object System.Windows.Forms.Button
+        $BtnPb.Text = "Signaler un problème"
+        $BtnPb.Location = New-Object System.Drawing.Point(30, 230)
+        $BtnPb.Size = New-Object System.Drawing.Size(200, 30)
+        $BtnPb.Add_Click({
+            $Formulaire = New-Object System.Windows.Forms.Form
+            $Formulaire.Text = "Signaler un problème"
+            $Formulaire.Size = New-Object System.Drawing.Size(400, 200)
+    
+            $FormText = New-Object System.Windows.Forms.TextBox
+            $FormText.Location = New-Object System.Drawing.Point(20, 20)
+            $FormText.Size = New-Object System.Drawing.Size(350, 20)
+    
+            $BntEnvoi = New-Object System.Windows.Forms.Button
+            $BntEnvoi.Text = "Envoyer"
+            $BntEnvoi.Location = New-Object System.Drawing.Point(150, 60)
+            $BntEnvoi.Add_Click({
+                $utilisateur =$env:username.Split(".")[1].ToUpper()
+                $From  = "$env:username@cabinet.local"
+                $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
+                $body = " Bonjour,
+       
+                Un problème a été signalé par $utilisateur.
+                $problemDescription
+
+                Merci de v�rifier si ces informations sont correctes" 
+
+                $Subject = 'Check_New_Computer'
+                $SmtpServer = 'mail.cabinet.local'
+                $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
+            })
+    
+            $TabPage2.Controls.Add($FormText)
+            $TabPage2.Controls.Add($BntEnvoi)
+            $TabPage2.ShowDialog()
+        })
+
+        #Bouton téléphone
+        $BtnTel = New-Object System.Windows.Forms.Button
+        $BtnTel.Text = "Numéro de téléphone erroné"
+        $BtnTel.Location = New-Object System.Drawing.Point(30, 260)
+        $BtnTel.Size = New-Object System.Drawing.Size(200, 30)
+        $BtnTel.Add_Click({
+            $FormulaireTel = New-Object System.Windows.Forms.Form
+            $FormulaireTel.Text = "Numéro de téléphone erroné"
+            $FormulaireTel.Size = New-Object System.Drawing.Size(300, 200)
+    
+            $Absent = New-Object System.Windows.Forms.Button
+            $Absent.Text = "Numéro absent"
+            $Absent.Location = New-Object System.Drawing.Point(50, 20)
+            $Absent.Size = New-Object System.Drawing.Size(200, 30)
+            $Absent.Add_Click({
+                $utilisateur =$env:username.Split(".")[1].ToUpper()
+                $From  = "$env:username@cabinet.local"
+                $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
+                $body = " Bonjour,
+
+                $utilisateur signale que le numéro de téléphone est absent
+
+                Merci de v�rifier si ces informations sont correctes" 
+                $Subject = 'Check_New_Computer'
+                $SmtpServer = 'mail.cabinet.local'
+                $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
+            })
+    
+            $letterErrorButton = New-Object System.Windows.Forms.Button
+            $letterErrorButton.Text = "Format non respecté"
+            $letterErrorButton.Location = New-Object System.Drawing.Point(50, 100)
+            $letterErrorButton.Size = New-Object System.Drawing.Size(200, 30)
+            $letterErrorButton.Add_Click({
+                $utilisateur =$env:username.Split(".")[1].ToUpper()
+                $From  = "$env:username@cabinet.local"
+                $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
+                $body = " Bonjour,
+
+                $utilisateur signale que le numéro ne respecte pas la convention du format.
+
+                Merci de v�rifier si ces informations sont correctes" 
+                $Subject = 'Check_New_Computer'
+                $SmtpServer = 'mail.cabinet.local'
+                $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
+                $FormulaireTel.Close()
+            })
+
+
+            $Taille = New-Object System.Windows.Forms.Button
+            $Taille.Text = "Taille du numéro erroné"
+            $Taille.Location = New-Object System.Drawing.Point(50, 60)
+            $Taille.Size = New-Object System.Drawing.Size(200, 30)
+            $Taille.Add_Click({
+                $utilisateur =$env:username.Split(".")[1].ToUpper()
+                $From  = "$env:username@cabinet.local"
+                $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
+                $body = " Bonjour,
+
+                $utilisateur signale que la taille du numéro de téléphone est erroné.
+
+                Merci de v�rifier si ces informations sont correctes" 
+                $Subject = 'Check_New_Computer'
+                $SmtpServer = 'mail.cabinet.local'
+                $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
+                $FormulaireTel.Close()
+            })
+    
+            $Autre = New-Object System.Windows.Forms.Button
+            $Autre.Text = "Autre"
+            $Autre.Location = New-Object System.Drawing.Point(50, 140)
+            $Autre.Size = New-Object System.Drawing.Size(200, 30)
+            $Autre.Add_Click({
+                $utilisateur =$env:username.Split(".")[1].ToUpper()
+                $From  = "$env:username@cabinet.local"
+                $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
+                $body = " Bonjour,
+
+                $utilisateur signale qu'une erreur est présentes
+
+                Merci de v�rifier si ces informations sont correctes" 
+                $Subject = 'Check_New_Computer'
+                $SmtpServer = 'mail.cabinet.local'
+                $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
+                $FormulaireTel.Close()
+            })
+    
+            $FormulaireTel.Controls.Add($Absent)
+            $FormulaireTel.Controls.Add($Taille)
+            $FormulaireTel.Controls.Add($Autre)
+            $FormulaireTel.Controls.Add($letterErrorButton)
+            $FormulaireTel.ShowDialog()
+        })
+
+        $TabPage2.Controls.Add($BtnPb)
+        $TabPage2.Controls.Add($BtnTel)
