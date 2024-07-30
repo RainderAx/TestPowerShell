@@ -572,7 +572,7 @@ $button_generer.Add_Click({
  		[System.Windows.Forms.MessageBox]::Show("Tout les champs ne sont pas complétés.")
 	        return
 	 } else {
-	[System.Windows.Forms.MessageBox]::Show("le compte a été envoyé")
+	[System.Windows.Forms.MessageBox]::Show("Veuillez attendre l'onglet validation")
 } 
 	#####
 	
@@ -728,10 +728,9 @@ $button_generer.Add_Click({
                 $SmtpServer = 'mail.cabinet.local'
                 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
             })
-    
-            $TabPage2.Controls.Add($FormText)
-            $TabPage2.Controls.Add($BntEnvoi)
-            $TabPage2.ShowDialog()
+            $Formulaire.Controls.Add($FormText)
+            $Formulaire.Controls.Add($BntEnvoi)
+            $Formulaire.ShowDialog()
         })
 
         #Bouton téléphone
