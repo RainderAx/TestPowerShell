@@ -53,12 +53,12 @@ $BtnTel.Add_Click({
     })
     
     $letterErrorButton = New-Object System.Windows.Forms.Button
-    $letterErrorButton.Text = "Lettre dans le numéro"
+    $letterErrorButton.Text = "Format non respecté"
     $letterErrorButton.Location = New-Object System.Drawing.Point(50, 100)
     $letterErrorButton.Size = New-Object System.Drawing.Size(200, 30)
     $letterErrorButton.Add_Click({
         Send-Email -subject "Erreur de numéro" -body "Lettre dans le numéro"
-        $phoneForm.Close()
+        $FormulaireTel.Close()
     })
 
     $Taille = New-Object System.Windows.Forms.Button
@@ -88,7 +88,7 @@ $BtnTel.Add_Click({
     $FormulaireTel.Controls.Add($Absent)
     $FormulaireTel.Controls.Add($Taille)
     $FormulaireTel.Controls.Add($Autre)
-    $phoneForm.Controls.Add($letterErrorButton)
+    $FormulaireTel.Controls.Add($letterErrorButton)
     $FormulaireTel.ShowDialog()
 })
 
