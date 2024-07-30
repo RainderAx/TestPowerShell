@@ -492,7 +492,7 @@ $TextBureau_2.Add_LostFocus({
 
     $Global:Bureau_2 = $TextBureau_2.Text.Trim()
     $selectedOption = $comboBox.SelectedItem
-
+    $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
     if ($Global:Bureau_2 -ne $null) {
         $Global:VerifBureau_2 = $false
 
@@ -526,11 +526,11 @@ $TextBureau_2.Add_LostFocus({
 
                 $PrintBur.Visible = $false
 
-                if ($Global:bur2 -match '^\d{4}$'){
+                if ( $Global:burtest-match '^\d{3}$'){
                     $Global:VfBur = $true
                     $PrintBur.Visible = $true
-                    Write-Host "Verification: $Global:VerifBureau_2"
-                    Write-Host "Verification1223: $Global:Bureau_2"
+                    Write-Host "Verification: $burtest"
+                    
                 }  
                 
                 
@@ -546,12 +546,14 @@ $TextBureau_2.Add_LostFocus({
         ####
     }
     $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
+
     
     #### test  console
     Write-Host "c est Bureau: '$Global:Bureau_2'"
     Write-Host "Length: $($Global:Bureau_2.Length)"
     Write-Host "$Global:bur2"
     Write-Host "Verification: $Global:VerifBureau_2"
+    Write-Host "test bureau $Globalburtest"
     #######
     
        
@@ -735,7 +737,7 @@ $button_generer.Add_Click({
         #Bouton téléphone
         $BtnTel = New-Object System.Windows.Forms.Button
         $BtnTel.Text = "Numéro de téléphone erroné"
-        $BtnTel.Location = New-Object System.Drawing.Point(30, 200)
+        $BtnTel.Location = New-Object System.Drawing.Point(30, 260)
         $BtnTel.Size = New-Object System.Drawing.Size(200, 30)
         $BtnTel.Add_Click({
             $FormulaireTel = New-Object System.Windows.Forms.Form
@@ -921,7 +923,7 @@ $LabelNomError.Size = New-Object System.Drawing.Size(71, 13)
 # LabelTelephone
 #
 $LabelTelephone.AutoSize = $true
-$LabelTelephone.Location = New-Object System.Drawing.Point(15, 225)
+$LabelTelephone.Location = New-Object System.Drawing.Point(15, 255)
 $LabelTelephone.Name = 'LabelTelephone'
 $LabelTelephone.Size = New-Object System.Drawing.Size(71, 13)
 $LabelTelephone.Text = 'Telephone (optionel)'
@@ -1026,5 +1028,3 @@ $Form10.Controls.Add($tabcontrol_Cabinet)
 $Form10.Name = 'Form1'
 $Form10.Text = 'Createur Utilisateur Cabinet'
 $Form10.ShowDialog()
-
-
