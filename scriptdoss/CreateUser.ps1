@@ -5,10 +5,10 @@
 
 
 #16/03/23 (modif faite par Ali)
-# ce script génère un fichier txt qui va être traité par un autre script en tâche planifier
+# ce script génére un fichier txt qui va être traité par un autre script en tâche planifier
 
 
-#Charge en mémoire les éléments graphiques necessaires
+#Charge en mÃ©moire les Ã©lÃ©ments graphiques necessaires
 [void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
 $Form10 = new-object System.Windows.Forms.form
 
@@ -58,7 +58,7 @@ $tabpage_newuser.Controls.Add($textBureau)
 $tabpage_newuser.Controls.Add($ComboBoxService)
 
 
-#Valeurs qui permettent de vérifier les valeurs des champs necessaires pour créer un utilisateur
+#Valeurs qui permettent de vÃ©rifier les valeurs des champs necessaires pour crÃ©er un utilisateur
 [bool]$Global:VerifPrenom=$false
 [bool]$Global:VerifNom=$false
 [bool]$Global:VerifBureau=$false
@@ -163,7 +163,7 @@ $TextBureau.Add_LostFocus({
 		}
 		
 		elseif ($TextBureau.Text.Length -ne 4) {
-			ChangeLabelError $LabelBureauError 'Le champ doit contenir 4 caractères'
+			ChangeLabelError $LabelBureauError 'Le champ doit contenir 4 caractÃ¨res'
 			return
 		}
 		else {
@@ -174,7 +174,7 @@ $TextBureau.Add_LostFocus({
 })
 
 
-#Fonction qui permet de prendre les initials de plusieurs prénoms
+#Fonction qui permet de prendre les initials de plusieurs prÃ©noms
 function MultiPrenom{
 	Param($Prenom=$args[0])
 	
@@ -216,7 +216,7 @@ Function ChangeLabelOk{
 	$LabelError.text = 'OK'
 }
 
-#Fonction qui génère un mot de passe aléatoire
+#Fonction qui gÃ©nÃ¨re un mot de passe alÃ©atoire
 function Generate-Pwd {
 	Param([bool]$chiffres=$args[0], [bool]$minuscules=$args[1], [bool]$majuscules=$args[2], [bool]$autres=$args[3], [int]$len=$args[4])
 	[string]$chars = ''
@@ -277,13 +277,13 @@ $button_generer.Add_Click({
         $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
         $body = " Bonjour,
 
-        Ci-dessous la description du PC $env:computername appartenant � $Nom  :
+        Ci-dessous la description du PC $env:computername appartenant à $Nom  :
 
         $Nom $Prenom Bur: $Bureau Tel: $Telephone $Service
        
-        Ce rapport a �t� g�n�r� par $utilisateur.
+        Ce rapport a été généré par $utilisateur.
 
-        Merci de v�rifier si ces informations sont correctes" 
+        Merci de vérifier si ces informations sont correctes" 
         $Subject = 'Check_New_Computer'
         $SmtpServer = 'mail.cabinet.local'
         $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
@@ -312,7 +312,7 @@ $button_generer.Add_Click({
 	}
 	
 	Catch {
-		ChangeLabelError $LabelMessage 'La creation a échoué. Voir les logs'
+		ChangeLabelError $LabelMessage 'La creation a Ã©chouÃ©. Voir les logs'
 		get-date >> .\logerrorAD.txt
 		$error >> .\logerrorAD.txt
 		return
@@ -330,7 +330,7 @@ $Clients | Sort-Object | Foreach-object {$ComboBoxService.Items.Add($_)}
 
 $comboBoxPoste.Items.Add($env:COMPUTERNAME)
 
-#Définit la valeur par défaut des listes déroulantes
+#DÃ©finit la valeur par dÃ©faut des listes dÃ©roulantes
 $ComboBoxService.SelectedIndex=0
 $comboBoxPoste.Selectedindex=0
 
@@ -519,5 +519,3 @@ $Form10.Controls.Add($tabcontrol_Cabinet)
 $Form10.Name = 'Form1'
 $Form10.Text = 'Createur Utilisateur Cabinet'
 $Form10.ShowDialog()
-
-
