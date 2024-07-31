@@ -32,15 +32,15 @@ function Manage-Computer {
     Remove-ADGroupMember -Identity "grp-ordinateurs-Stock_Tampon" -Members $Computer -Confirm:$false
 
     # Déplacement de l'ordinateur dans la bonne OU correspondante
-    Move-ADObject –Identity $Computer -TargetPath $Ou_Pc -Confirm:$false
+    Move-ADObject -Identity $Computer -TargetPath $Ou_Pc -Confirm:$false
 }
 
 # Pour chaque fichier, affichez le contenu
 foreach ($fichier in $Pcfiler) {
     $filePath = "$chemin\$fichier"
-    
-    if ($fichier.Name -match "P-PC.*\.txt") {
-        # Traitement pour le premier type de fichier
+
+    if ($fichier.Name -match "^P-PC\d{3}\w{3}_\s\w+\.txt$") {
+        # Traitement pour le premier type de fichier (numéro de série du PC suivi du nom de famille)
         Get-Content $filePath | ForEach-Object {
             $Nom = $_.Split(",")[0]
             $Prenom = $_.Split(",")[1]
@@ -57,7 +57,6 @@ foreach ($fichier in $Pcfiler) {
             $PcMemberOf = (Get-ADComputer -Identity $Pc -Properties *).memberof
             $Description_Pc = "$Nom $Prenom Bur: $Bureau Tel: $Tel $Cabinet"
 
-            # Traitement spécifique
             if ($Cabinet -like "OH") {
                 $Users_OH = (Get-ADUser -Identity "$Prenom.$Nom" –Properties * ).department
                 $Cab_OH = $Users_OH.split("/")[1]
@@ -79,15 +78,25 @@ foreach ($fichier in $Pcfiler) {
 
             Manage-Computer -Computer $Computer -Description_Pc $Description_Pc -Grp_Pc $Grp_Pc -Ou_Pc $Ou_Pc
         }
-    } elseif ($fichier.Name -match "test\.alexis\.cab\.txt") {
-        # Traitement pour le deuxième type de fichier
+    } elseif ($fichier.Name -match "^\w+\.\w+(\.cab)?\.txt$") {
+        # Traitement pour le deuxième type de fichier (prénom.nom ou prénom.nom.cab)
         Get-Content $filePath | ForEach-Object {
-            # Ajoutez ici le traitement spécifique pour le deuxième type de fichier
-            # Vous pouvez ajouter des conditions ou des traitements similaires au précédent
-            # Exemple :
-            $Nom = $_.Split(",")[0]
-            $Prenom = $_.Split(",")[1]
-            # Autres traitements spécifiques
+            # Exemple de traitement, à adapter selon vos besoins spécifiques
+            $Prenom = $_.Split(",")[0]
+            $Nom = $_.Split(",")[1]
+            $Bureau = $_.Split(",")[2]
+            $Tel = $_.Split(",")[3]
+            $Cabinet = $_.Split(",")[4]
+            $Pc = $_.Split(",")[5]
+
+            # Variables nécessaires au fonctionnement du script
+            $Computer = (Get-ADComputer -Identity $Pc -Properties *).DistinguishedName
+            $grp_User = "grp-utilisateurs-$Cabinet"
+            $Grp_Pc = "grp-ordinateurs-$Cabinet"
+            $Ou_Pc = "OU=$Cabinet,OU=ordinateurs,OU=infra,DC=cabinet,DC=local"
+            $Description_Pc = "$Prenom $Nom Bur: $Bureau Tel: $Tel $Cabinet"
+
+            Manage-Computer -Computer $Computer -Description_Pc $Description_Pc -Grp_Pc $Grp_Pc -Ou_Pc $Ou_Pc
         }
     }
 
