@@ -150,6 +150,5 @@ if (-not $Global:VerifPrenom -or -not $Global:VerifNom -or -not $Global:VerifTel
 } else {
     [System.Windows.Forms.MessageBox]::Show("cestfé")
 }
-
 ####properties
 mail/Office/AccountExpirationDate/telephoneNumber/Name/Title

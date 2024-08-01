@@ -507,7 +507,6 @@ $tabcontrol_Cabinet.Size = new-object System.Drawing.Size(600, 500)
 $tabcontrol_Cabinet.TabIndex = 99
 $tabcontrol_Cabinet.Text = 'Droit'
 $tabcontrol_Cabinet.Controls.Add($tabpage_newuser)
-
 #
 # Form1
 #

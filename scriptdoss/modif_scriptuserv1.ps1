@@ -3,7 +3,6 @@
 #22/02/23 (modif faite par Ali)
 # la maj un email de notification
 
-
 #16/03/23 (modif faite par Ali)
 # ce script génère un fichier txt qui va être traité par un autre script en tâche planifier
 

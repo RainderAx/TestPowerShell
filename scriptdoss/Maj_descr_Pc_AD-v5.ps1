@@ -211,6 +211,4 @@ if ($Cabinet -like "SETI4") {
          #
 
         Move-Item -Path "$chemin\$fichier"  -Destination $destination
-
-
  }
