@@ -1,11 +1,11 @@
 # Spécifiez le chemin du répertoire à traiter
-$chemin = "\\cabinet.local\partages\support-informatique\Info_Computer\Description-PC"
+$chemin = "C:\Scripts\Alexis\test_pour_script2"
 
 # Obtenez tous les fichiers dans le répertoire
 $Pcfiler = Get-ChildItem $chemin
 
 # Répertoire de destination
-$destination = "\\cabinet.local\partages\support-informatique\Info_Computer\Archives"
+$destination = "C:\Scripts\Alexis\test_pour_script2\archive"
 
 # Initialisation de la variable
 $fichier = $null
@@ -39,8 +39,8 @@ function Manage-Computer {
 foreach ($fichier in $Pcfiler) {
     $filePath = "$chemin\$fichier"
 
-    if ($fichier.Name -match "^P-PC\d{3}\w{3}_\s\w+\.txt$") {
-        # Traitement pour le premier type de fichier (numéro de série du PC suivi du nom de famille)
+    if ($fichier.Name -match "C.*\.txt") {
+        #Traitement 1
         Get-Content $filePath | ForEach-Object {
             $Nom = $_.Split(",")[0]
             $Prenom = $_.Split(",")[1]
@@ -78,16 +78,12 @@ foreach ($fichier in $Pcfiler) {
 
             Manage-Computer -Computer $Computer -Description_Pc $Description_Pc -Grp_Pc $Grp_Pc -Ou_Pc $Ou_Pc
         }
-    } elseif ($fichier.Name -match "^\w+\.\w+(\.cab)?\.txt$") {
-        # Traitement pour le deuxième type de fichier (prénom.nom ou prénom.nom.cab)
+    } elseif ($fichier.Name -match "U.*\.txt") {
+        # Traitement 2
         Get-Content $filePath | ForEach-Object {
             # Exemple de traitement, à adapter selon vos besoins spécifiques
-            $Prenom = $_.Split(",")[0]
-            $Nom = $_.Split(",")[1]
-            $Bureau = $_.Split(",")[2]
-            $Tel = $_.Split(",")[3]
-            $Cabinet = $_.Split(",")[4]
-            $Pc = $_.Split(",")[5]
+            $Login = $_.Split(",")[1]           
+            $Bureau = $_.Split(",")[0]
 
             # Variables nécessaires au fonctionnement du script
             $Computer = (Get-ADComputer -Identity $Pc -Properties *).DistinguishedName
@@ -96,7 +92,10 @@ foreach ($fichier in $Pcfiler) {
             $Ou_Pc = "OU=$Cabinet,OU=ordinateurs,OU=infra,DC=cabinet,DC=local"
             $Description_Pc = "$Prenom $Nom Bur: $Bureau Tel: $Tel $Cabinet"
 
-            Manage-Computer -Computer $Computer -Description_Pc $Description_Pc -Grp_Pc $Grp_Pc -Ou_Pc $Ou_Pc
+            #Deplacement du bureau
+            Set-ADUser -Identity $Login -Office "$Bureau"
+            #test console
+            Write-Host "$Login ,  $Bureau"
         }
     }
 
