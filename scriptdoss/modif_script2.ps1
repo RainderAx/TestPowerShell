@@ -39,8 +39,8 @@ function Manage-Computer {
 foreach ($fichier in $Pcfiler) {
     $filePath = "$chemin\$fichier"
 
-    if ($fichier.Name -match "P-PC.*\.txt") {
-        # Traitement pour le premier type de fichier (numéro de série du PC suivi du nom de famille)
+    if ($fichier.Name -match "^C.*\.txt") {
+        #Traitement 1
         Get-Content $filePath | ForEach-Object {
             $Nom = $_.Split(",")[0]
             $Prenom = $_.Split(",")[1]
@@ -78,8 +78,8 @@ foreach ($fichier in $Pcfiler) {
 
             Manage-Computer -Computer $Computer -Description_Pc $Description_Pc -Grp_Pc $Grp_Pc -Ou_Pc $Ou_Pc
         }
-    } elseif ($fichier.Name -match "^\w+\.\w+(\.cab)?\.txt$") {
-        # Traitement pour le deuxième type de fichier (prénom.nom ou prénom.nom.cab)
+    } elseif ($fichier.Name -match "^U.*\.txt") {
+        # Traitement 2
         Get-Content $filePath | ForEach-Object {
             # Exemple de traitement, à adapter selon vos besoins spécifiques
             $Login = $_.Split(",")[1]           
@@ -92,8 +92,7 @@ foreach ($fichier in $Pcfiler) {
             $Ou_Pc = "OU=$Cabinet,OU=ordinateurs,OU=infra,DC=cabinet,DC=local"
             $Description_Pc = "$Prenom $Nom Bur: $Bureau Tel: $Tel $Cabinet"
 
-            
-
+            #Deplacement du bureau
             Set-ADUser -Identity $Login -Office "$Bureau"
             #test console
             Write-Host "$Login ,  $Bureau"
