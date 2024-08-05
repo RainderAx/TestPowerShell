@@ -638,22 +638,29 @@ $button_generer.Add_Click({
 	$LabelMessage.text = "La modfication de $Poste est OK"
    
     <####ajout Onglet de validation    
+
+    #####création du second onglet
+
     $TabPage2 = New-Object System.Windows.Forms.TabPage
     $TabPage2.Text = "Validation"
     $tabcontrol_Cabinet.TabPages.Add($TabPage2)
     $tabcontrol_Cabinet.SelectedTab = $TabPage2
     
+    #####récupère les données de l'utilisateur 
     $user = Get-ADUser -Filter "GivenName -like '$($Prenom)*' -and Surname -like '$($Nom)*'" -Properties *
 
+    #si le user est valide
     if ($user) {
-        $NP = $user.Name
-        $Mail = $user.mail 
-        $AccountExpirationDate = $user.AccountExpirationDate
-        $telephoneNumber = $user.telephoneNumber
-        $Title = $user.Title
-        $log = $user.SamAccountName
 
-        $OngletBLabelPrenom = New-Object System.Windows.Forms.Label
+        $NP = $user.Name #récupère nom et prenom
+        $Mail = $user.mail #récupère le mail
+        $AccountExpirationDate = $user.AccountExpirationDate #récupère la date d'expiration 
+        $telephoneNumber = $user.telephoneNumber #récupère le numéro de téléphone
+        $Title = $user.Title #récupère le poste 
+        $log = $user.SamAccountName #récupère l'idententifiant d'ouverture de session
+
+        #
+        $OngletBLabelPrenom = New-Object System.Windows.Forms.Label 
         $OngletBLabelPrenom.Location = New-Object System.Drawing.Point(30, 20)
         $OngletBLabelPrenom.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelPrenom.Text = "Nom: $NP"
