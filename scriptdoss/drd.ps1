@@ -659,42 +659,50 @@ $button_generer.Add_Click({
         $Title = $user.Title #récupère le poste 
         $log = $user.SamAccountName #récupère l'idententifiant d'ouverture de session
 
-        #
+        #Label pour le prénom
         $OngletBLabelPrenom = New-Object System.Windows.Forms.Label 
         $OngletBLabelPrenom.Location = New-Object System.Drawing.Point(30, 20)
         $OngletBLabelPrenom.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelPrenom.Text = "Nom: $NP"
 
+        #Label pour le mail
         $OngletBLabelMail = New-Object System.Windows.Forms.Label
         $OngletBLabelMail.Location = New-Object System.Drawing.Point(30, 50)
         $OngletBLabelMail.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelMail.Text = "Email: $Mail"
  
+        #Label pour l'expiration de compte
         $OngletBLabelAccExp = New-Object System.Windows.Forms.Label
         $OngletBLabelAccExp.Location = New-Object System.Drawing.Point(30, 80)
         $OngletBLabelAccExp.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelAccExp.Text = "Expiration du compte: $AccountExpirationDate"
 
+        #Label pour le numéro de téléphone
         $OngletBLabelPhone = New-Object System.Windows.Forms.Label
         $OngletBLabelPhone.Location = New-Object System.Drawing.Point(30, 110)
         $OngletBLabelPhone.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelPhone.Text = "Numéro de téléphone: $telephoneNumber"
 
+        #Label pour le poste
         $OngletBLabelTitle = New-Object System.Windows.Forms.Label
         $OngletBLabelTitle.Location = New-Object System.Drawing.Point(30, 140)
         $OngletBLabelTitle.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelTitle.Text = "Poste: $Title"
  
+        #label pour l identifiant de session
         $OngletBLabelLog = New-Object System.Windows.Forms.Label
         $OngletBLabelLog.Location = New-Object System.Drawing.Point(30, 170)
         $OngletBLabelLog.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelLog.Text = "Login: $log"
 
+        #label pour le bureau 
         $OngletBLabelBur = New-Object System.Windows.Forms.Label
         $OngletBLabelBur.Location = New-Object System.Drawing.Point(30, 200)
         $OngletBLabelBur.size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelBur.Text = "Bureau: $Global:bur2"
 
+
+        #fonction pour faire afficher les labels sur le second onglet
         $TabPage2.Controls.Add($OngletBLabelPrenom)
         $TabPage2.Controls.Add($OngletBLabelMail)
         $TabPage2.Controls.Add($OngletBLabelAccExp)
@@ -704,23 +712,31 @@ $button_generer.Add_Click({
         $TabPage2.Controls.Add($OngletBLabelBur)
         
         #Bouton Problème
+        #Création 
         $BtnPb = New-Object System.Windows.Forms.Button
         $BtnPb.Text = "Signaler un problème"
         $BtnPb.Location = New-Object System.Drawing.Point(30, 230)
         $BtnPb.Size = New-Object System.Drawing.Size(200, 30)
+
+        #event quand cliqué
         $BtnPb.Add_Click({
+            #crée une zone de texte et son label
             $Formulaire = New-Object System.Windows.Forms.Form
             $Formulaire.Text = "Signaler un problème"
             $Formulaire.Size = New-Object System.Drawing.Size(400, 200)
-    
             $FormText = New-Object System.Windows.Forms.TextBox
             $FormText.Location = New-Object System.Drawing.Point(20, 20)
             $FormText.Size = New-Object System.Drawing.Size(350, 20)
-    
+
+            #crée un bouton pour soumettre le texte
             $BntEnvoi = New-Object System.Windows.Forms.Button
             $BntEnvoi.Text = "Envoyer"
             $BntEnvoi.Location = New-Object System.Drawing.Point(150, 60)
+
+            #quand bouton cliqué 
             $BntEnvoi.Add_Click({
+
+                #envoie un mail avec le texte 
                 $utilisateur =$env:username.Split(".")[1].ToUpper()
                 $From  = "$env:username@cabinet.local"
                 $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
@@ -745,11 +761,15 @@ $button_generer.Add_Click({
         $BtnTel.Text = "Numéro de téléphone erroné"
         $BtnTel.Location = New-Object System.Drawing.Point(30, 260)
         $BtnTel.Size = New-Object System.Drawing.Size(200, 30)
+
+        #quand cliqué
         $BtnTel.Add_Click({
             $FormulaireTel = New-Object System.Windows.Forms.Form
             $FormulaireTel.Text = "Numéro de téléphone erroné"
             $FormulaireTel.Size = New-Object System.Drawing.Size(300, 200)
-    
+
+            crée un bouton
+            
             $Absent = New-Object System.Windows.Forms.Button
             $Absent.Text = "Numéro absent"
             $Absent.Location = New-Object System.Drawing.Point(50, 20)
