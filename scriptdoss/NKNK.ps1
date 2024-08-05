@@ -519,8 +519,8 @@ $TextBureau_2.Add_LostFocus({
                 $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
 
                 $PrintBur = New-Object System.Windows.Forms.Label
-                $PrintBur.Location = New-Object System.Drawing.Point(17, 85)
-                $PrintBur.Size = New-Object System.Drawing.Size(150, 20)
+                $PrintBur.Location = New-Object System.Drawing.Point(320, 85)
+                $PrintBur.Size = New-Object System.Drawing.Size(50, 20)
                 $PrintBur.Text = "Numéro de bureau $Global:bur2"
                 $tabpage_newuser.Controls.Add($PrintBur)
 
