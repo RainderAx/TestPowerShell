@@ -429,10 +429,13 @@ $button.Add_Click({
     }
 })
 
+#fonction pour vérifier les conditions
 $TextBureau.Add_LostFocus({
+    #change la valeur de Global Bureau pour qu'elle  soit égale au numéro de bureau
     $Global:Bureau = $TextBureau.Text.Trim()
     $selectedOption = $comboBox.SelectedItem
 
+    #vérifie si le text de bureau est vide
     if ($Global:Bureau -ne $null) {
         $Global:VerifBureau = $false
 
@@ -479,7 +482,7 @@ $TextBureau.Add_LostFocus({
     
         
 })
-
+#verifie les conditions pour 
 $TextBureau_2.Add_LostFocus({
     
     $PrintBur = New-Object System.Windows.Forms.Label
