@@ -345,6 +345,8 @@ $button.Add_Click({
             $LabelBureau_2.Visible = $true
             #rend visible le label
             $LabelBureau_3.Visible = $true
+            #rend la zone de texte de la saisie automatique invisible
+            $TextAuto.Visible = $false
         }
         "BAT5" {
             $TextBureau.Visible = $true
@@ -360,7 +362,7 @@ $button.Add_Click({
 
             $LabelBureau_3.Visible = $true
 
-            $LabelBureau_3.Text = "N° Bureau:"
+            $TextAuto.Visible = $false
         }
         "BAT6" {
             $TextBureau.Visible = $true
@@ -375,6 +377,8 @@ $button.Add_Click({
             $LabelBureau_2.Visible = $true
 
             $LabelBureau_3.Visible = $true
+
+            $TextAuto.Visible = $false
         }
         "ROQUELAURE" {
             $TextBureau.Visible = $true
@@ -389,6 +393,8 @@ $button.Add_Click({
             $LabelBureau_2.Visible = $true
 
             $LabelBureau_3.Visible = $true
+
+            $TextAuto.Visible = $false
         }
         "LEPLAY" {
             $TextBureau.Visible = $true
@@ -403,6 +409,8 @@ $button.Add_Click({
             $LabelBureau_2.Visible = $true
 
             $LabelBureau_3.Visible = $true
+
+            $TextAuto.Visible = $false
         }
         "LESDIGUIERE" {
             $TextBureau.Visible = $true
@@ -595,7 +603,7 @@ $button_generer.Add_Click({
  		[System.Windows.Forms.MessageBox]::Show("Tout les champs ne sont pas complétés.")
 	        return
 	 } else {
-        [System.Windows.Forms.MessageBox]::Show("Information enregistrer")  
+        [System.Windows.Forms.MessageBox]::Show("Information enregistrée")  
 	#[System.Windows.Forms.MessageBox]::Show("Veuillez attendre l'onglet validation")
 } 
 	#####
