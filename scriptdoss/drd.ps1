@@ -751,6 +751,8 @@ $button_generer.Add_Click({
                 $SmtpServer = 'mail.cabinet.local'
                 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
             })
+
+            #fonction pour afficher la barre de texte et le bouton d envoie
             $Formulaire.Controls.Add($FormText)
             $Formulaire.Controls.Add($BntEnvoi)
             $Formulaire.ShowDialog()
@@ -768,12 +770,14 @@ $button_generer.Add_Click({
             $FormulaireTel.Text = "Numéro de téléphone erroné"
             $FormulaireTel.Size = New-Object System.Drawing.Size(300, 200)
 
-            crée un bouton
+            #crée un bouton numéro absent
             
             $Absent = New-Object System.Windows.Forms.Button
             $Absent.Text = "Numéro absent"
             $Absent.Location = New-Object System.Drawing.Point(50, 20)
             $Absent.Size = New-Object System.Drawing.Size(200, 30)
+            
+            #quand cliqué envoie un mail
             $Absent.Add_Click({
                 $utilisateur =$env:username.Split(".")[1].ToUpper()
                 $From  = "$env:username@cabinet.local"
@@ -787,11 +791,14 @@ $button_generer.Add_Click({
                 $SmtpServer = 'mail.cabinet.local'
                 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
             })
-    
+
+            #crée un bouton format non respecté
             $letterErrorButton = New-Object System.Windows.Forms.Button
             $letterErrorButton.Text = "Format non respecté"
             $letterErrorButton.Location = New-Object System.Drawing.Point(50, 100)
             $letterErrorButton.Size = New-Object System.Drawing.Size(200, 30)
+            
+            #quand cliqué envoie un mail
             $letterErrorButton.Add_Click({
                 $utilisateur =$env:username.Split(".")[1].ToUpper()
                 $From  = "$env:username@cabinet.local"
@@ -807,11 +814,13 @@ $button_generer.Add_Click({
                 $FormulaireTel.Close()
             })
 
-
+            #crée un bouton poour la taille du numéro 
             $Taille = New-Object System.Windows.Forms.Button
             $Taille.Text = "Taille du numéro erroné"
             $Taille.Location = New-Object System.Drawing.Point(50, 60)
             $Taille.Size = New-Object System.Drawing.Size(200, 30)
+
+            #quand cliqué envoie un mail 
             $Taille.Add_Click({
                 $utilisateur =$env:username.Split(".")[1].ToUpper()
                 $From  = "$env:username@cabinet.local"
@@ -826,11 +835,14 @@ $button_generer.Add_Click({
                 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
                 $FormulaireTel.Close()
             })
-    
+
+            #crée un bouton "autre"
             $Autre = New-Object System.Windows.Forms.Button
             $Autre.Text = "Autre"
             $Autre.Location = New-Object System.Drawing.Point(50, 140)
             $Autre.Size = New-Object System.Drawing.Size(200, 30)
+
+            #quand cliqué envoie un mail
             $Autre.Add_Click({
                 $utilisateur =$env:username.Split(".")[1].ToUpper()
                 $From  = "$env:username@cabinet.local"
@@ -845,14 +857,16 @@ $button_generer.Add_Click({
                 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
                 $FormulaireTel.Close()
             })
-    
+
+            #fonction pour faire apparaitre les 4 boutons précedent
             $FormulaireTel.Controls.Add($Absent)
             $FormulaireTel.Controls.Add($Taille)
             $FormulaireTel.Controls.Add($Autre)
             $FormulaireTel.Controls.Add($letterErrorButton)
             $FormulaireTel.ShowDialog()
         })
-
+        
+        #fonction pour faire appraitre les boutons Problemes et Teléphones
         $TabPage2.Controls.Add($BtnPb)
         $TabPage2.Controls.Add($BtnTel)
 
@@ -864,7 +878,7 @@ $button_generer.Add_Click({
     # ajout Vérifie si le numéro de téléphone n'est pas renseigné
     if ($Telephone -eq $null -or $Telephone -eq '') {
 
-
+        #envoie un mail
         $utilisateur =$env:username.Split(".")[1].ToUpper()
         #a changer
         $From  = "$env:username@cabinet.local"
