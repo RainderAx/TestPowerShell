@@ -12,7 +12,7 @@
 [void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
 $Form10 = new-object System.Windows.Forms.form
 
-#
+#initialisation des objets (bouton,zone de text, label,etc)
 $TextBoxPrenom = New-Object System.Windows.Forms.TextBox
 $TextBoxNom = New-Object System.Windows.Forms.TextBox
 $TextTelephone = New-Object System.Windows.Forms.TextBox
@@ -29,11 +29,10 @@ $Labelservice = New-Object System.Windows.Forms.Label
 $labelMessage = New-Object System.Windows.Forms.Label
 $ComboBoxService = New-Object System.Windows.Forms.ComboBox
 $ComboBoxPoste = New-Object System.Windows.Forms.ComboBox
-
-
 $tabcontrol_Cabinet = New-Object System.Windows.Forms.TabControl
 $tabpage_newuser = New-Object System.Windows.Forms.TabPage
 
+#fonction pour les faire apparaitre sur l'onglet
 $tabpage_newuser.Controls.Add($LabelNom)
 $tabpage_newuser.Controls.Add($LabelNomError)
 $tabpage_newuser.Controls.Add($LabelPrenom)
@@ -61,26 +60,29 @@ $tabpage_newuser.Controls.Add($ComboBoxService)
 [string]$settingsFile = "PwdCabinet.xml" 
 [xml]$config = Get-Content $settingsFile
 
-
+#methode pour que les lettres du nom soit en majuscule
 $TextBoxNom.Add_textChanged({
 	$TextBoxNom.Text = ($TextBoxNom.Get_Text()).ToUpper()
 	$TextBoxNom.SelectionStart = $TextBoxNom.Text.Length
 	$TextBoxNom.SelectionLength = 0
 })
 
+#methodes pour que la première lettre du prénom soit en majuscule
 $TextBoxPrenom.Add_textChanged({
 	$TextBoxPrenom.Text = (Get-Culture).textinfo.totitlecase($TextBoxPrenom.Text.Split(' '))
 	$TextBoxPrenom.SelectionStart = $TextBoxPrenom.Text.Length
 	$TextBoxPrenom.SelectionLength = 0
 })
 
+#condition pour vérifier si le champ de téléphone est valide
 $TextTelephone.Add_LostFocus({
+    #vérifie si le champ est vide
 	if ($TextTelephone.Text.Length -eq 0) {
 		ChangeLabelOk $LabelTelephoneError
 		$Global:VerifTelephone=$false
 		return
 	}
-	
+	#vérifie si le champ ne fait pas 5 caractères 
 	elseif ($TextTelephone.Text.Length -ne 5) {
 		ChangeLabelError $LabelTelephoneError 'Merci de mettre que les 5 derniers numeros'
 		$Global:VerifTelephone=$false
@@ -91,15 +93,18 @@ $TextTelephone.Add_LostFocus({
 	[Int]$TestTelephone=$TextTelephone.Text
 	}	
 	
+    #vérifie si le champ contient que des chiffres
 	Catch [System.Management.Automation.PSInvalidCastException] {
 		$Global:VerifTelephone=$false
 		ChangeLabelError $LabelTelephoneError 'Le champ doit contenir que des chiffres'
 		return
 	}
+    #met le booléen en true si les conditions sont respectées
 	$Global:VerifTelephone=$true
 	ChangeLabelOk $LabelTelephoneError
 })
 
+#methode qui vérifie si le champ du prénom ne contient que des lettres
 $TextBoxPrenom.Add_LostFocus({
 	
 	if ($Global:VerifPrenom -eq $true) {
@@ -123,6 +128,8 @@ $TextBoxPrenom.Add_LostFocus({
 	}
 })
 
+
+#methode qui vérifie si le champ du nom ne contient que des lettres
 $TextBoxNom.Add_LostFocus({
 	if ($Global:VerifNom -eq $true) {
 		return
@@ -142,27 +149,6 @@ $TextBoxNom.Add_LostFocus({
 	}
 	if ($Global:VerifNom -eq $true) {
 		ChangeLabelOK $LabelNomError
-	}
-})
-
-$TextBureau.Add_LostFocus({
-	$chars = '0123456789'
-	
-	for ( $i=0; $i -lt ($TextBureau.text).Length; $i++ ) {
-		if ($chars -match $TextBureau.Text[$i] -ne $true) {
-			ChangeLabelError $LabelBureauError 'Le champ doit contenir que des chiffres'
-			$Global:VerifBureau = $false
-			Break
-		}
-		
-		elseif ($TextBureau.Text.Length -ne 4) {
-			ChangeLabelError $LabelBureauError 'Le champ doit contenir 4 caractères'
-			return
-		}
-		else {
-			ChangeLabelOK $LabelBureauError
-			$Global:VerifBureau = $true
-		}
 	}
 })
 
@@ -252,93 +238,112 @@ Function Get-InfoDomaine {
 
 ############# ajout
 
-# Créer une étiquette pour le menu déroulant
+# Créer une label pour le menu déroulant
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10, 20)
 $label.Size = New-Object System.Drawing.Size(150, 20)
 $label.Text = "Choisissez un bâtiment :"
 $tabpage_newuser.Controls.Add($label)
 
+#crée le menu déroulant
 $comboBox = New-Object System.Windows.Forms.ComboBox
 $comboBox.Location = New-Object System.Drawing.Point(170, 20)
 $comboBox.Size = New-Object System.Drawing.Size(100, 20)
 $comboBox.DropDownStyle = [System.Windows.Forms.ComboBoxStyle]::DropDownList
-
+#crée les options pour le menu déroulant
 $options = @("BAT4", "BAT5", "BAT6", "ROQUELAURE", "LEPLAY", "LESDIGUIERE","Autre")
 $comboBox.Items.AddRange($options)
 
 $tabpage_newuser.Controls.Add($comboBox)
 
+#crée un label pour les message d'erreurs
 $LabelBureauError = New-Object System.Windows.Forms.Label
 $LabelBureauError.Location = New-Object System.Drawing.Point(340, 65)
 $LabelBureauError.Size = New-Object System.Drawing.Size(250, 20)
 $LabelBureauError.ForeColor = [System.Drawing.Color]::Red
 $tabpage_newuser.Controls.Add($LabelBureauError)
 
-
+#crée la 1ère zone de texte 
 $TextBureau = New-Object System.Windows.Forms.TextBox
 $TextBureau.Location = New-Object System.Drawing.Point(150, 65)
 $TextBureau.Size = New-Object System.Drawing.Size(45, 30)
 $TextBureau.Visible = $false
 $tabpage_newuser.Controls.Add($TextBureau)
 
+#crée le label pour le batiment
 $LabelBureau = New-Object System.Windows.Forms.Label
 $LabelBureau.Location = New-Object System.Drawing.Point(15, 65)
 $LabelBureau.Size = New-Object System.Drawing.Size(80, 20)
-
 $LabelBureau.Visible = $false
 $tabpage_newuser.Controls.Add($LabelBureau)
 
+#crée la 2ième zone de texte
 $TextBureau_2 = New-Object System.Windows.Forms.TextBox
 $TextBureau_2.Location = New-Object System.Drawing.Point(270, 65)
 $TextBureau_2.Size = New-Object System.Drawing.Size(45, 30)
 $TextBureau_2.Visible = $false
 $tabpage_newuser.Controls.Add($TextBureau_2)
 
+#créee le label pour l'étage 
 $LabelBureau_2 = New-Object System.Windows.Forms.Label
 $LabelBureau_2.Location = New-Object System.Drawing.Point(110, 65)
 $LabelBureau_2.Size = New-Object System.Drawing.Size(100, 20)
 $LabelBureau_2.Text = "étage :"
-
 $LabelBureau_2.Visible = $false
 $tabpage_newuser.Controls.Add($LabelBureau_2)
 
+#crée le label pour le numéro de bureau 
 $LabelBureau_3 = New-Object System.Windows.Forms.Label
 $LabelBureau_3.Location = New-Object System.Drawing.Point(212, 65)
 $LabelBureau_3.Size = New-Object System.Drawing.Size(100, 20)
 $LabelBureau_3.Text = "N° Bureau:"
-
 $LabelBureau_3.Visible = $false
 $tabpage_newuser.Controls.Add($LabelBureau_3)
 
+#crée un bouton pour valider le bâtiment sélectionné 
 $button = New-Object System.Windows.Forms.Button
 $button.Location = New-Object System.Drawing.Point(300, 20)
 $button.Size = New-Object System.Drawing.Size(100, 30)
 $button.Text = "Valider"
 $tabpage_newuser.Controls.Add($button)
 
+#crée la zone de texte pour la saisie manuelle
+$TextAuto = New-Object System.Windows.Forms.TextBox
+$TextAuto.Location = New-Object System.Drawing.Point(150, 65)
+$TextAuto.Size = New-Object System.Drawing.Size(205, 30)
+$TextAuto.Visible = $false
+$tabpage_newuser.Controls.Add($TextAuto)
+
+#instanciation de variable 
 $Global:Bureau = ""
 $Global:choice =""
 $Global:Bureau_2 = ""
 
+#action lorsque le bouton est sélectionné
 $button.Add_Click({
     $selectedOption = $comboBox.SelectedItem    
-    $LabelBureau.Visible = $true
+    $LabelBureau.Visible = $false
+
 
     # switchcase pour afficher les batiments 
     switch ($selectedOption) {
+        
         "BAT4" {
             $TextBureau.Visible = $true
             $TextBureau.Focus()
+            #change la valeur de global choice
             $Global:choice = '4'
+            #ajoute un texte au label du batiment
             $LabelBureau.Text = "Batiment 4 :"
+            #rend visible le label
             $LabelBureau.Visible = $true
-
+            #rend visible la zone de texte
             $TextBureau_2.Visible = $true
+            #enregistre les infos écrit dans la zone de texte
             $TextBureau_2.Focus()
-
+            #rend visible le label
             $LabelBureau_2.Visible = $true
-
+            #rend visible le label
             $LabelBureau_3.Visible = $true
         }
         "BAT5" {
@@ -354,6 +359,8 @@ $button.Add_Click({
             $LabelBureau_2.Visible = $true
 
             $LabelBureau_3.Visible = $true
+
+            $LabelBureau_3.Text = "N° Bureau:"
         }
         "BAT6" {
             $TextBureau.Visible = $true
@@ -406,21 +413,31 @@ $button.Add_Click({
 
             $TextBureau_2.Visible = $true
             $TextBureau_2.Focus()
-
+            $TextAuto.Visible = $false
             $LabelBureau_2.Visible = $true
 
             $LabelBureau_3.Visible = $true
         }
         "Autre" {
-            $TextBureau.Size = New-Object System.Drawing.Size(205, 30)
-            $LabelBureau.Size = New-Object System.Drawing.Size(100, 20)
+            #modifie la taille de la zone de texte et du premier label
+            $TextAuto.Size = New-Object System.Drawing.Size(205, 30)
+            $LabelBureau.Size = New-Object System.Drawing.Size(97, 20)
 
-            $TextBureau.Visible = $true
-            $TextBureau.Focus()
+         
+            $TextAuto.Focus()
+            
             $Global:choice = ''
+
             $LabelBureau.Text = "Saisie Manuelle "
             $LabelBureau.Visible = $true
+            $TextAuto.Visible = $true
+            $TextBureau.Visible = $false
+            $TextBureau_2.Visible = $false
+            $LabelBureau_2.Visible = $false
+            $LabelBureau_3.Visible = $false
+
         }
+        #choix par défaut
         default { 
             $TextBureau.Visible = $false
             [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption") 
@@ -428,10 +445,13 @@ $button.Add_Click({
     }
 })
 
+#fonction pour vérifier les conditions
 $TextBureau.Add_LostFocus({
+    #change la valeur de Global Bureau pour qu'elle  soit égale au numéro de bureau
     $Global:Bureau = $TextBureau.Text.Trim()
     $selectedOption = $comboBox.SelectedItem
 
+    #vérifie si le text de bureau est vide
     if ($Global:Bureau -ne $null) {
         $Global:VerifBureau = $false
 
@@ -458,15 +478,7 @@ $TextBureau.Add_LostFocus({
                 $Global:bur = "$Global:choice" + "$Global:Bureau"
             }
         }
-    } elseif ($comboBox.SelectedItem -eq "Saisie Manuelle") {
-        $Global:VerifBureau = $true
-        $Global:bur = "$Global:choice" + "$Global:Bureau"
-    } else {
-        $LabelBureauError.Text = 'Le champ ne peut pas être vide'
-        #### test console
-        Write-Host "TextBox est null ou TextBox.Text est null"
-        ####
-    }
+    } 
     $Global:bur = "$Global:choice" + "$Global:Bureau"
     
     #### test  console
@@ -474,13 +486,15 @@ $TextBureau.Add_LostFocus({
     Write-Host "Length: $($Global:Bureau.Length)"
     Write-Host "$Global:bur"
     Write-Host "Verification: $Global:VerifBureau"
+    Write-Host "Verification: $Global:VfBur"
     #######
     
         
 })
-
+#verifie les conditions pour la 2ième zone de texte
 $TextBureau_2.Add_LostFocus({
     
+    #création d un label qui affichera le bureau si toute les conditions sont validés
     $PrintBur = New-Object System.Windows.Forms.Label
     $PrintBur.Location = New-Object System.Drawing.Point(320, 65)
     $PrintBur.Size = New-Object System.Drawing.Size(100, 20)
@@ -493,6 +507,7 @@ $TextBureau_2.Add_LostFocus({
     $Global:Bureau_2 = $TextBureau_2.Text.Trim()
     $selectedOption = $comboBox.SelectedItem
     $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
+    #vérifie si le texte bureau n'est pas vide
     if ($Global:Bureau_2 -ne $null) {
         $Global:VerifBureau_2 = $false
 
@@ -506,29 +521,34 @@ $TextBureau_2.Add_LostFocus({
             $LabelBureauError.Text = ''
             $Global:VerifBureau_2 = $true
         }
-	
+        
+        # Vérifie les conditions 
         else {
-            # Vérifie les conditions 
+            #vérifie si le nombre de caracteres est de 2
             if ($Global:Bureau_2.Length -ne 2) {
                 $LabelBureauError.Text = "Le second champ ne doit contenir que 2 chiffres"
+            #vérifie s'il n'y a que des chiffres
             } elseif ($Global:Bureau -notmatch '^[0-9]+$') {
                 $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
+            #toutes les conditons sont vérifiés
             } else {
+                #affiche le label 
                 $LabelBureauError.Text = ''
                 $Global:VerifBureau_2 = $true
                 $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
 
                 $PrintBur = New-Object System.Windows.Forms.Label
-                $PrintBur.Location = New-Object System.Drawing.Point(320, 85)
-                $PrintBur.Size = New-Object System.Drawing.Size(50, 20)
+                $PrintBur.Location = New-Object System.Drawing.Point(17, 85)
+                $PrintBur.Size = New-Object System.Drawing.Size(150, 20)
                 $PrintBur.Text = "Numéro de bureau $Global:bur2"
                 $tabpage_newuser.Controls.Add($PrintBur)
 
                 $PrintBur.Visible = $false
-
+                #vérifie si les 3 chiffres pour crée le bureau sont correctes
                 if ( $Global:burtest-match '^\d{3}$'){
                     $Global:VfBur = $true
                     $PrintBur.Visible = $true
+                    #test console
                     Write-Host "Verification: $Global:burtest"
                     
                 }  
@@ -536,15 +556,7 @@ $TextBureau_2.Add_LostFocus({
                 
             }
         }
-    } elseif ($comboBox.SelectedItem -eq "Saisie Manuelle") {
-        $Global:VfBur = $true
-        $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
-    } else {
-        $LabelBureauError.Text = 'Le champ ne peut pas être vide'
-        #### test console
-        Write-Host "TextBox est null ou TextBox.Text est null"
-        ####
-    }
+    } 
     $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
 
     
@@ -554,9 +566,20 @@ $TextBureau_2.Add_LostFocus({
     Write-Host "$Global:bur2"
     Write-Host "Verification: $Global:VerifBureau_2"
     Write-Host "test bureau $Global:burtest"
-    #######
-    
-       
+    #######       
+})
+
+$TextAuto.Add_LostFocus({
+    $Global:Bureau_2 = $TextAuto.Text.Trim()
+    $Global:VfBur = $true
+    if ($Global:Bureau_2 -eq $null) {
+        $Global:VfBur = $false
+        $LabelBureauError.Text = 'Le champ ne peut pas être vide'
+        #test console
+        Write-Host "test bureau $Global:Bureau_2 bureau2 est vide"
+        }
+        #test console
+        Write-Host "hors condition $Global:Bureau_2 "
 })
 #############
 
@@ -572,7 +595,8 @@ $button_generer.Add_Click({
  		[System.Windows.Forms.MessageBox]::Show("Tout les champs ne sont pas complétés.")
 	        return
 	 } else {
-	[System.Windows.Forms.MessageBox]::Show("Veuillez attendre l'onglet validation")
+        [System.Windows.Forms.MessageBox]::Show("Information enregistrer")  
+	#[System.Windows.Forms.MessageBox]::Show("Veuillez attendre l'onglet validation")
 } 
 	#####
 	
@@ -638,56 +662,71 @@ $button_generer.Add_Click({
 	$LabelMessage.text = "La modfication de $Poste est OK"
    
     <####ajout Onglet de validation    
+
+    #####création du second onglet
+
     $TabPage2 = New-Object System.Windows.Forms.TabPage
     $TabPage2.Text = "Validation"
     $tabcontrol_Cabinet.TabPages.Add($TabPage2)
     $tabcontrol_Cabinet.SelectedTab = $TabPage2
     
+    #####récupère les données de l'utilisateur 
     $user = Get-ADUser -Filter "GivenName -like '$($Prenom)*' -and Surname -like '$($Nom)*'" -Properties *
 
+    #si le user est valide
     if ($user) {
-        $NP = $user.Name
-        $Mail = $user.mail 
-        $AccountExpirationDate = $user.AccountExpirationDate
-        $telephoneNumber = $user.telephoneNumber
-        $Title = $user.Title
-        $log = $user.SamAccountName
 
-        $OngletBLabelPrenom = New-Object System.Windows.Forms.Label
+        $NP = $user.Name #récupère nom et prenom
+        $Mail = $user.mail #récupère le mail
+        $AccountExpirationDate = $user.AccountExpirationDate #récupère la date d'expiration 
+        $telephoneNumber = $user.telephoneNumber #récupère le numéro de téléphone
+        $Title = $user.Title #récupère le poste 
+        $log = $user.SamAccountName #récupère l'idententifiant d'ouverture de session
+
+        #Label pour le prénom
+        $OngletBLabelPrenom = New-Object System.Windows.Forms.Label 
         $OngletBLabelPrenom.Location = New-Object System.Drawing.Point(30, 20)
         $OngletBLabelPrenom.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelPrenom.Text = "Nom: $NP"
 
+        #Label pour le mail
         $OngletBLabelMail = New-Object System.Windows.Forms.Label
         $OngletBLabelMail.Location = New-Object System.Drawing.Point(30, 50)
         $OngletBLabelMail.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelMail.Text = "Email: $Mail"
  
+        #Label pour l'expiration de compte
         $OngletBLabelAccExp = New-Object System.Windows.Forms.Label
         $OngletBLabelAccExp.Location = New-Object System.Drawing.Point(30, 80)
         $OngletBLabelAccExp.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelAccExp.Text = "Expiration du compte: $AccountExpirationDate"
 
+        #Label pour le numéro de téléphone
         $OngletBLabelPhone = New-Object System.Windows.Forms.Label
         $OngletBLabelPhone.Location = New-Object System.Drawing.Point(30, 110)
         $OngletBLabelPhone.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelPhone.Text = "Numéro de téléphone: $telephoneNumber"
 
+        #Label pour le poste
         $OngletBLabelTitle = New-Object System.Windows.Forms.Label
         $OngletBLabelTitle.Location = New-Object System.Drawing.Point(30, 140)
         $OngletBLabelTitle.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelTitle.Text = "Poste: $Title"
  
+        #label pour l identifiant de session
         $OngletBLabelLog = New-Object System.Windows.Forms.Label
         $OngletBLabelLog.Location = New-Object System.Drawing.Point(30, 170)
         $OngletBLabelLog.Size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelLog.Text = "Login: $log"
 
+        #label pour le bureau 
         $OngletBLabelBur = New-Object System.Windows.Forms.Label
         $OngletBLabelBur.Location = New-Object System.Drawing.Point(30, 200)
         $OngletBLabelBur.size = New-Object System.Drawing.Size(300, 20)
         $OngletBLabelBur.Text = "Bureau: $Global:bur2"
 
+
+        #fonction pour faire afficher les labels sur le second onglet
         $TabPage2.Controls.Add($OngletBLabelPrenom)
         $TabPage2.Controls.Add($OngletBLabelMail)
         $TabPage2.Controls.Add($OngletBLabelAccExp)
@@ -697,23 +736,31 @@ $button_generer.Add_Click({
         $TabPage2.Controls.Add($OngletBLabelBur)
         
         #Bouton Problème
+        #Création 
         $BtnPb = New-Object System.Windows.Forms.Button
         $BtnPb.Text = "Signaler un problème"
         $BtnPb.Location = New-Object System.Drawing.Point(30, 230)
         $BtnPb.Size = New-Object System.Drawing.Size(200, 30)
+
+        #event quand cliqué
         $BtnPb.Add_Click({
+            #crée une zone de texte et son label
             $Formulaire = New-Object System.Windows.Forms.Form
             $Formulaire.Text = "Signaler un problème"
             $Formulaire.Size = New-Object System.Drawing.Size(400, 200)
-    
             $FormText = New-Object System.Windows.Forms.TextBox
             $FormText.Location = New-Object System.Drawing.Point(20, 20)
             $FormText.Size = New-Object System.Drawing.Size(350, 20)
-    
+
+            #crée un bouton pour soumettre le texte
             $BntEnvoi = New-Object System.Windows.Forms.Button
             $BntEnvoi.Text = "Envoyer"
             $BntEnvoi.Location = New-Object System.Drawing.Point(150, 60)
+
+            #quand bouton cliqué 
             $BntEnvoi.Add_Click({
+
+                #envoie un mail avec le texte 
                 $utilisateur =$env:username.Split(".")[1].ToUpper()
                 $From  = "$env:username@cabinet.local"
                 $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
@@ -728,6 +775,8 @@ $button_generer.Add_Click({
                 $SmtpServer = 'mail.cabinet.local'
                 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
             })
+
+            #fonction pour afficher la barre de texte et le bouton d envoie
             $Formulaire.Controls.Add($FormText)
             $Formulaire.Controls.Add($BntEnvoi)
             $Formulaire.ShowDialog()
@@ -738,15 +787,21 @@ $button_generer.Add_Click({
         $BtnTel.Text = "Numéro de téléphone erroné"
         $BtnTel.Location = New-Object System.Drawing.Point(30, 260)
         $BtnTel.Size = New-Object System.Drawing.Size(200, 30)
+
+        #quand cliqué
         $BtnTel.Add_Click({
             $FormulaireTel = New-Object System.Windows.Forms.Form
             $FormulaireTel.Text = "Numéro de téléphone erroné"
             $FormulaireTel.Size = New-Object System.Drawing.Size(300, 200)
-    
+
+            #crée un bouton numéro absent
+            
             $Absent = New-Object System.Windows.Forms.Button
             $Absent.Text = "Numéro absent"
             $Absent.Location = New-Object System.Drawing.Point(50, 20)
             $Absent.Size = New-Object System.Drawing.Size(200, 30)
+            
+            #quand cliqué envoie un mail
             $Absent.Add_Click({
                 $utilisateur =$env:username.Split(".")[1].ToUpper()
                 $From  = "$env:username@cabinet.local"
@@ -760,11 +815,14 @@ $button_generer.Add_Click({
                 $SmtpServer = 'mail.cabinet.local'
                 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
             })
-    
+
+            #crée un bouton format non respecté
             $letterErrorButton = New-Object System.Windows.Forms.Button
             $letterErrorButton.Text = "Format non respecté"
             $letterErrorButton.Location = New-Object System.Drawing.Point(50, 100)
             $letterErrorButton.Size = New-Object System.Drawing.Size(200, 30)
+            
+            #quand cliqué envoie un mail
             $letterErrorButton.Add_Click({
                 $utilisateur =$env:username.Split(".")[1].ToUpper()
                 $From  = "$env:username@cabinet.local"
@@ -780,11 +838,13 @@ $button_generer.Add_Click({
                 $FormulaireTel.Close()
             })
 
-
+            #crée un bouton poour la taille du numéro 
             $Taille = New-Object System.Windows.Forms.Button
             $Taille.Text = "Taille du numéro erroné"
             $Taille.Location = New-Object System.Drawing.Point(50, 60)
             $Taille.Size = New-Object System.Drawing.Size(200, 30)
+
+            #quand cliqué envoie un mail 
             $Taille.Add_Click({
                 $utilisateur =$env:username.Split(".")[1].ToUpper()
                 $From  = "$env:username@cabinet.local"
@@ -799,11 +859,14 @@ $button_generer.Add_Click({
                 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
                 $FormulaireTel.Close()
             })
-    
+
+            #crée un bouton "autre"
             $Autre = New-Object System.Windows.Forms.Button
             $Autre.Text = "Autre"
             $Autre.Location = New-Object System.Drawing.Point(50, 140)
             $Autre.Size = New-Object System.Drawing.Size(200, 30)
+
+            #quand cliqué envoie un mail
             $Autre.Add_Click({
                 $utilisateur =$env:username.Split(".")[1].ToUpper()
                 $From  = "$env:username@cabinet.local"
@@ -818,14 +881,16 @@ $button_generer.Add_Click({
                 $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
                 $FormulaireTel.Close()
             })
-    
+
+            #fonction pour faire apparaitre les 4 boutons précedent
             $FormulaireTel.Controls.Add($Absent)
             $FormulaireTel.Controls.Add($Taille)
             $FormulaireTel.Controls.Add($Autre)
             $FormulaireTel.Controls.Add($letterErrorButton)
             $FormulaireTel.ShowDialog()
         })
-
+        
+        #fonction pour faire appraitre les boutons Problemes et Teléphones
         $TabPage2.Controls.Add($BtnPb)
         $TabPage2.Controls.Add($BtnTel)
 
@@ -837,7 +902,7 @@ $button_generer.Add_Click({
     # ajout Vérifie si le numéro de téléphone n'est pas renseigné
     if ($Telephone -eq $null -or $Telephone -eq '') {
 
-
+        #envoie un mail
         $utilisateur =$env:username.Split(".")[1].ToUpper()
         #a changer
         $From  = "$env:username@cabinet.local"
