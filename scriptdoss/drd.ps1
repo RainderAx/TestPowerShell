@@ -12,7 +12,7 @@
 [void][Reflection.Assembly]::LoadWithPartialName('System.Windows.Forms')
 $Form10 = new-object System.Windows.Forms.form
 
-#
+#initialisation des objets (bouton,zone de text, label,etc)
 $TextBoxPrenom = New-Object System.Windows.Forms.TextBox
 $TextBoxNom = New-Object System.Windows.Forms.TextBox
 $TextTelephone = New-Object System.Windows.Forms.TextBox
@@ -29,11 +29,10 @@ $Labelservice = New-Object System.Windows.Forms.Label
 $labelMessage = New-Object System.Windows.Forms.Label
 $ComboBoxService = New-Object System.Windows.Forms.ComboBox
 $ComboBoxPoste = New-Object System.Windows.Forms.ComboBox
-
-
 $tabcontrol_Cabinet = New-Object System.Windows.Forms.TabControl
 $tabpage_newuser = New-Object System.Windows.Forms.TabPage
 
+#fonction pour les faire apparaitre sur l'onglet
 $tabpage_newuser.Controls.Add($LabelNom)
 $tabpage_newuser.Controls.Add($LabelNomError)
 $tabpage_newuser.Controls.Add($LabelPrenom)
@@ -61,26 +60,29 @@ $tabpage_newuser.Controls.Add($ComboBoxService)
 [string]$settingsFile = "PwdCabinet.xml" 
 [xml]$config = Get-Content $settingsFile
 
-
+#methode pour que les lettres du nom soit en majuscule
 $TextBoxNom.Add_textChanged({
 	$TextBoxNom.Text = ($TextBoxNom.Get_Text()).ToUpper()
 	$TextBoxNom.SelectionStart = $TextBoxNom.Text.Length
 	$TextBoxNom.SelectionLength = 0
 })
 
+#methodes pour que la première lettre du prénom soit en majuscule
 $TextBoxPrenom.Add_textChanged({
 	$TextBoxPrenom.Text = (Get-Culture).textinfo.totitlecase($TextBoxPrenom.Text.Split(' '))
 	$TextBoxPrenom.SelectionStart = $TextBoxPrenom.Text.Length
 	$TextBoxPrenom.SelectionLength = 0
 })
 
+#condition pour vérifier si le champ de téléphone est valide
 $TextTelephone.Add_LostFocus({
+    #vérifie si le champ est vide
 	if ($TextTelephone.Text.Length -eq 0) {
 		ChangeLabelOk $LabelTelephoneError
 		$Global:VerifTelephone=$false
 		return
 	}
-	
+	#vérifie si le champ ne fait pas 5 caractères 
 	elseif ($TextTelephone.Text.Length -ne 5) {
 		ChangeLabelError $LabelTelephoneError 'Merci de mettre que les 5 derniers numeros'
 		$Global:VerifTelephone=$false
@@ -91,15 +93,18 @@ $TextTelephone.Add_LostFocus({
 	[Int]$TestTelephone=$TextTelephone.Text
 	}	
 	
+    #vérifie si le champ contient que des chiffres
 	Catch [System.Management.Automation.PSInvalidCastException] {
 		$Global:VerifTelephone=$false
 		ChangeLabelError $LabelTelephoneError 'Le champ doit contenir que des chiffres'
 		return
 	}
+    #met le booléen en true si les conditions sont respectées
 	$Global:VerifTelephone=$true
 	ChangeLabelOk $LabelTelephoneError
 })
 
+#methode qui vérifie si le champ du prénom ne contient que des lettres
 $TextBoxPrenom.Add_LostFocus({
 	
 	if ($Global:VerifPrenom -eq $true) {
@@ -123,6 +128,8 @@ $TextBoxPrenom.Add_LostFocus({
 	}
 })
 
+
+#methode qui vérifie si le champ du nom ne contient que des lettres
 $TextBoxNom.Add_LostFocus({
 	if ($Global:VerifNom -eq $true) {
 		return
@@ -142,27 +149,6 @@ $TextBoxNom.Add_LostFocus({
 	}
 	if ($Global:VerifNom -eq $true) {
 		ChangeLabelOK $LabelNomError
-	}
-})
-
-$TextBureau.Add_LostFocus({
-	$chars = '0123456789'
-	
-	for ( $i=0; $i -lt ($TextBureau.text).Length; $i++ ) {
-		if ($chars -match $TextBureau.Text[$i] -ne $true) {
-			ChangeLabelError $LabelBureauError 'Le champ doit contenir que des chiffres'
-			$Global:VerifBureau = $false
-			Break
-		}
-		
-		elseif ($TextBureau.Text.Length -ne 4) {
-			ChangeLabelError $LabelBureauError 'Le champ doit contenir 4 caractères'
-			return
-		}
-		else {
-			ChangeLabelOK $LabelBureauError
-			$Global:VerifBureau = $true
-		}
 	}
 })
 
@@ -252,84 +238,92 @@ Function Get-InfoDomaine {
 
 ############# ajout
 
-# Créer une étiquette pour le menu déroulant
+# Créer une label pour le menu déroulant
 $label = New-Object System.Windows.Forms.Label
 $label.Location = New-Object System.Drawing.Point(10, 20)
 $label.Size = New-Object System.Drawing.Size(150, 20)
 $label.Text = "Choisissez un bâtiment :"
 $tabpage_newuser.Controls.Add($label)
 
+#crée le menu déroulant
 $comboBox = New-Object System.Windows.Forms.ComboBox
 $comboBox.Location = New-Object System.Drawing.Point(170, 20)
 $comboBox.Size = New-Object System.Drawing.Size(100, 20)
 $comboBox.DropDownStyle = [System.Windows.Forms.ComboBoxStyle]::DropDownList
-
+#crée les options pour le menu déroulant
 $options = @("BAT4", "BAT5", "BAT6", "ROQUELAURE", "LEPLAY", "LESDIGUIERE","Autre")
 $comboBox.Items.AddRange($options)
 
 $tabpage_newuser.Controls.Add($comboBox)
 
+#crée un label pour les message d'erreurs
 $LabelBureauError = New-Object System.Windows.Forms.Label
 $LabelBureauError.Location = New-Object System.Drawing.Point(340, 65)
 $LabelBureauError.Size = New-Object System.Drawing.Size(250, 20)
 $LabelBureauError.ForeColor = [System.Drawing.Color]::Red
 $tabpage_newuser.Controls.Add($LabelBureauError)
 
-
+#crée la 1ère zone de texte 
 $TextBureau = New-Object System.Windows.Forms.TextBox
 $TextBureau.Location = New-Object System.Drawing.Point(150, 65)
 $TextBureau.Size = New-Object System.Drawing.Size(45, 30)
 $TextBureau.Visible = $false
 $tabpage_newuser.Controls.Add($TextBureau)
 
+#crée le label pour le batiment
 $LabelBureau = New-Object System.Windows.Forms.Label
 $LabelBureau.Location = New-Object System.Drawing.Point(15, 65)
 $LabelBureau.Size = New-Object System.Drawing.Size(80, 20)
-
 $LabelBureau.Visible = $false
 $tabpage_newuser.Controls.Add($LabelBureau)
 
+#crée la 2ième zone de texte
 $TextBureau_2 = New-Object System.Windows.Forms.TextBox
 $TextBureau_2.Location = New-Object System.Drawing.Point(270, 65)
 $TextBureau_2.Size = New-Object System.Drawing.Size(45, 30)
 $TextBureau_2.Visible = $false
 $tabpage_newuser.Controls.Add($TextBureau_2)
 
+#créee le label pour l'étage 
 $LabelBureau_2 = New-Object System.Windows.Forms.Label
 $LabelBureau_2.Location = New-Object System.Drawing.Point(110, 65)
 $LabelBureau_2.Size = New-Object System.Drawing.Size(100, 20)
 $LabelBureau_2.Text = "étage :"
-
 $LabelBureau_2.Visible = $false
 $tabpage_newuser.Controls.Add($LabelBureau_2)
 
+#crée le label pour le numéro de bureau 
 $LabelBureau_3 = New-Object System.Windows.Forms.Label
 $LabelBureau_3.Location = New-Object System.Drawing.Point(212, 65)
 $LabelBureau_3.Size = New-Object System.Drawing.Size(100, 20)
 $LabelBureau_3.Text = "N° Bureau:"
-
 $LabelBureau_3.Visible = $false
 $tabpage_newuser.Controls.Add($LabelBureau_3)
 
+#crée un bouton pour valider le bâtiment sélectionné 
 $button = New-Object System.Windows.Forms.Button
 $button.Location = New-Object System.Drawing.Point(300, 20)
 $button.Size = New-Object System.Drawing.Size(100, 30)
 $button.Text = "Valider"
 $tabpage_newuser.Controls.Add($button)
 
+#instanciation de variable 
 $Global:Bureau = ""
 $Global:choice =""
 $Global:Bureau_2 = ""
 
+#action lorsque le bouton est sélectionné
 $button.Add_Click({
     $selectedOption = $comboBox.SelectedItem    
     $LabelBureau.Visible = $true
 
     # switchcase pour afficher les batiments 
     switch ($selectedOption) {
+        
         "BAT4" {
             $TextBureau.Visible = $true
             $TextBureau.Focus()
+            #met
             $Global:choice = '4'
             $LabelBureau.Text = "Batiment 4 :"
             $LabelBureau.Visible = $true
@@ -572,7 +566,8 @@ $button_generer.Add_Click({
  		[System.Windows.Forms.MessageBox]::Show("Tout les champs ne sont pas complétés.")
 	        return
 	 } else {
-	[System.Windows.Forms.MessageBox]::Show("Veuillez attendre l'onglet validation")
+        [System.Windows.Forms.MessageBox]::Show("Information enregistrer")  
+	#[System.Windows.Forms.MessageBox]::Show("Veuillez attendre l'onglet validation")
 } 
 	#####
 	
