@@ -462,7 +462,7 @@ $TextBureau.Add_LostFocus({
                 $Global:bur = "$Global:choice" + "$Global:Bureau"
             }
         }
-    } elseif ($comboBox.SelectedItem -eq "Saisie Manuelle") {
+    } elseif ($comboBox.SelectedItem -eq "Autre") {
         $Global:VerifBureau = $true
         $Global:bur = "$Global:choice" + "$Global:Bureau"
     } else {
@@ -482,9 +482,10 @@ $TextBureau.Add_LostFocus({
     
         
 })
-#verifie les conditions pour 
+#verifie les conditions pour la 2ième zone de texte
 $TextBureau_2.Add_LostFocus({
     
+    #création d un label qui affichera le bureau si toute les conditions sont validés
     $PrintBur = New-Object System.Windows.Forms.Label
     $PrintBur.Location = New-Object System.Drawing.Point(320, 65)
     $PrintBur.Size = New-Object System.Drawing.Size(100, 20)
@@ -497,6 +498,7 @@ $TextBureau_2.Add_LostFocus({
     $Global:Bureau_2 = $TextBureau_2.Text.Trim()
     $selectedOption = $comboBox.SelectedItem
     $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
+    #vérifie si le texte bureau n'est pas vide
     if ($Global:Bureau_2 -ne $null) {
         $Global:VerifBureau_2 = $false
 
@@ -510,14 +512,18 @@ $TextBureau_2.Add_LostFocus({
             $LabelBureauError.Text = ''
             $Global:VerifBureau_2 = $true
         }
-	
+        
+        # Vérifie les conditions 
         else {
-            # Vérifie les conditions 
+            #vérifie si le nombre de caracteres est de 2
             if ($Global:Bureau_2.Length -ne 2) {
                 $LabelBureauError.Text = "Le second champ ne doit contenir que 2 chiffres"
+            #vérifie s'il n'y a que des chiffres
             } elseif ($Global:Bureau -notmatch '^[0-9]+$') {
                 $LabelBureauError.Text = 'Le champ doit contenir uniquement des chiffres'
+            #toutes les conditons sont vérifiés
             } else {
+                #affiche le label 
                 $LabelBureauError.Text = ''
                 $Global:VerifBureau_2 = $true
                 $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
@@ -529,10 +535,11 @@ $TextBureau_2.Add_LostFocus({
                 $tabpage_newuser.Controls.Add($PrintBur)
 
                 $PrintBur.Visible = $false
-
+                #vérifie si les 3 chiffres pour crée le bureau sont correctes
                 if ( $Global:burtest-match '^\d{3}$'){
                     $Global:VfBur = $true
                     $PrintBur.Visible = $true
+                    #test console
                     Write-Host "Verification: $Global:burtest"
                     
                 }  
@@ -540,6 +547,7 @@ $TextBureau_2.Add_LostFocus({
                 
             }
         }
+    #si  autre dans le switch case
     } elseif ($comboBox.SelectedItem -eq "Saisie Manuelle") {
         $Global:VfBur = $true
         $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
