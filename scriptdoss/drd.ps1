@@ -323,16 +323,19 @@ $button.Add_Click({
         "BAT4" {
             $TextBureau.Visible = $true
             $TextBureau.Focus()
-            #met
+            #change la valeur de global choice
             $Global:choice = '4'
+            #ajoute un texte au label du batiment
             $LabelBureau.Text = "Batiment 4 :"
+            #rend visible le label
             $LabelBureau.Visible = $true
-
+            #rend visible la zone de texte
             $TextBureau_2.Visible = $true
+            #enregistre les infos écrit dans la zone de texte
             $TextBureau_2.Focus()
-
+            #rend visible le label
             $LabelBureau_2.Visible = $true
-
+            #rend visible le label
             $LabelBureau_3.Visible = $true
         }
         "BAT5" {
@@ -406,15 +409,19 @@ $button.Add_Click({
             $LabelBureau_3.Visible = $true
         }
         "Autre" {
+            #modifie la taille de la zone de texte et du premier label
             $TextBureau.Size = New-Object System.Drawing.Size(205, 30)
             $LabelBureau.Size = New-Object System.Drawing.Size(100, 20)
 
             $TextBureau.Visible = $true
             $TextBureau.Focus()
+            
             $Global:choice = ''
+
             $LabelBureau.Text = "Saisie Manuelle "
             $LabelBureau.Visible = $true
         }
+        #choix par défaut
         default { 
             $TextBureau.Visible = $false
             [System.Windows.Forms.MessageBox]::Show("Vous avez sélectionné : $selectedOption") 
