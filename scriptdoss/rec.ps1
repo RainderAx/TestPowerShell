@@ -39,6 +39,7 @@ $TextBoxNom.Size = New-Object System.Drawing.Size(200, 20)
 $TextBoxNom.TabIndex = 3
 ##########################Archeum
 # Création de la TextBox
+$tabcontrol_Cabinet = New-Object System.Windows.Forms.TabControl
 $TextBoxNom = New-Object System.Windows.Forms.TextBox
 $tabpage_newuser.Controls.Add($TextBoxNom)
 
@@ -82,3 +83,70 @@ $TextBoxNom.Location = New-Object System.Drawing.Point(150, 155)
 $TextBoxNom.Name = 'TextBoxNom'
 $TextBoxNom.Size = New-Object System.Drawing.Size(200, 20)
 $TextBoxNom.TabIndex = 3
+
+
+
+$tabpage_newuser.AutoSize = $true
+$tabpage_newuser.Location = New-Object System.Drawing.Point(4, 32)
+$tabpage_newuser.Name = 'tabpage_newuser_'
+$tabpage_newuser.Size = new-object System.Drawing.Size(600, 500)
+$tabpage_newuser.TabIndex = 100
+$tabpage_newuser.Text = 'Cabinet'
+$tabcontrol_Cabinet.Controls.Add($tabpage_newuser)
+
+Impossible d’appeler une méthode dans une expression Null.
+Au caractère Ligne:3 : 1
++ $tabpage_newuser.Controls.Add($TextBoxNom)
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : InvokeMethodOnNull
+ 
+La propriété « AutoSize » est introuvable dans cet objet. Vérifiez qu’elle existe et qu’elle peut être définie.
+Au caractère Ligne:51 : 1
++ $tabpage_newuser.AutoSize = $true
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : PropertyNotFound
+ 
+La propriété « Location » est introuvable dans cet objet. Vérifiez qu’elle existe et qu’elle peut être définie.
+Au caractère Ligne:52 : 1
++ $tabpage_newuser.Location = New-Object System.Drawing.Point(4, 32)
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : PropertyNotFound
+ 
+La propriété « Name » est introuvable dans cet objet. Vérifiez qu’elle existe et qu’elle peut être définie.
+Au caractère Ligne:53 : 1
++ $tabpage_newuser.Name = 'tabpage_newuser_'
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : PropertyNotFound
+ 
+La propriété « Size » est introuvable dans cet objet. Vérifiez qu’elle existe et qu’elle peut être définie.
+Au caractère Ligne:54 : 1
++ $tabpage_newuser.Size = new-object System.Drawing.Size(600, 500)
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : PropertyNotFound
+ 
+La propriété « TabIndex » est introuvable dans cet objet. Vérifiez qu’elle existe et qu’elle peut être définie.
+Au caractère Ligne:55 : 1
++ $tabpage_newuser.TabIndex = 100
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : PropertyNotFound
+ 
+La propriété « Text » est introuvable dans cet objet. Vérifiez qu’elle existe et qu’elle peut être définie.
+Au caractère Ligne:56 : 1
++ $tabpage_newuser.Text = 'Cabinet'
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation : (:) [], RuntimeException
+    + FullyQualifiedErrorId : PropertyNotFound
+ 
+Exception lors de l'appel de « Add » avec « 1 » argument(s) : « La référence d'objet n'est pas définie à une instance d'un objet. »
+Au caractère Ligne:57 : 1
++ $tabcontrol_Cabinet.Controls.Add($tabpage_newuser)
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
+    + FullyQualifiedErrorId : NullReferenceException
+ 
