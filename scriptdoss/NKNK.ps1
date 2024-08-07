@@ -578,16 +578,16 @@ $TextBureau_2.Add_LostFocus({
 })
 
 $TextAuto.Add_LostFocus({
-    $Global:Bureau_2 = $TextAuto.Text.Trim()
+    $Global:bur2 = $TextAuto.Text.Trim()
     $Global:VfBur = $true
-    if ($Global:Bureau_2 -eq $null) {
+    if ($Global:bur2 -eq $null) {
         $Global:VfBur = $false
         $LabelBureauError.Text = 'Le champ ne peut pas être vide'
         #test console
-        Write-Host "test bureau $Global:Bureau_2 bureau2 est vide"
+        Write-Host "test bureau $Global:bur2 bureau2 est vide"
         }
         #test console
-        Write-Host "hors condition $Global:Bureau_2 "
+        Write-Host "hors condition $Global:bur2 "
 })
 #############
 
