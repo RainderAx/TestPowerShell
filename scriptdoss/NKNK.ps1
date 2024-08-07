@@ -1,5 +1,3 @@
-Get-ADUser -Filter "samAccountName -like '$($Prenom)*$($Nom)*'"#ce script permet de renseigner le champs de desciption de l'ordinateur 
-
 #22/02/23 (modif faite par Ali)
 # la maj un email de notification
 
