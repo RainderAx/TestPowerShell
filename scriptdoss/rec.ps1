@@ -1,10 +1,10 @@
-$Users_OH = (Get-ADUser -Identity "Sophie.BEAUDOUIN HUBIERE" –Properties * ).SamAccountName
+# Using the filter to find the user
+$user = Get-ADUser -Filter { Name -like "*Sophie.BEAUDOUIN HUBIERE*" }
 
-Write-Host $Users_OH
-
-Get-ADUser : Impossible de trouver un objet avec l’identité « Sophie.BEAUDOUIN HUBIERE » sous : « DC=cabinet,DC=local ».
-Au caractère Ligne:1 : 14
-+ ... Users_OH = (Get-ADUser -Identity "Sophie.BEAUDOUIN HUBIERE" –Properti ...
-+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ObjectNotFound: (Sophie.BEAUDOUIN HUBIERE:ADUser) [Get-ADUser], ADIdentityNotFoundException
-    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Microsoft.ActiveDirectory.Management.Commands.GetADUser
+# Check if the user object was found
+if ($user) {
+    $Users_OH = $user.SamAccountName
+    Write-Host $Users_OH
+} else {
+    Write-Host "User not found"
+}
