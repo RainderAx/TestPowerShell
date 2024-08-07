@@ -62,9 +62,10 @@ $tabpage_newuser.Controls.Add($ComboBoxService)
 
 #methode pour que les lettres du nom soit en majuscule
 $TextBoxNom.Add_textChanged({
-	$TextBoxNom.Text = ($TextBoxNom.Get_Text()).ToUpper()
+	$TextBoxNom.Text = ($TextBoxNom.Get_Text()).ToUpper().Replace(' ', '-')
 	$TextBoxNom.SelectionStart = $TextBoxNom.Text.Length
 	$TextBoxNom.SelectionLength = 0
+    Write-Host "Texte actuel: $($TextBoxNom.Text)"
 })
 
 #methodes pour que la première lettre du prénom soit en majuscule
@@ -307,6 +308,13 @@ $button.Size = New-Object System.Drawing.Size(100, 30)
 $button.Text = "Valider"
 $tabpage_newuser.Controls.Add($button)
 
+#crée la zone de texte pour la saisie manuelle
+$TextAuto = New-Object System.Windows.Forms.TextBox
+$TextAuto.Location = New-Object System.Drawing.Point(150, 65)
+$TextAuto.Size = New-Object System.Drawing.Size(205, 30)
+$TextAuto.Visible = $false
+$tabpage_newuser.Controls.Add($TextAuto)
+
 #instanciation de variable 
 $Global:Bureau = ""
 $Global:choice =""
@@ -315,7 +323,8 @@ $Global:Bureau_2 = ""
 #action lorsque le bouton est sélectionné
 $button.Add_Click({
     $selectedOption = $comboBox.SelectedItem    
-    $LabelBureau.Visible = $true
+    $LabelBureau.Visible = $false
+
 
     # switchcase pour afficher les batiments 
     switch ($selectedOption) {
@@ -337,6 +346,8 @@ $button.Add_Click({
             $LabelBureau_2.Visible = $true
             #rend visible le label
             $LabelBureau_3.Visible = $true
+            #rend la zone de texte de la saisie automatique invisible
+            $TextAuto.Visible = $false
         }
         "BAT5" {
             $TextBureau.Visible = $true
@@ -351,6 +362,8 @@ $button.Add_Click({
             $LabelBureau_2.Visible = $true
 
             $LabelBureau_3.Visible = $true
+
+            $TextAuto.Visible = $false
         }
         "BAT6" {
             $TextBureau.Visible = $true
@@ -365,6 +378,8 @@ $button.Add_Click({
             $LabelBureau_2.Visible = $true
 
             $LabelBureau_3.Visible = $true
+
+            $TextAuto.Visible = $false
         }
         "ROQUELAURE" {
             $TextBureau.Visible = $true
@@ -379,6 +394,8 @@ $button.Add_Click({
             $LabelBureau_2.Visible = $true
 
             $LabelBureau_3.Visible = $true
+
+            $TextAuto.Visible = $false
         }
         "LEPLAY" {
             $TextBureau.Visible = $true
@@ -393,6 +410,8 @@ $button.Add_Click({
             $LabelBureau_2.Visible = $true
 
             $LabelBureau_3.Visible = $true
+
+            $TextAuto.Visible = $false
         }
         "LESDIGUIERE" {
             $TextBureau.Visible = $true
@@ -403,23 +422,29 @@ $button.Add_Click({
 
             $TextBureau_2.Visible = $true
             $TextBureau_2.Focus()
-
+            $TextAuto.Visible = $false
             $LabelBureau_2.Visible = $true
 
             $LabelBureau_3.Visible = $true
         }
         "Autre" {
             #modifie la taille de la zone de texte et du premier label
-            $TextBureau.Size = New-Object System.Drawing.Size(205, 30)
-            $LabelBureau.Size = New-Object System.Drawing.Size(100, 20)
+            $TextAuto.Size = New-Object System.Drawing.Size(205, 30)
+            $LabelBureau.Size = New-Object System.Drawing.Size(97, 20)
 
-            $TextBureau.Visible = $true
-            $TextBureau.Focus()
+         
+            $TextAuto.Focus()
             
             $Global:choice = ''
 
             $LabelBureau.Text = "Saisie Manuelle "
             $LabelBureau.Visible = $true
+            $TextAuto.Visible = $true
+            $TextBureau.Visible = $false
+            $TextBureau_2.Visible = $false
+            $LabelBureau_2.Visible = $false
+            $LabelBureau_3.Visible = $false
+
         }
         #choix par défaut
         default { 
@@ -462,15 +487,7 @@ $TextBureau.Add_LostFocus({
                 $Global:bur = "$Global:choice" + "$Global:Bureau"
             }
         }
-    } elseif ($comboBox.SelectedItem -eq "Autre") {
-        $Global:VerifBureau = $true
-        $Global:bur = "$Global:choice" + "$Global:Bureau"
-    } else {
-        $LabelBureauError.Text = 'Le champ ne peut pas être vide'
-        #### test console
-        Write-Host "TextBox est null ou TextBox.Text est null"
-        ####
-    }
+    } 
     $Global:bur = "$Global:choice" + "$Global:Bureau"
     
     #### test  console
@@ -478,6 +495,7 @@ $TextBureau.Add_LostFocus({
     Write-Host "Length: $($Global:Bureau.Length)"
     Write-Host "$Global:bur"
     Write-Host "Verification: $Global:VerifBureau"
+    Write-Host "Verification: $Global:VfBur"
     #######
     
         
@@ -547,16 +565,7 @@ $TextBureau_2.Add_LostFocus({
                 
             }
         }
-    #si  autre dans le switch case
-    } elseif ($comboBox.SelectedItem -eq "Saisie Manuelle") {
-        $Global:VfBur = $true
-        $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
-    } else {
-        $LabelBureauError.Text = 'Le champ ne peut pas être vide'
-        #### test console
-        Write-Host "TextBox est null ou TextBox.Text est null"
-        ####
-    }
+    } 
     $Global:bur2 = "$Global:bur" + "$Global:Bureau_2"
 
     
@@ -566,9 +575,20 @@ $TextBureau_2.Add_LostFocus({
     Write-Host "$Global:bur2"
     Write-Host "Verification: $Global:VerifBureau_2"
     Write-Host "test bureau $Global:burtest"
-    #######
-    
-       
+    #######       
+})
+
+$TextAuto.Add_LostFocus({
+    $Global:bur2 = $TextAuto.Text.Trim()
+    $Global:VfBur = $true
+    if ($Global:bur2 -eq $null) {
+        $Global:VfBur = $false
+        $LabelBureauError.Text = 'Le champ ne peut pas être vide'
+        #test console
+        Write-Host "test bureau $Global:bur2 bureau2 est vide"
+        }
+        #test console
+        Write-Host "hors condition $Global:bur2 "
 })
 #############
 
@@ -584,7 +604,7 @@ $button_generer.Add_Click({
  		[System.Windows.Forms.MessageBox]::Show("Tout les champs ne sont pas complétés.")
 	        return
 	 } else {
-        [System.Windows.Forms.MessageBox]::Show("Information enregistrer")  
+        [System.Windows.Forms.MessageBox]::Show("Information enregistrée")  
 	#[System.Windows.Forms.MessageBox]::Show("Veuillez attendre l'onglet validation")
 } 
 	#####
@@ -616,7 +636,7 @@ $button_generer.Add_Click({
         $donnees | Out-File "C:\Scripts\Alexis\test_pour_script2\C_$env:computername _ $Nom.txt"
 
  	####ajout
-	$uD = ( Get-ADUser -Filter "samAccountName -like '$($Prenom)*$($Nom)*'").SamAccountName
+	$uD = ( Get-ADUser -Filter "GivenName -like '$($Prenom)*' -and Surname -like '$($Nom)*'").SamAccountName
 	$userData = "$Global:bur2,$uD"
 	$userData | Out-File -FilePath "C:\Scripts\Alexis\test_pour_script2\U_$uD.txt"
  	#######"
