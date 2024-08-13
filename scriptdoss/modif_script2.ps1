@@ -1,10 +1,13 @@
-# Spécifiez le chemin du répertoire à traiter
+##Version 1 pour le script 2 
+
+
+#####changez le chemin pour le fichier
 $chemin = "C:\Scripts\Alexis\test_pour_script2"
 
 # Obtenez tous les fichiers dans le répertoire
 $Pcfiler = Get-ChildItem $chemin
 
-# Répertoire de destination
+#####changez le chemin pour le fichier
 $destination = "C:\Scripts\Alexis\test_pour_script2\archive"
 
 # Initialisation de la variable
