@@ -615,7 +615,7 @@ $button_generer.Add_Click({
 	[String]$Telephone=$TextTelephone.Get_text().Trim(' ')
 	[String]$Poste=$ComboBoxPoste.Get_text().Trim(' ') 
        
-       
+        ##changez le destinateur du mail
         $utilisateur =$env:username.Split(".")[1].ToUpper()
         $From  = "$env:username@cabinet.local"
         $To = 'administrateurs.psnsm@developpement-durable.gouv.fr'
@@ -633,11 +633,13 @@ $button_generer.Add_Click({
         $Send_mail = Send-MailMessage -From $From -To $To -Subject $Subject  -Body $body -SmtpServer $SmtpServer -port 587 -Encoding unicode
 
         $donnees = "$Nom,$Prenom,$Global:bur2,$Telephone,$Service,$env:computername"
+        #####changez le chemin pour le fichier
         $donnees | Out-File "C:\Scripts\Alexis\test_pour_script2\C_$env:computername _ $Nom.txt"
 
  	####ajout
 	$uD = ( Get-ADUser -Filter "GivenName -like '$($Prenom)*' -and Surname -like '$($Nom)*'").SamAccountName
 	$userData = "$Global:bur2,$uD"
+    #####changez le chemin pour le fichier
 	$userData | Out-File -FilePath "C:\Scripts\Alexis\test_pour_script2\U_$uD.txt"
  	#######"
 	
